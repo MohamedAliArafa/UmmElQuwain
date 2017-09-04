@@ -11,5 +11,7 @@ public interface LandingContract {
 
         void setupTabLayout();
 
+        boolean moveToHome();
+
     }
 }

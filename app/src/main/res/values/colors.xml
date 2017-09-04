@@ -5,8 +5,12 @@
     <color name="colorAccent">#fdbf02</color>
     <color name="trans_white_10">#19ffffff</color>
     <color name="trans_white_50">#81ffffff</color>
+    <color name="trans_black_50">#81000000</color>
+    <color name="trans_black_10">#19000000</color>
+
 
     <color name="transColorPrimary">#88051b44</color>
+    <color name="transColorPrimaryDark">#1e051b44</color>
     <color name="footerBackground">#dee1e6</color>
     <color name="statusColor">#909090</color>
 

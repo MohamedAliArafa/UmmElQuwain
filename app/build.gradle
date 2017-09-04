@@ -14,7 +14,6 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
@@ -25,14 +24,15 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        jackOptions {
-            enabled true
-        }
+        android.compileOptions.sourceCompatibility 1.8
+        android.compileOptions.targetCompatibility 1.8
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -42,30 +42,6 @@ android {
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
     }
-    productFlavors {
-        pmConfig {
-            applicationId "com.a700apps.ummelquwain"
-            minSdkVersion 16
-            targetSdkVersion 26
-            versionCode 1
-            versionName "1.0"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            jackOptions {
-                enabled true
-            }
-        }
-        stableConfig {
-            applicationId "com.a700apps.ummelquwain"
-            minSdkVersion 16
-            targetSdkVersion 26
-            versionCode 1
-            versionName "1.0"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            jackOptions {
-                enabled true
-            }
-        }
-    }
 }
 
 dependencies {
@@ -74,16 +50,20 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
+        transitive = true
     }
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.android.support:appcompat-v7:26.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.android.support:support-v4:26.0.2'
     compile 'android.arch.lifecycle:runtime:1.0.0-alpha9'
     compile 'android.arch.lifecycle:extensions:1.0.0-alpha9'
     annotationProcessor 'android.arch.lifecycle:compiler:1.0.0-alpha9'
 
-    compile 'com.android.support:design:26.0.0-alpha1'
+    //pager Indicator
+    compile 'com.romandanylyk:pageindicatorview:0.2.0@aar'
+
+
+    compile 'com.android.support:design:26.0.2'
     compile 'com.thoughtbot:expandablerecyclerview:1.3'
 
     testCompile 'junit:junit:4.12'

@@ -80,9 +80,8 @@ public class AlbumFragment extends Fragment implements AlbumContract.View, Lifec
         mTabLayout.setupWithViewPager(mViewPager);
         for (int i = 0; i < supplierNames.size(); i++) {
             TextView tab = (TextView) LayoutInflater.from(getContext()).inflate(
-                    R.layout.tab_item_landing, null);
+                    R.layout.tab_item_album, null);
             tab.setText(getString(supplierNames.get(i)));
-            tab.setTextSize(14);
             tab.setTextColor(getResources().getColorStateList(R.color.tab_colors_list_bright));
             mTabLayout.getTabAt(i).setCustomView(tab);
         }

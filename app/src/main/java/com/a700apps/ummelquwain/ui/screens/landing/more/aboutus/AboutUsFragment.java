@@ -49,7 +49,7 @@ public class AboutUsFragment extends Fragment implements
         // Required empty public constructor
     }
 
-    GestureDetector mGesture;
+    private GestureDetector mGesture;
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     AboutUsPresenter mPresenter;
 

@@ -63,4 +63,7 @@
     <string name="mock_news_desc">The British Academy Film Awards or BAFTA Film Awards are presented in an annual award show hosted by the British Academy of Film and Television Arts to honour the best British and international contributions to film.</string>
     <string name="read_more">Read More</string>
     <string name="mock_news_title">Bafta Tv Awards 2018</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

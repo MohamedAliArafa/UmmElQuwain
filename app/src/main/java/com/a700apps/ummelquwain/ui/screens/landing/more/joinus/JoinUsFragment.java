@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -39,12 +38,7 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener{
         mBackToolbarBtn.setOnClickListener(this);
         mGesture = new GestureDetector(getActivity(),
                 new SwipeToDismissHelper(getFragmentManager()));
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return mGesture.onTouchEvent(event);
-            }
-        });
+        view.setOnTouchListener((v, event) -> mGesture.onTouchEvent(event));
         return view;
     }
 

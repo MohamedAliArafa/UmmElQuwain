@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 
 public class SwipeToDismissHelper extends GestureDetector.SimpleOnGestureListener {
 
-    FragmentManager mFragmentManager;
+    private FragmentManager mFragmentManager;
 
     public SwipeToDismissHelper(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;

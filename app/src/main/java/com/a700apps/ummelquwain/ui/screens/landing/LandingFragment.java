@@ -98,6 +98,14 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
     }
 
     @Override
+    public boolean moveToHome() {
+        if (mViewPager.getCurrentItem() == 0)
+            return true;
+        mViewPager.setCurrentItem(0, true);
+        return false;
+    }
+
+    @Override
     public LifecycleRegistry getLifecycle() {
         return mLifecycleRegistry;
     }
@@ -112,4 +120,6 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+
 }
