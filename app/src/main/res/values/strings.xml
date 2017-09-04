@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="_hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="app_name">UmmAlQuwain</string>
+
+    <string name="btn_mark_my_calender">Mark my calender</string>
+    <string name="btn_upload_mp3_or_video">Upload (mp3 or video)</string>
+
+    <string name="desc_contact_us_on_the_following_channels">Contact us on the following channels:</string>
+    <string name="desc_on_start">ON:</string>
+    <string name="desc_powered_by">Powered by:</string>
+    <string name="desc_search_a_program">Search a program</string>
+    <string name="desc_search_a_program_or_station">Search a program or station</string>
+
+    <string name="mock_2015">جميع الحقوق محفوظة لدائرة الحكومة الإلكترونية 2015</string>
+    <string name="mock_ali_jassim_ahmed_director_general_of_the_network_said_that">Ali Jassim Ahmed, Director General of the Network, said that the network has worked since it\'s inception in march 1978 to achieve advanced position among the radio stations operating in the country, in accordance with it\'s vision of civilization, humanity and community, and to enhance it\'s competitive position to achieve greater uniqueness and excellence.</string>
+    <string name="mock_all_stations_will_introduce">all stations will introduce a singer from this channel</string>
+    <string name="mock_an_hdhomerun_is_a_simple_tv">An HDHomeRun is a simple TV tuner that can broadcast television over your home network to any room in your house</string>
+    <string name="mock_contact_fax">+971 7777 6088</string>
+    <string name="mock_contact_mail">ump@uae.com</string>
+    <string name="mock_contact_phone_no">+971 7666 6088</string>
+    <string name="mock_dubai_24_khalifa_tower">Dubai, 24 Khalifa Tower</string>
+    <string name="mock_from_2017_3_12_to_2017_3_30">From 2017/3/12 To 2017/3/30</string>
+    <string name="mock_he_added_that_zee_middle_east_network">He added that Zee Middle East Network will provide advanced software content, a new concept in the entertainment and marketing world, and will provide the station with highly effective and competitive media experience. (WAM)</string>
+    <string name="mock_his_highness_shieikh">His Highness Shieikh Saoud Bin Rashid Al-Mualla, Supreme Council Member And Ruler of Umm Al Quwain, Issued and Amiri Decree Amending the Name of Umm Al Quwain Radio to Become The Umm Al Quwain Radio Network.</string>
+    <string name="mock_his_highness_shieikh_saoud">His Highness Shieikh Saoud Bin Rashid Al-Mualla, Supreme Council Member And Ruler of Umm Al Quwain</string>
+    <string name="mock_location_on_map">Location on map</string>
+    <string name="mock_shieikh_saoud_bin_rashid_al_mualla">Shieikh Saoud Bin Rashid Al-Mualla</string>
+    <string name="mock_songs_event">Songs Event</string>
+    <string name="mock_station_category_mock">Genre/Category</string>
+    <string name="mock_station_desc_mock">A very long program name</string>
+    <string name="mock_station_name">Dance Station</string>
+
+    <string name="title_about_us">About Us</string>
+    <string name="title_address">Address</string>
+    <string name="title_albums">Albums</string>
+    <string name="title_contact_us">Contact Us</string>
+    <string name="title_email">Email</string>
+    <string name="title_events">Events</string>
+    <string name="title_favs">Favs</string>
+    <string name="title_images">Images</string>
+    <string name="title_join_us">Join Us</string>
+    <string name="title_log_out">Log out</string>
+    <string name="title_media">Media</string>
+    <string name="title_mission">Mission</string>
+    <string name="title_more">More</string>
+    <string name="title_name">Name</string>
+    <string name="title_news">News</string>
+    <string name="title_phone">Phone</string>
+    <string name="title_program_albums">Program Albums</string>
+    <string name="title_programs">Programs</string>
+    <string name="title_setting">Setting</string>
+    <string name="title_share">Share</string>
+    <string name="title_sponsor">Sponsors</string>
+    <string name="title_stations">Stations</string>
+    <string name="title_submit">Submit</string>
+    <string name="title_videos">Videos</string>
+    <string name="title_vision">Vision</string>
+    <string name="mock_date">2017/8/5</string>
+    <string name="mock_time">02:43:40 PM</string>
+    <string name="mock_news_desc">The British Academy Film Awards or BAFTA Film Awards are presented in an annual award show hosted by the British Academy of Film and Television Arts to honour the best British and international contributions to film.</string>
+    <string name="read_more">Read More</string>
+    <string name="mock_news_title">Bafta Tv Awards 2018</string>
+</resources>

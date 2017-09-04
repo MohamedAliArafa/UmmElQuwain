@@ -1,0 +1,70 @@
+package com.a700apps.ummelquwain.ui.screens.landing.media;
+
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
+
+import com.a700apps.ummelquwain.MyApplication;
+import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
+import com.a700apps.ummelquwain.models.response.Albums.AlbumResultModel;
+import com.a700apps.ummelquwain.models.response.Albums.AlbumsModel;
+import com.a700apps.ummelquwain.ui.screens.landing.media.albums.AlbumFragment;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * Created by mohamed.arafa on 8/24/2017.
+ */
+
+public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObserver {
+
+    private Context mContext;
+    private AlbumsContract.View mView;
+    private FragmentManager mFragmentManager;
+    private Call<AlbumsModel> mAlbumsCall;
+    private List<AlbumResultModel> mModel;
+
+    public AlbumsPresenter(Context mContext, AlbumsContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
+        lifecycle.addObserver(this);
+        this.mContext = mContext;
+        this.mView = mView;
+        this.mFragmentManager = mFragmentManager;
+    }
+
+    @Override
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void getData() {
+        mView.showProgress();
+        mAlbumsCall = MyApplication.get(mContext).getApiService().getAllAlbums(new LanguageRequestModel(1));
+        mAlbumsCall.enqueue(new Callback<AlbumsModel>() {
+            @Override
+            public void onResponse(@NonNull Call<AlbumsModel> call, @NonNull Response<AlbumsModel> response) {
+                mModel = response.body().getResult();
+                mView.hideProgress();
+                mView.updateUI(mModel);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AlbumsModel> call, @NonNull Throwable t) {
+                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+                mView.hideProgress();
+            }
+        });
+    }
+
+    @Override
+    public void openDetails(int albumID) {
+        mFragmentManager.beginTransaction().addToBackStack(null)
+                .add(R.id.fragment_container, AlbumFragment.newInstance(albumID)).commit();
+    }
+}
