@@ -3,6 +3,8 @@ package com.a700apps.ummelquwain.service;
 import com.a700apps.ummelquwain.models.request.AlbumContentRequestModel;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
 import com.a700apps.ummelquwain.models.request.NewsDetailsRequestModel;
+import com.a700apps.ummelquwain.models.request.StationDetailsRequestModel;
+import com.a700apps.ummelquwain.models.request.StationsRequestModel;
 import com.a700apps.ummelquwain.models.response.AboutUs.AboutUsModel;
 import com.a700apps.ummelquwain.models.response.Albums.AlbumModel;
 import com.a700apps.ummelquwain.models.response.Albums.AlbumsModel;
@@ -12,6 +14,7 @@ import com.a700apps.ummelquwain.models.response.Events.EventsModel;
 import com.a700apps.ummelquwain.models.response.NewsBar.NewsBarDetailModel;
 import com.a700apps.ummelquwain.models.response.NewsBar.NewsBarModel;
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorModel;
+import com.a700apps.ummelquwain.models.response.Station.StationsModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -56,4 +59,12 @@ public interface ApiService {
 
     @POST("Content/ContactUs")
     Call<ContactUsModel> getContactUs(@Body LanguageRequestModel language);
+
+    //Station
+    @POST("Stations/GetAllStations")
+    Call<StationsModel> getAllStations(@Body StationsRequestModel language);
+
+    @POST("Stations/StationsDetails")
+    Call<AlbumModel> getStationDetails(@Body StationDetailsRequestModel newsModel);
+
 }

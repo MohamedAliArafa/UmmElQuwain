@@ -3,11 +3,16 @@ package com.a700apps.ummelquwain.models.response.Sponsors;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by mohamed.arafa on 8/28/2017.
  */
 
-public class SponsorResultModel {
+public class SponsorResultModel extends RealmObject{
+
+    @PrimaryKey
     @SerializedName("SponserID")
     @Expose
     private Integer sponserID;

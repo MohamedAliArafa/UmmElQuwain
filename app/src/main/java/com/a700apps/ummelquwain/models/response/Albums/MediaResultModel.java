@@ -1,13 +1,21 @@
 package com.a700apps.ummelquwain.models.response.Albums;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by mohamed.arafa on 8/30/2017.
  */
 
-public class MediaResultModel {
+public class MediaResultModel extends RealmObject implements Parcelable{
+
+    @PrimaryKey
     @SerializedName("MediaID")
     @Expose
     private Integer mediaID;
@@ -96,4 +104,48 @@ public class MediaResultModel {
     public void setLanguage(Integer language) {
         this.language = language;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.mediaID);
+        dest.writeValue(this.albumID);
+        dest.writeValue(this.mediaType);
+        dest.writeString(this.attachmentURL);
+        dest.writeValue(this.isYoutube);
+        dest.writeString(this.videoThumb);
+        dest.writeString(this.description);
+        dest.writeValue(this.language);
+    }
+
+    public MediaResultModel() {
+    }
+
+    protected MediaResultModel(Parcel in) {
+        this.mediaID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.albumID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.mediaType = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.attachmentURL = in.readString();
+        this.isYoutube = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.videoThumb = in.readString();
+        this.description = in.readString();
+        this.language = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Creator<MediaResultModel> CREATOR = new Creator<MediaResultModel>() {
+        @Override
+        public MediaResultModel createFromParcel(Parcel source) {
+            return new MediaResultModel(source);
+        }
+
+        @Override
+        public MediaResultModel[] newArray(int size) {
+            return new MediaResultModel[size];
+        }
+    };
 }

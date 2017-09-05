@@ -1,7 +1,7 @@
 package com.a700apps.ummelquwain.ui.screens.splash;
 
-/*
- * Created by mohamed.arafa on 8/22/2017.
+/**
+ * Created by mohamed.arafa on 9/5/2017.
  */
 
 interface SplashContract {

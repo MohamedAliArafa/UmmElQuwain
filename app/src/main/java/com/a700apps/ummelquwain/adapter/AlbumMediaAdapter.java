@@ -70,7 +70,7 @@ public class AlbumMediaAdapter extends RecyclerView.Adapter<AlbumMediaAdapter.My
         holder.mTitleTextView.setText(model.getDescription());
         mPicasso.load(model.getVideoThumb()).into(holder.mThumpImageView);
         holder.itemView.setOnClickListener(view -> {
-            mPresenter.openDetails(model.getMediaID(), model.getMediaType());
+            mPresenter.openDetails(mList, model.getMediaType());
         });
     }
 

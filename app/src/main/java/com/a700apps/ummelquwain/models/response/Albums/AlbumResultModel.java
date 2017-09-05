@@ -5,14 +5,22 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+/*
  * Created by mohamed.arafa on 8/30/2017.
  */
 
-public class AlbumResultModel {
+public class AlbumResultModel extends RealmObject{
+
+    @PrimaryKey
     @SerializedName("AlbumID")
     @Expose
     private Integer albumID;
+
+
     @SerializedName("AlbumName")
     @Expose
     private String albumName;
@@ -24,7 +32,7 @@ public class AlbumResultModel {
     private Integer language;
     @SerializedName("keyword")
     @Expose
-    private Object keyword;
+    private String keyword;
     @SerializedName("MediaType")
     @Expose
     private Integer mediaType;
@@ -33,7 +41,7 @@ public class AlbumResultModel {
     private String albumDescription;
     @SerializedName("LstAlbumContent")
     @Expose
-    private List<MediaResultModel> lstAlbumContent = null;
+    private RealmList<MediaResultModel> lstAlbumContent = null;
 
     public Integer getAlbumID() {
         return albumID;
@@ -67,11 +75,11 @@ public class AlbumResultModel {
         this.language = language;
     }
 
-    public Object getKeyword() {
+    public String getKeyword() {
         return keyword;
     }
 
-    public void setKeyword(Object keyword) {
+    public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
 
@@ -95,7 +103,7 @@ public class AlbumResultModel {
         return lstAlbumContent;
     }
 
-    public void setLstAlbumContent(List<MediaResultModel> lstAlbumContent) {
+    public void setLstAlbumContent(RealmList<MediaResultModel> lstAlbumContent) {
         this.lstAlbumContent = lstAlbumContent;
     }
 }

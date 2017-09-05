@@ -3,11 +3,16 @@ package com.a700apps.ummelquwain.models.response.AboutUs;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by mohamed.arafa on 8/27/2017.
  */
 
-public class AboutUsResultModel {
+public class AboutUsResultModel extends RealmObject{
+
+    @PrimaryKey
     @SerializedName("AboutUsID")
     @Expose
     private Integer aboutUsID;
@@ -28,7 +33,7 @@ public class AboutUsResultModel {
     private Integer language;
     @SerializedName("UBNManager_Image")
     @Expose
-    private Object uBNManagerImage;
+    private String uBNManagerImage;
     @SerializedName("UBNManager_Word")
     @Expose
     private String uBNManagerWord;
@@ -81,11 +86,11 @@ public class AboutUsResultModel {
         this.language = language;
     }
 
-    public Object getUBNManagerImage() {
+    public String getUBNManagerImage() {
         return uBNManagerImage;
     }
 
-    public void setUBNManagerImage(Object uBNManagerImage) {
+    public void setUBNManagerImage(String uBNManagerImage) {
         this.uBNManagerImage = uBNManagerImage;
     }
 

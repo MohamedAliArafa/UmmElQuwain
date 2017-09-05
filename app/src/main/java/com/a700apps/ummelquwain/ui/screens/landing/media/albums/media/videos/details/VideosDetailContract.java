@@ -6,7 +6,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.videos.de
 
 public interface VideosDetailContract {
     interface View {
-
+        void playVideo(String url);
     }
 
     interface UserActions {

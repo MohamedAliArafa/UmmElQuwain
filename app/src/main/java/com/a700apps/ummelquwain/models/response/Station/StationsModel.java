@@ -1,8 +1,4 @@
-package com.a700apps.ummelquwain.models.response.ContactUs;
-
-/**
- * Created by mohamed.arafa on 8/27/2017.
- */
+package com.a700apps.ummelquwain.models.response.Station;
 
 import com.a700apps.ummelquwain.models.response.DataModel;
 import com.google.gson.annotations.Expose;
@@ -10,20 +6,23 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ContactUsModel {
+/**
+ * Created by mohamed.arafa on 9/5/2017.
+ */
 
+public class StationsModel {
     @SerializedName("result")
     @Expose
-    private ContactUsResultModel result;
+    private List<StationResultModel> result = null;
     @SerializedName("data")
     @Expose
     private List<DataModel> data = null;
 
-    public ContactUsResultModel getResult() {
+    public List<StationResultModel> getResult() {
         return result;
     }
 
-    public void setResult(ContactUsResultModel result) {
+    public void setResult(List<StationResultModel> result) {
         this.result = result;
     }
 

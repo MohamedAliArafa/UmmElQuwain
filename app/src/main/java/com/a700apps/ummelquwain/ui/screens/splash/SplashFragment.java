@@ -14,6 +14,10 @@ import android.view.ViewGroup;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.ui.screens.landing.LandingFragment;
 
+/**
+ * Created by mohamed.arafa on 9/5/2017.
+ */
+
 public class SplashFragment extends Fragment implements SplashContract.View, LifecycleRegistryOwner {
 
     private static final long SPLASH_DISPLAY_LENGTH = 5000;

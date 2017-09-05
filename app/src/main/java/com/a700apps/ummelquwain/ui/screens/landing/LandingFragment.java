@@ -19,7 +19,7 @@ import com.a700apps.ummelquwain.ui.screens.landing.favorite.FavFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.media.AlbumsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.MoreFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.programs.ProgramsFragment;
-import com.a700apps.ummelquwain.ui.screens.landing.stations.StationFragment;
+import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +48,7 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
                     R.drawable.ic_media, R.drawable.ic_more);
 
     List<Fragment> supplierFragments =
-            Arrays.asList(StationFragment.newInstance(), FavFragment.newInstance(),
+            Arrays.asList(StationsFragment.newInstance(), FavFragment.newInstance(),
                     ProgramsFragment.newInstance(), AlbumsFragment.newInstance(),
                     MoreFragment.newInstance());
 

@@ -4,8 +4,8 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 
-/*
- * Created by mohamed.arafa on 8/22/2017.
+/**
+ * Created by mohamed.arafa on 9/5/2017.
  */
 
 class SplashPresenter implements LifecycleObserver {

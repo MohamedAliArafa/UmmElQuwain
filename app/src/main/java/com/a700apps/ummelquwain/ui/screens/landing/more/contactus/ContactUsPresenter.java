@@ -15,6 +15,7 @@ import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
 import com.a700apps.ummelquwain.models.response.ContactUs.ContactUsModel;
 import com.a700apps.ummelquwain.models.response.ContactUs.ContactUsResultModel;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +30,7 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
     private Context mContext;
     private ContactUsResultModel mModel;
     private Call<ContactUsModel> mGetContactUsCall;
+    private Realm mRealm;
 
     public ContactUsPresenter(Context context, ContactUsContract.View view, Lifecycle lifecycle) {
         mView = view;
@@ -40,6 +42,13 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getData() {
         mView.showProgress();
+        mRealm = Realm.getDefaultInstance();
+        ContactUsResultModel query = mRealm.where(ContactUsResultModel.class).findFirst();
+        if (query != null){
+            mModel = query;
+            mView.hideProgress();
+            mView.updateUI(mModel);
+        }
         mGetContactUsCall = MyApplication.get(mContext).getApiService().getContactUs(new LanguageRequestModel(1));
         mGetContactUsCall.enqueue(new Callback<ContactUsModel>() {
             @Override
@@ -47,6 +56,11 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
                 Log.i("response", response.body().getResult().getFacebookUrl());
                 mModel = response.body().getResult();
                 mView.hideProgress();
+
+                mRealm.beginTransaction();
+                mRealm.copyToRealmOrUpdate(mModel);
+                mRealm.commitTransaction();
+
                 mView.updateUI(mModel);
             }
 
@@ -68,32 +82,42 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
 
     @Override
     public void showFacebook() {
-        Intent in = new  Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getFacebookUrl()));
-        mContext.startActivity(in);
+        if (mModel != null) {
+            Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getFacebookUrl()));
+            mContext.startActivity(in);
+        }
     }
 
     @Override
     public void showTwitter() {
-        Intent in = new  Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getTwitterUrl()));
-        mContext.startActivity(in);
+        if (mModel != null) {
+            Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getTwitterUrl()));
+            mContext.startActivity(in);
+        }
     }
 
     @Override
     public void showInstagram() {
-        Intent in = new  Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getInstagramUrl()));
-        mContext.startActivity(in);
+        if (mModel != null) {
+            Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getInstagramUrl()));
+            mContext.startActivity(in);
+        }
     }
 
     @Override
     public void showLinkedIn() {
+        if (mModel != null) {
 //        Intent in = new  Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getWebsiteLink()));
 //        mContext.startActivity(in);
+        }
     }
 
     @Override
     public void openMap() {
-        String uri = "geo:"+ mModel.getLatitude()+ mModel.getLatitude();
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        mContext.startActivity(intent);
+        if (mModel != null) {
+            String uri = "geo:" + mModel.getLatitude() + mModel.getLatitude();
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            mContext.startActivity(intent);
+        }
     }
 }

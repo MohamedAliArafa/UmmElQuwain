@@ -13,6 +13,7 @@ import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
 import com.a700apps.ummelquwain.models.response.AboutUs.AboutUsModel;
 import com.a700apps.ummelquwain.models.response.AboutUs.AboutUsResultModel;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +28,7 @@ public class AboutUsPresenter implements AboutUsContract.UserAction, LifecycleOb
     private AboutUsResultModel mModel;
     private Context mContext;
     Call<AboutUsModel> mGetContactUsCall;
+    private Realm mRealm;
 
     public AboutUsPresenter(AboutUsContract.View view, Context context, Lifecycle lifecycle) {
         mView = view;
@@ -38,6 +40,13 @@ public class AboutUsPresenter implements AboutUsContract.UserAction, LifecycleOb
     @Override
     public void getData() {
         mView.showProgress();
+        mRealm = Realm.getDefaultInstance();
+        AboutUsResultModel query = mRealm.where(AboutUsResultModel.class).findFirst();
+        if (query != null){
+            mModel = query;
+            mView.hideProgress();
+            mView.updateUI(mModel);
+        }
         mGetContactUsCall = MyApplication.get(mContext).getApiService().getAboutUs(new LanguageRequestModel(1));
         mGetContactUsCall.enqueue(new Callback<AboutUsModel>() {
             @Override
@@ -45,6 +54,11 @@ public class AboutUsPresenter implements AboutUsContract.UserAction, LifecycleOb
                 Log.i("response", response.body().getResult().getMangerName());
                 mModel = response.body().getResult();
                 mView.hideProgress();
+
+                mRealm.beginTransaction();
+                mRealm.copyToRealmOrUpdate(mModel);
+                mRealm.commitTransaction();
+
                 mView.updateUI(mModel);
             }
 

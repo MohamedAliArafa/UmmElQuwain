@@ -1,6 +1,8 @@
 package com.a700apps.ummelquwain.ui.screens.landing.stations;
 
 
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,22 +13,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StationFragment extends Fragment implements StationContract.View{
+public class StationsFragment extends Fragment implements StationsContract.View, LifecycleRegistryOwner{
+
+    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
 
-    public StationFragment() {
+    public StationsFragment() {
         // Required empty public constructor
     }
 
-    public static StationFragment newInstance() {
-        return new StationFragment();
+    public static StationsFragment newInstance() {
+        return new StationsFragment();
     }
 
     @Override
@@ -38,6 +44,26 @@ public class StationFragment extends Fragment implements StationContract.View{
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(new Adapter());
         return view;
+    }
+
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return mLifecycleRegistry;
+    }
+
+    @Override
+    public void updateUI(List<StationResultModel> models) {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 
     class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {

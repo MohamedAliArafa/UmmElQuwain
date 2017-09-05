@@ -6,21 +6,6 @@
     android:background="@android:color/white"
     tools:context="com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.images.details.ImagePagerFragment">
 
-
-    <ImageView
-        android:id="@+id/iv_media_pic"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="250dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_list_box"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/iv_gradiant_bg"
         android:layout_width="0dp"
@@ -34,19 +19,34 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+    <fragment
+        android:id="@+id/iv_media_vid"
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="250dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_list_box"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tv_media_desc"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_media_vid" />
 
 </android.support.constraint.ConstraintLayout>

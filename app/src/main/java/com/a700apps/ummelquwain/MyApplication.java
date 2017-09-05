@@ -9,9 +9,11 @@ import com.a700apps.ummelquwain.dagger.Application.module.ContextModule;
 import com.a700apps.ummelquwain.service.ApiService;
 import com.squareup.picasso.Picasso;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import timber.log.Timber;
 
-/**
+/*
  * Created by mohamed.arafa on 8/27/2017.
  */
 
@@ -32,6 +34,11 @@ public class MyApplication extends Application {
         ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
                 .contextModule(new ContextModule(this))
                 .build();
+
+        Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder().build();
+        Realm.setDefaultConfiguration(config);
+
 
         mPicasso = applicationComponent.getPicasso();
         mApiService = applicationComponent.getService();

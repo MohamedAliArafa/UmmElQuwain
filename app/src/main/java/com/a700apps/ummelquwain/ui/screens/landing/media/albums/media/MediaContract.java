@@ -17,6 +17,6 @@ public interface MediaContract {
 
     interface UserAction {
         void getData();
-        void openDetails(int mediaID, int mediaType);
+        void openDetails(List<MediaResultModel> media, int mediaType);
     }
 }

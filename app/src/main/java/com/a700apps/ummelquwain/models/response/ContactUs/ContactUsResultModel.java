@@ -3,12 +3,16 @@ package com.a700apps.ummelquwain.models.response.ContactUs;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /*
  * Created by mohamed.arafa on 8/27/2017.
  */
 
-public class ContactUsResultModel {
+public class ContactUsResultModel extends RealmObject{
 
+    @PrimaryKey
     @SerializedName("ContactUsID")
     @Expose
     private Integer contactUsID;

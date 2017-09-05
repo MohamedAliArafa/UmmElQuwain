@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.models.response.Albums.MediaResultModel;
 import com.a700apps.ummelquwain.utilities.ViewPagerAdapter;
 import com.rd.PageIndicatorView;
 import com.rd.animation.type.AnimationType;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +31,9 @@ public class ImageDetailsFragment extends Fragment implements View.OnClickListen
     ImageView mBackToolbarBtn;
     @BindView(R.id.pageIndicatorView)
     PageIndicatorView mPageIndicatorView;
+
+    private static int mInitPosition;
+    private static List<MediaResultModel> mMedia;
 
     public ImageDetailsFragment() {
         // Required empty public constructor
@@ -47,15 +53,23 @@ public class ImageDetailsFragment extends Fragment implements View.OnClickListen
 
     public void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        for (int i = 0; i < 3; i++)
-            adapter.addFragment(new ImagePagerFragment(), "Fragment" + i);
+        for (int i = 0; i < mMedia.size(); i++) {
+            Bundle b = new Bundle();
+            b.putParcelable("media", mMedia.get(i));
+            ImagePagerFragment fragment = new ImagePagerFragment();
+            fragment.setArguments(b);
+            adapter.addFragment(fragment, "Fragment" + i);
+        }
         mPageIndicatorView.setViewPager(mViewPager);
         mPageIndicatorView.setInteractiveAnimation(true);
         mPageIndicatorView.setAnimationType(AnimationType.FILL);
         mViewPager.setAdapter(adapter);
+        mViewPager.setCurrentItem(mInitPosition, true);
     }
 
-    public static ImageDetailsFragment newInstance(int mediaID) {
+    public static ImageDetailsFragment newInstance(List<MediaResultModel> media, int position) {
+        mMedia = media;
+        mInitPosition = position;
         return new ImageDetailsFragment();
     }
 

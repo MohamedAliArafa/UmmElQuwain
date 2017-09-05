@@ -18,6 +18,8 @@ import com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.images.det
 
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +37,7 @@ public class ImagesPresenter implements MediaContract.UserAction, LifecycleObser
     private List<MediaResultModel> mModel;
     private Integer albumID;
     private Integer mediaType;
+    private Realm mRealm;
 
     public ImagesPresenter(Context mContext, MediaContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle, int albumID, int mediaType) {
         lifecycle.addObserver(this);
@@ -49,12 +52,27 @@ public class ImagesPresenter implements MediaContract.UserAction, LifecycleObser
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getData() {
         mView.showProgress();
+
+        mRealm = Realm.getDefaultInstance();
+        RealmResults<MediaResultModel> query = mRealm.where(MediaResultModel.class)
+                .equalTo("albumID", albumID).findAll();
+        if (query.isLoaded() && !query.isEmpty()){
+            mModel = query;
+            mView.hideProgress();
+            mView.updateUI(mModel);
+        }
+
         mAlbumsCall = MyApplication.get(mContext).getApiService().getAlbumContent(new AlbumContentRequestModel(1, albumID, mediaType));
         mAlbumsCall.enqueue(new Callback<AlbumModel>() {
             @Override
             public void onResponse(@NonNull Call<AlbumModel> call, @NonNull Response<AlbumModel> response) {
                 mModel = response.body().getResult().getLstAlbumContent();
                 mView.hideProgress();
+
+                mRealm.beginTransaction();
+                mRealm.copyToRealmOrUpdate(mModel);
+                mRealm.commitTransaction();
+
                 mView.updateUI(mModel);
             }
 
@@ -69,8 +87,8 @@ public class ImagesPresenter implements MediaContract.UserAction, LifecycleObser
 
 
     @Override
-    public void openDetails(int mediaID, int mediaType) {
+    public void openDetails(List<MediaResultModel> media, int position) {
         mFragmentManager.beginTransaction().addToBackStack(null)
-                .add(R.id.fragment_container, ImageDetailsFragment.newInstance(mediaID)).commit();
+                .add(R.id.fragment_container, ImageDetailsFragment.newInstance(media, position)).commit();
     }
 }
