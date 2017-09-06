@@ -61,7 +61,8 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             mView.hideProgress();
             mView.updateFavUI(mStationModel);
         }
-        mStationCall = MyApplication.get(mContext).getApiService().getAllStations(new StationsRequestModel(1, -1));
+        mStationCall = MyApplication.get(mContext).getApiService()
+                .getAllStations(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), -1));
         mStationCall.enqueue(new Callback<StationsModel>() {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
@@ -95,7 +96,8 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             mView.hideProgress();
             mView.updateSponsorUI(mSponsorModel);
         }
-        mSponsorCall = MyApplication.get(mContext).getApiService().getAllSponsors(new LanguageRequestModel(1));
+        mSponsorCall = MyApplication.get(mContext).getApiService()
+                .getAllSponsors(new LanguageRequestModel(MyApplication.get(mContext).getLanguage()));
         mSponsorCall.enqueue(new Callback<SponsorModel>() {
             @Override
             public void onResponse(@NonNull Call<SponsorModel> call, @NonNull Response<SponsorModel> response) {

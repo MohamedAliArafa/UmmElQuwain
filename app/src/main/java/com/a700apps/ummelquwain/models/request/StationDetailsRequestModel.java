@@ -18,6 +18,12 @@ public class StationDetailsRequestModel {
     @Expose
     private Integer stationID;
 
+    public StationDetailsRequestModel(Integer language, Integer userID, Integer stationID) {
+        this.language = language;
+        this.userID = userID;
+        this.stationID = stationID;
+    }
+
     public Integer getLanguage() {
         return language;
     }

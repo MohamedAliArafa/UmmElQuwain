@@ -43,7 +43,7 @@ public class SponsorAdapter extends RecyclerView.Adapter<SponsorAdapter.MyViewHo
         mList = list;
         mLayout = layout;
         mContext = context;
-        mPicasso = ((MyApplication) mContext.getApplicationContext()).getPicasso();
+        mPicasso = MyApplication.get(mContext).getPicasso();
     }
 
     public void updateData(List<SponsorResultModel> list) {

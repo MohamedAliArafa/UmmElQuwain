@@ -8,7 +8,7 @@ import java.util.List;
  * Created by mohamed.arafa on 8/24/2017.
  */
 
-interface StationsContract {
+public interface StationsContract {
     interface View {
         void updateUI(List<StationResultModel> models);
         void showProgress();

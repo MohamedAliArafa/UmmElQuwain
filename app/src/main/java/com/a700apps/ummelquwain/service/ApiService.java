@@ -14,6 +14,7 @@ import com.a700apps.ummelquwain.models.response.Events.EventsModel;
 import com.a700apps.ummelquwain.models.response.NewsBar.NewsBarDetailModel;
 import com.a700apps.ummelquwain.models.response.NewsBar.NewsBarModel;
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorModel;
+import com.a700apps.ummelquwain.models.response.Station.StationModel;
 import com.a700apps.ummelquwain.models.response.Station.StationsModel;
 
 import retrofit2.Call;
@@ -65,6 +66,6 @@ public interface ApiService {
     Call<StationsModel> getAllStations(@Body StationsRequestModel language);
 
     @POST("Stations/StationsDetails")
-    Call<AlbumModel> getStationDetails(@Body StationDetailsRequestModel newsModel);
+    Call<StationModel> getStationDetails(@Body StationDetailsRequestModel newsModel);
 
 }

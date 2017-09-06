@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">أم القوين</string>
+    <string name="desc_powered_by">مشغل بواسطة:</string>
+    <string name="desc_search_a_program">إبحث عن برنامج</string>
+    <string name="mock_2015">جميع الحقوق محفوظة لدائرة الحكومة الإلكترونية 2015</string>
+</resources>

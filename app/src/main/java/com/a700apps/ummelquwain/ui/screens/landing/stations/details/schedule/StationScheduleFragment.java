@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,4 +28,7 @@ public class StationScheduleFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_station_schedule, container, false);
     }
 
+    public static StationScheduleFragment newInstance(StationResultModel station) {
+        return new StationScheduleFragment();
+    }
 }

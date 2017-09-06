@@ -49,7 +49,8 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
             mView.hideProgress();
             mView.updateUI(mModel);
         }
-        mGetContactUsCall = MyApplication.get(mContext).getApiService().getContactUs(new LanguageRequestModel(1));
+        mGetContactUsCall = MyApplication.get(mContext).getApiService()
+                .getContactUs(new LanguageRequestModel(MyApplication.get(mContext).getLanguage()));
         mGetContactUsCall.enqueue(new Callback<ContactUsModel>() {
             @Override
             public void onResponse(@NonNull Call<ContactUsModel> call, @NonNull Response<ContactUsModel> response) {

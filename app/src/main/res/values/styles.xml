@@ -11,6 +11,6 @@
     </style>
 
     <style name="fancyTextView" parent="android:Widget.TextView">
-        <item name="android:fontFamily">@font/ge_two_light</item>
+        <item name="android:fontFamily">@font/main_font</item>
     </style>
 </resources>

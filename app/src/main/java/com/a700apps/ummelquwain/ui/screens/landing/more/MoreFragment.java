@@ -1,6 +1,7 @@
 package com.a700apps.ummelquwain.ui.screens.landing.more;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.ui.screens.landing.more.aboutus.AboutUsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.contactus.ContactUsFragment;
@@ -41,7 +43,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        LinearLayout settingBtn = view.findViewById(R.id.ll_setting);
+        LinearLayout settingBtn = view.findViewById(R.id.ll_language);
         LinearLayout eventsBtn = view.findViewById(R.id.ll_events);
         LinearLayout newsBtn = view.findViewById(R.id.ll_news);
         LinearLayout sponsersBtn = view.findViewById(R.id.ll_sponser);
@@ -66,8 +68,13 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
         int viewId = view.getId();
         LandingFragment landingFragment = (LandingFragment) getParentFragment();
         switch (viewId){
-            case R.id.ll_setting:
-
+            case R.id.ll_language:
+                MyApplication.get(getContext()).toggleLanguage();
+                Intent i = getActivity().getPackageManager()
+                        .getLaunchIntentForPackage( getActivity().getPackageName() );
+                assert i != null;
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
                 break;
             case R.id.ll_events:
                 landingFragment.startFragmentFromChild(new EventsFragment());

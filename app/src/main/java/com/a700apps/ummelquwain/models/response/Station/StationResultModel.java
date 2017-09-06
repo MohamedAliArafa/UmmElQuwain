@@ -1,8 +1,10 @@
 package com.a700apps.ummelquwain.models.response.Station;
 
+import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -79,6 +81,41 @@ public class StationResultModel  extends RealmObject{
     @SerializedName("keyword")
     @Expose
     private String keyword;
+    @SerializedName("Programs")
+    @Expose
+    private RealmList<ProgramResultModel> programs;
+
+    public Boolean getLive() {
+        return isLive;
+    }
+
+    public void setLive(Boolean live) {
+        isLive = live;
+    }
+
+    public Boolean getVideo() {
+        return isVideo;
+    }
+
+    public void setVideo(Boolean video) {
+        isVideo = video;
+    }
+
+    public String getuRLPLS() {
+        return uRLPLS;
+    }
+
+    public void setuRLPLS(String uRLPLS) {
+        this.uRLPLS = uRLPLS;
+    }
+
+    public RealmList<ProgramResultModel> getPrograms() {
+        return programs;
+    }
+
+    public void setPrograms(RealmList<ProgramResultModel> programs) {
+        this.programs = programs;
+    }
 
     public Integer getStationID() {
         return stationID;

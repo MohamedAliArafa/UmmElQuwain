@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
     tools:context="com.a700apps.ummelquwain.ui.screens.landing.more.events.details.EventDetailsFragment">
 
     <ImageView
@@ -58,27 +60,29 @@
     </RelativeLayout>
 
     <View
+        android:id="@+id/view2"
         android:layout_width="0dp"
         android:layout_height="1dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_event_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_event_title"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/tv_event_title"
         app:layout_constraintHorizontal_bias="0.0"
-        android:id="@+id/view2" />
+        app:layout_constraintLeft_toLeftOf="@+id/tv_event_title"
+        app:layout_constraintRight_toRightOf="@+id/tv_event_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_event_title" />
 
     <TextView
         android:id="@+id/tv_event_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="Famous Celebrties event"
         android:textColor="@android:color/white"
@@ -94,6 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="From 2017/8/01     To 2017/8/31"
         android:textColor="@android:color/white"
@@ -105,6 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="0dp"
         android:text="Dubai, 27 Khalifa Tower"
         android:textColor="@color/colorAccent"
@@ -147,13 +153,16 @@
 
     <TextView
         android:id="@+id/tv_event_desc"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="It was the eve of another highly anticipated royal wedding: the 2011 nuptials of Prince William and Kate Middleton. Joan Lee may have lived in the United States for most of her life, but the former model and showgirl was still absolutely British, and she wanted her then 88-year-old husband to stay up with her to the wee hours to watch the Westminster Abbey ceremony."
         android:textAllCaps="false"
         android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_event_location" />
 

@@ -44,7 +44,8 @@ public class NewsPresenter implements NewsContract.UserAction, LifecycleObserver
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getData() {
         mView.showProgress();
-        mNewsCall = MyApplication.get(mContext).getApiService().getAllNews(new LanguageRequestModel(1));
+        mNewsCall = MyApplication.get(mContext).getApiService()
+                .getAllNews(new LanguageRequestModel(MyApplication.get(mContext).getLanguage()));
         mNewsCall.enqueue(new Callback<NewsBarModel>() {
             @Override
             public void onResponse(@NonNull Call<NewsBarModel> call, @NonNull Response<NewsBarModel> response) {

@@ -46,7 +46,7 @@ public class ImagePagerFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_image_pager, container, false);
         ButterKnife.bind(this, view);
-        Picasso picasso = ((MyApplication) getActivity().getApplicationContext()).getPicasso();
+        Picasso picasso = MyApplication.get(getContext()).getPicasso();
         picasso.load(mMedia.getAttachmentURL()).into(mMediaBackImageView);
         mMediaDescTextView.setText(mMedia.getDescription());
         return view;

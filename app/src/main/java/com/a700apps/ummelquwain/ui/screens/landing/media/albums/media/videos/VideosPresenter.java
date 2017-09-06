@@ -54,14 +54,16 @@ public class VideosPresenter implements MediaContract.UserAction, LifecycleObser
 
         mRealm = Realm.getDefaultInstance();
         RealmResults<MediaResultModel> query = mRealm.where(MediaResultModel.class)
-                .equalTo("albumID", albumID).findAll();
+                .equalTo("albumID", albumID).equalTo("mediaType", 2).findAll();
         if (query.isLoaded() && !query.isEmpty()){
             mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);
         }
 
-        mAlbumsCall = MyApplication.get(mContext).getApiService().getAlbumContent(new AlbumContentRequestModel(1, albumID, mediaType));
+        mAlbumsCall = MyApplication.get(mContext).getApiService()
+                .getAlbumContent(new AlbumContentRequestModel(
+                        MyApplication.get(mContext).getLanguage(), albumID, mediaType));
         mAlbumsCall.enqueue(new Callback<AlbumModel>() {
             @Override
             public void onResponse(@NonNull Call<AlbumModel> call, @NonNull Response<AlbumModel> response) {

@@ -41,7 +41,8 @@ public class SponsorPresenter implements SponsorsContract.UserAction, LifecycleO
     public void getData() {
         Log.i("Status","GetData Init");
         mView.showProgress();
-        mGetSponsorCall = MyApplication.get(mContext).getApiService().getAllSponsors(new LanguageRequestModel(1));
+        mGetSponsorCall = MyApplication.get(mContext).getApiService()
+                .getAllSponsors(new LanguageRequestModel(MyApplication.get(mContext).getLanguage()));
         mGetSponsorCall.enqueue(new Callback<SponsorModel>() {
             @Override
             public void onResponse(@NonNull Call<SponsorModel> call, @NonNull Response<SponsorModel> response) {

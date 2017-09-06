@@ -15,7 +15,7 @@
         android:layout_marginRight="0dp"
         android:layout_marginTop="9dp"
         android:background="@android:color/white"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -52,12 +52,12 @@
         android:layout_marginRight="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_setting">
+        app:layout_constraintTop_toBottomOf="@+id/ll_language">
 
         <ImageView
             android:id="@+id/iv_events"
@@ -89,7 +89,7 @@
         android:layout_marginRight="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -126,7 +126,7 @@
         android:layout_marginRight="0dp"
         android:layout_marginTop="7dp"
         android:background="@android:color/white"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -163,7 +163,7 @@
         android:layout_marginRight="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -200,7 +200,7 @@
         android:layout_marginRight="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -230,14 +230,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_setting"
+        android:id="@+id/ll_language"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -245,19 +245,20 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iv_setting"
+            android:id="@+id/iv_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_setting" />
+            app:srcCompat="@drawable/ic_languge" />
 
         <TextView
-            android:id="@+id/tv_setting"
+            android:id="@+id/tv_language"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:gravity="end"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/title_setting" />
+            android:text="العربية" />
 
         <ImageView
             android:id="@+id/iv_setting_arrow"
@@ -274,7 +275,7 @@
         android:layout_marginRight="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"

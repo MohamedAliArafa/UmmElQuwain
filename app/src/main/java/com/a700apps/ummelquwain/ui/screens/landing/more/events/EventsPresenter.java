@@ -44,7 +44,8 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getData() {
         mView.showProgress();
-        mEventsCall = MyApplication.get(mContext).getApiService().getAllEvents(new LanguageRequestModel(1));
+        mEventsCall = MyApplication.get(mContext).getApiService()
+                .getAllEvents(new LanguageRequestModel(MyApplication.get(mContext).getLanguage()));
         mEventsCall.enqueue(new Callback<EventsModel>() {
             @Override
             public void onResponse(@NonNull Call<EventsModel> call, @NonNull Response<EventsModel> response) {

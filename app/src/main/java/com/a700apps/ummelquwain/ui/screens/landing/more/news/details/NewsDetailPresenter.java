@@ -41,7 +41,9 @@ public class NewsDetailPresenter implements NewsDetailContract.UserAction, Lifec
     public void getData() {
         Log.i("Status","GetData Init");
         mView.showProgress();
-        mGetNewsDetails = MyApplication.get(mContext).getApiService().getNewsDetails(new NewsDetailsRequestModel(1, mNewsID));
+        mGetNewsDetails = MyApplication.get(mContext).getApiService()
+                .getNewsDetails(new NewsDetailsRequestModel(
+                        MyApplication.get(mContext).getLanguage(), mNewsID));
         mGetNewsDetails.enqueue(new Callback<NewsBarDetailModel>() {
             @Override
             public void onResponse(@NonNull Call<NewsBarDetailModel> call, @NonNull Response<NewsBarDetailModel> response) {

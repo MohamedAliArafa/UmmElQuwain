@@ -7,7 +7,7 @@
     android:background="@color/trans_white_10">
 
     <ImageView
-        android:id="@+id/iv_program_logo"
+        android:id="@+id/iv_station_logo"
         android:layout_width="@dimen/logo_dimension"
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
@@ -30,8 +30,8 @@
         android:layout_marginTop="8dp"
         android:text="@string/mock_station_name"
         android:textColor="@android:color/white"
-        app:layout_constraintLeft_toRightOf="@+id/iv_program_logo"
-        app:layout_constraintTop_toTopOf="@+id/iv_program_logo" />
+        app:layout_constraintLeft_toRightOf="@+id/iv_station_logo"
+        app:layout_constraintTop_toTopOf="@+id/iv_station_logo" />
 
     <TextView
         android:id="@+id/tv_on_live"
@@ -43,7 +43,7 @@
         android:text="@string/desc_on_start"
         android:textColor="@color/statusColor"
         android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@+id/iv_program_logo"
+        app:layout_constraintLeft_toRightOf="@+id/iv_station_logo"
         app:layout_constraintTop_toBottomOf="@+id/tv_station_name" />
 
     <TextView
@@ -71,7 +71,7 @@
         android:paddingBottom="8dp"
         android:text="@string/mock_station_category_mock"
         android:textColor="@android:color/white"
-        app:layout_constraintLeft_toRightOf="@+id/iv_program_logo"
+        app:layout_constraintLeft_toRightOf="@+id/iv_station_logo"
         app:layout_constraintTop_toBottomOf="@+id/tv_program_desc" />
 
     <ImageView

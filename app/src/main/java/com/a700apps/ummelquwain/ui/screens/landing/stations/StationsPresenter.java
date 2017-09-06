@@ -2,6 +2,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.stations;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -42,6 +43,7 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     }
 
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     @Override
     public void getData() {
         mView.showProgress();
@@ -53,7 +55,8 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
             mView.hideProgress();
             mView.updateUI(mModel);
         }
-        mStationsCall = MyApplication.get(mContext).getApiService().getAllStations(new StationsRequestModel(1, -1));
+        mStationsCall = MyApplication.get(mContext).getApiService()
+                .getAllStations(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), -1));
         mStationsCall.enqueue(new Callback<StationsModel>() {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {

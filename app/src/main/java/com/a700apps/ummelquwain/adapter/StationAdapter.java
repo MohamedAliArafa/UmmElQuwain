@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
-import com.a700apps.ummelquwain.models.response.Albums.MediaResultModel;
-import com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.MediaContract;
+import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsContract;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,18 +24,24 @@ import butterknife.ButterKnife;
  * Created by mohamed.arafa on 8/28/2017.
  */
 
-public class AlbumMediaAdapter extends RecyclerView.Adapter<AlbumMediaAdapter.MyViewHolder> {
+public class StationAdapter extends RecyclerView.Adapter<StationAdapter.MyViewHolder> {
 
-    private List<MediaResultModel> mList = new ArrayList<>();
+    private List<StationResultModel> mList = new ArrayList<>();
     private int mLayout;
-    private MediaContract.UserAction mPresenter;
+    private StationsContract.UserAction mPresenter;
     Picasso mPicasso;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_album_title)
+        @BindView(R.id.tv_station_name)
         TextView mTitleTextView;
 
-        @BindView(R.id.iv_logo)
+        @BindView(R.id.tv_station_category)
+        TextView mCategoryTextView;
+
+        @BindView(R.id.tv_program_desc)
+        TextView mProgramTextView;
+
+        @BindView(R.id.iv_station_logo)
         ImageView mThumpImageView;
 
 
@@ -45,14 +51,14 @@ public class AlbumMediaAdapter extends RecyclerView.Adapter<AlbumMediaAdapter.My
         }
     }
 
-    public AlbumMediaAdapter(Context context, ArrayList<MediaResultModel> list, int layout, MediaContract.UserAction presenter) {
+    public StationAdapter(Context context, ArrayList<StationResultModel> list, int layout, StationsContract.UserAction presenter) {
         mList = list;
         mLayout = layout;
         mPresenter = presenter;
         mPicasso = ((MyApplication) context.getApplicationContext()).getPicasso();
     }
 
-    public void updateData(List<MediaResultModel> list) {
+    public void updateData(List<StationResultModel> list) {
         mList = list;
         this.notifyDataSetChanged();
     }
@@ -66,10 +72,12 @@ public class AlbumMediaAdapter extends RecyclerView.Adapter<AlbumMediaAdapter.My
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        MediaResultModel model = mList.get(position);
-        holder.mTitleTextView.setText(model.getDescription());
-        mPicasso.load(model.getVideoThumb()).into(holder.mThumpImageView);
-        holder.itemView.setOnClickListener(view -> mPresenter.openDetails(mList, position));
+        StationResultModel model = mList.get(position);
+        holder.mTitleTextView.setText(model.getStationName());
+        holder.mCategoryTextView.setText(model.getCategoryName());
+        holder.mProgramTextView.setText(model.getCurrentProgramName());
+        mPicasso.load(model.getStationLogo()).into(holder.mThumpImageView);
+        holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model.getStationID()));
     }
 
     @Override

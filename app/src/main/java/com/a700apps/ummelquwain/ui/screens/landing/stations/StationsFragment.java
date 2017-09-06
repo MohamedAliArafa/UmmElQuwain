@@ -4,31 +4,48 @@ package com.a700apps.ummelquwain.ui.screens.landing.stations;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.adapter.StationAdapter;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StationsFragment extends Fragment implements StationsContract.View, LifecycleRegistryOwner{
+public class StationsFragment extends Fragment implements StationsContract.View, LifecycleRegistryOwner {
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
+    @BindView(R.id.recycler_stations)
+    RecyclerView mRecycler;
 
+    @BindView(R.id.progressBar)
+    ProgressBar mProgressBar;
+
+    StationAdapter mAdapter;
+    StationsPresenter mPresenter;
 
     public StationsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mPresenter = new StationsPresenter(getContext(), this, getParentFragment().getFragmentManager(), getLifecycle());
     }
 
     public static StationsFragment newInstance() {
@@ -40,9 +57,11 @@ public class StationsFragment extends Fragment implements StationsContract.View,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stations, container, false);
-        RecyclerView rv = view.findViewById(R.id.recycler_stations);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        rv.setAdapter(new Adapter());
+        ButterKnife.bind(this, view);
+        mRecycler = view.findViewById(R.id.recycler_stations);
+        mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new StationAdapter(getContext(), null, R.layout.list_item_station, mPresenter);
+        mRecycler.setAdapter(mAdapter);
         return view;
     }
 
@@ -53,56 +72,16 @@ public class StationsFragment extends Fragment implements StationsContract.View,
 
     @Override
     public void updateUI(List<StationResultModel> models) {
-
+        mAdapter.updateData(models);
     }
 
     @Override
     public void showProgress() {
-
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-
+        mProgressBar.setVisibility(View.GONE);
     }
-
-    class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
-
-        private ArrayList<String> list = new ArrayList<>();
-
-        class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView title;
-
-            MyViewHolder(View view) {
-                super(view);
-                title = view.findViewById(R.id.title);
-            }
-        }
-
-        Adapter() {
-        }
-
-        public Adapter(ArrayList<String> list) {
-            this.list = list;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item_station, parent, false);
-            return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-//            holder.title.setText(list.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return 15;
-//            return list.size();
-        }
-    }
-
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="_hello_blank_fragment">Hello blank fragment</string>
+    <string name="_hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
     <string name="app_name">UmmAlQuwain</string>
 
@@ -66,4 +66,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_info">Info</string>
+    <string name="title_schedule">Schedule</string>
+    <string name="mock_info_desc">Dance FM 97.8. 36K likes. Dance FM 97.8 The UAE\'s only dance station brings you exclusively the best in electronic music from over 100 local</string>
 </resources>

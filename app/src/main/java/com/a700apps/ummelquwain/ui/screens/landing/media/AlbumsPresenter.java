@@ -55,7 +55,8 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
             mView.hideProgress();
             mView.updateUI(mModel);
         }
-        mAlbumsCall = MyApplication.get(mContext).getApiService().getAllAlbums(new LanguageRequestModel(1));
+        mAlbumsCall = MyApplication.get(mContext).getApiService()
+                .getAllAlbums(new LanguageRequestModel(MyApplication.get(mContext).getLanguage()));
         mAlbumsCall.enqueue(new Callback<AlbumsModel>() {
             @Override
             public void onResponse(@NonNull Call<AlbumsModel> call, @NonNull Response<AlbumsModel> response) {

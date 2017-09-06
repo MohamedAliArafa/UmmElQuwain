@@ -18,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
+/*
  * Created by mohamed.arafa on 8/28/2017.
  */
 
@@ -47,7 +47,8 @@ public class AboutUsPresenter implements AboutUsContract.UserAction, LifecycleOb
             mView.hideProgress();
             mView.updateUI(mModel);
         }
-        mGetContactUsCall = MyApplication.get(mContext).getApiService().getAboutUs(new LanguageRequestModel(1));
+        mGetContactUsCall = MyApplication.get(mContext).getApiService()
+                .getAboutUs(new LanguageRequestModel(MyApplication.get(mContext).getLanguage()));
         mGetContactUsCall.enqueue(new Callback<AboutUsModel>() {
             @Override
             public void onResponse(@NonNull Call<AboutUsModel> call, @NonNull Response<AboutUsModel> response) {

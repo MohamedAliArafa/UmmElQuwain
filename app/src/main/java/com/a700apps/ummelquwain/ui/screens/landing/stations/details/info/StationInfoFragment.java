@@ -6,14 +6,28 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class StationInfoFragment extends Fragment {
 
+    private static StationResultModel mModel;
+    @BindView(R.id.tv_info_desc)
+    TextView mInfoDescTextView;
+    @BindView(R.id.tv_info_site)
+    TextView mInfoSiteTextView;
+    @BindView(R.id.tv_info_freq)
+    TextView mInfoFreqTextView;
+    @BindView(R.id.tv_info_language)
+    TextView mInfoLanguageTextView;
 
     public StationInfoFragment() {
         // Required empty public constructor
@@ -24,7 +38,17 @@ public class StationInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_station_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_station_info, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
+    public static StationInfoFragment newInstance(StationResultModel model) {
+        mModel = model;
+        return new StationInfoFragment();
+    }
+
+    void updateUI() {
+
+    }
 }

@@ -38,7 +38,7 @@ public class AlbumFragment extends Fragment implements AlbumContract.View, Lifec
     ImageView mBackToolbarBtn;
 
 
-    AlbumPresenter mProvider;
+    AlbumPresenter mPresenter;
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
@@ -54,7 +54,7 @@ public class AlbumFragment extends Fragment implements AlbumContract.View, Lifec
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProvider = new AlbumPresenter(this, getLifecycle());
+        mPresenter = new AlbumPresenter(this, getLifecycle());
     }
 
     @Override
