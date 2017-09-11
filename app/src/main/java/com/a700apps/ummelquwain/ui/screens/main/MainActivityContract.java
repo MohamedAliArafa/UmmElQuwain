@@ -6,7 +6,7 @@ package com.a700apps.ummelquwain.ui.screens.main;
 interface MainActivityContract {
 
     interface View {
-
+        void launchLanding();
     }
 
     interface UserActions {

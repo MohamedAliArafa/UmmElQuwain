@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,7 @@ import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.info.StationInfoFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.schedule.StationScheduleFragment;
 import com.a700apps.ummelquwain.utilities.ViewPagerAdapter;
+import com.booking.rtlviewpager.RtlViewPager;
 import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class StationFragment extends Fragment implements StationContract.View, L
     @BindView(R.id.tl_details)
     TabLayout mTabLayout;
     @BindView(R.id.vp_details)
-    ViewPager mViewPager;
+    RtlViewPager mViewPager;
     @BindView(R.id.iv_toolbar_back)
     ImageView mBackToolbarBtn;
 
@@ -114,6 +114,7 @@ public class StationFragment extends Fragment implements StationContract.View, L
 
     @Override
     public void setupViewPager() {
+        if (!isAdded()) return;
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         for (int i = 0; i < supplierFragments.size(); i++)
             adapter.addFragment(supplierFragments.get(i), getString(supplierNames.get(i)));
@@ -122,6 +123,7 @@ public class StationFragment extends Fragment implements StationContract.View, L
 
     @Override
     public void setupTabLayout() {
+        if (!isAdded()) return;
         mTabLayout.setupWithViewPager(mViewPager);
         for (int i = 0; i < supplierNames.size(); i++) {
             TextView tab = (TextView) LayoutInflater.from(getContext()).inflate(

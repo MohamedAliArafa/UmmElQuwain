@@ -6,7 +6,6 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
@@ -62,7 +61,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             mView.updateFavUI(mStationModel);
         }
         mStationCall = MyApplication.get(mContext).getApiService()
-                .getAllStations(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), -1));
+                .getAllStations(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), MyApplication.get(mContext).getUser()));
         mStationCall.enqueue(new Callback<StationsModel>() {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
@@ -78,7 +77,6 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
 
             @Override
             public void onFailure(@NonNull Call<StationsModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
                 mView.hideProgress();
             }
@@ -113,7 +111,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
 
             @Override
             public void onFailure(@NonNull Call<SponsorModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+
                 t.printStackTrace();
                 mView.hideProgress();
             }

@@ -6,11 +6,11 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
+import com.a700apps.ummelquwain.models.request.SearchRequestModel;
 import com.a700apps.ummelquwain.models.response.Albums.AlbumResultModel;
 import com.a700apps.ummelquwain.models.response.Albums.AlbumsModel;
 import com.a700apps.ummelquwain.ui.screens.landing.media.albums.AlbumFragment;
@@ -72,7 +72,7 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
 
             @Override
             public void onFailure(@NonNull Call<AlbumsModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+
                 t.printStackTrace();
                 mView.hideProgress();
             }
@@ -83,5 +83,40 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
     public void openDetails(int albumID) {
         mFragmentManager.beginTransaction().addToBackStack(null)
                 .add(R.id.fragment_container, AlbumFragment.newInstance(albumID)).commit();
+    }
+
+    @Override
+    public void search(String keyword) {
+        mView.showProgress();
+
+        mRealm = Realm.getDefaultInstance();
+        RealmResults<AlbumResultModel> query = mRealm.where(AlbumResultModel.class).findAll();
+        if (query.isLoaded() && !query.isEmpty()){
+            mModel = query;
+            mView.hideProgress();
+            mView.updateUI(mModel);
+        }
+        mAlbumsCall = MyApplication.get(mContext).getApiService()
+                .searchAlbums(new SearchRequestModel(keyword, MyApplication.get(mContext).getUser(), MyApplication.get(mContext).getLanguage()));
+        mAlbumsCall.enqueue(new Callback<AlbumsModel>() {
+            @Override
+            public void onResponse(@NonNull Call<AlbumsModel> call, @NonNull Response<AlbumsModel> response) {
+                mModel = response.body().getResult();
+                mView.hideProgress();
+
+                mRealm.beginTransaction();
+                mRealm.copyToRealmOrUpdate(mModel);
+                mRealm.commitTransaction();
+
+                mView.updateUI(mModel);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AlbumsModel> call, @NonNull Throwable t) {
+
+                t.printStackTrace();
+                mView.hideProgress();
+            }
+        });
     }
 }

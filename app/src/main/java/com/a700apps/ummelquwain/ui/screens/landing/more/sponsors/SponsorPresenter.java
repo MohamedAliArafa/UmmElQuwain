@@ -54,7 +54,7 @@ public class SponsorPresenter implements SponsorsContract.UserAction, LifecycleO
 
             @Override
             public void onFailure(@NonNull Call<SponsorModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+
                 t.printStackTrace();
                 mView.hideProgress();
             }

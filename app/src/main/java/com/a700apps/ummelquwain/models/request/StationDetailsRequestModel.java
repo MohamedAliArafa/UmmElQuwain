@@ -13,12 +13,12 @@ public class StationDetailsRequestModel {
     private Integer language;
     @SerializedName("UserID")
     @Expose
-    private Integer userID;
+    private String userID;
     @SerializedName("StationID")
     @Expose
     private Integer stationID;
 
-    public StationDetailsRequestModel(Integer language, Integer userID, Integer stationID) {
+    public StationDetailsRequestModel(Integer language, String userID, Integer stationID) {
         this.language = language;
         this.userID = userID;
         this.stationID = stationID;
@@ -32,11 +32,11 @@ public class StationDetailsRequestModel {
         this.language = language;
     }
 
-    public Integer getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(Integer userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 

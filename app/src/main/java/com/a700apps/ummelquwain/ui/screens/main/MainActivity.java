@@ -13,7 +13,9 @@ import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity implements MainActivityContract {
+public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+
+    private LandingFragment mContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,20 +24,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         setContentView(R.layout.activity_main);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             fragmentTransaction.replace(R.id.fragment_container, SplashFragment.newInstance());
             fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
                     android.R.anim.slide_out_right, android.R.anim.slide_in_left,
                     android.R.anim.slide_out_right);
             fragmentTransaction.commit();
-        }else {
-            fragmentTransaction.replace(R.id.fragment_container, new LandingFragment(), "landing");
-            fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
-                    android.R.anim.slide_out_right, android.R.anim.slide_in_left,
-                    android.R.anim.slide_out_right);
-            fragmentTransaction.commit();
+        } else {
+            mContent = (LandingFragment) getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
         }
     }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState!= null)
+            mContent = (LandingFragment) getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Save the fragment's instance
+        getSupportFragmentManager().putFragment(outState, "myFragmentName", mContent);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -44,9 +57,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         } else {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag("landing");
             if (fragment instanceof LandingFragment)
-                if(((LandingFragment)getSupportFragmentManager().findFragmentByTag("landing")).moveToHome()){
+                if (((LandingFragment) getSupportFragmentManager().findFragmentByTag("landing")).moveToHome()) {
                     super.onBackPressed();
                 }
         }
+    }
+
+    @Override
+    public void launchLanding() {
+        mContent = new LandingFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, mContent, "landing");
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right, android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
+        fragmentTransaction.commit();
+
     }
 }

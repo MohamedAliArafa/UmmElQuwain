@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
@@ -19,6 +20,7 @@ import com.a700apps.ummelquwain.ui.screens.landing.more.joinus.JoinUsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.LandingFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.news.NewsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.sponsors.SponsorsFragment;
+import com.a700apps.ummelquwain.utilities.Utility;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,19 +45,19 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        LinearLayout settingBtn = view.findViewById(R.id.ll_language);
+        LinearLayout LanguageBtn = view.findViewById(R.id.ll_language);
         LinearLayout eventsBtn = view.findViewById(R.id.ll_events);
         LinearLayout newsBtn = view.findViewById(R.id.ll_news);
-        LinearLayout sponsersBtn = view.findViewById(R.id.ll_sponser);
+        LinearLayout sponsorsBtn = view.findViewById(R.id.ll_sponser);
         LinearLayout joinBtn = view.findViewById(R.id.ll_join);
         LinearLayout aboutBtn = view.findViewById(R.id.ll_about);
         LinearLayout contactBtn = view.findViewById(R.id.ll_contact);
         LinearLayout logoutBtn = view.findViewById(R.id.ll_logout);
 
-        settingBtn.setOnClickListener(this);
+        LanguageBtn.setOnClickListener(this);
         eventsBtn.setOnClickListener(this);
         newsBtn.setOnClickListener(this);
-        sponsersBtn.setOnClickListener(this);
+        sponsorsBtn.setOnClickListener(this);
         joinBtn.setOnClickListener(this);
         aboutBtn.setOnClickListener(this);
         contactBtn.setOnClickListener(this);
@@ -69,12 +71,16 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
         LandingFragment landingFragment = (LandingFragment) getParentFragment();
         switch (viewId){
             case R.id.ll_language:
-                MyApplication.get(getContext()).toggleLanguage();
-                Intent i = getActivity().getPackageManager()
-                        .getLaunchIntentForPackage( getActivity().getPackageName() );
-                assert i != null;
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                if (Utility.isConnected(getContext())) {
+                    MyApplication.get(getContext()).toggleLanguage();
+                    Intent i = getActivity().getPackageManager()
+                            .getLaunchIntentForPackage(getActivity().getPackageName());
+                    assert i != null;
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }else {
+                    Toast.makeText(getContext(), getString(R.string.error_network_connectivity), Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.ll_events:
                 landingFragment.startFragmentFromChild(new EventsFragment());

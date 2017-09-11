@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
@@ -67,7 +66,7 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
 
             @Override
             public void onFailure(@NonNull Call<ContactUsModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+
                 t.printStackTrace();
                 mView.hideProgress();
             }

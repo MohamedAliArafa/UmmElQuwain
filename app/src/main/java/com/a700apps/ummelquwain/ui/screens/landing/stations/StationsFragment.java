@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.ProgressBar;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.adapter.StationAdapter;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.utilities.ClickableEditText;
 
 import java.util.List;
 
@@ -34,6 +37,9 @@ public class StationsFragment extends Fragment implements StationsContract.View,
 
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
+
+    @BindView(R.id.et_search)
+    ClickableEditText mSearchEditText;
 
     StationAdapter mAdapter;
     StationsPresenter mPresenter;
@@ -58,11 +64,44 @@ public class StationsFragment extends Fragment implements StationsContract.View,
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stations, container, false);
         ButterKnife.bind(this, view);
-        mRecycler = view.findViewById(R.id.recycler_stations);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new StationAdapter(getContext(), null, R.layout.list_item_station, mPresenter);
         mRecycler.setAdapter(mAdapter);
+        setupSearch();
         return view;
+    }
+
+    void setupSearch() {
+        mSearchEditText.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.drawable.ic_search), null);
+        mSearchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().isEmpty())
+                    mPresenter.getData();
+            }
+        });
+        mSearchEditText.setDrawableClickListener(target -> {
+            switch (target) {
+                case RIGHT:
+                    //Do something here
+                    if (!mSearchEditText.getText().toString().isEmpty())
+                        mPresenter.search(mSearchEditText.getText().toString());
+                    break;
+
+                default:
+                    break;
+            }
+        });
     }
 
     @Override

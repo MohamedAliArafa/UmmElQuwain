@@ -40,6 +40,7 @@ public class StationInfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_station_info, container, false);
         ButterKnife.bind(this, view);
+        updateUI();
         return view;
     }
 
@@ -49,6 +50,9 @@ public class StationInfoFragment extends Fragment {
     }
 
     void updateUI() {
-
+        mInfoDescTextView.setText(mModel.getStationInfo());
+        mInfoFreqTextView.setText(mModel.getStationFrequency());
+        mInfoLanguageTextView.setText(mModel.getStationLanguage());
+        mInfoSiteTextView.setText(mModel.getStationWebsite());
     }
 }

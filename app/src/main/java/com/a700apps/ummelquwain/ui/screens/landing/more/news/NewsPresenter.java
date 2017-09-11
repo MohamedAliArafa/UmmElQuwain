@@ -56,7 +56,7 @@ public class NewsPresenter implements NewsContract.UserAction, LifecycleObserver
 
             @Override
             public void onFailure(@NonNull Call<NewsBarModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+
                 t.printStackTrace();
                 mView.hideProgress();
             }

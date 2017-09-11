@@ -5,7 +5,6 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.models.request.StationDetailsRequestModel;
@@ -53,7 +52,7 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
         mStationCall = MyApplication.get(mContext).getApiService()
                 .getStationDetails(
                         new StationDetailsRequestModel(MyApplication.get(mContext).getLanguage(),
-                                -1, mStationID));
+                                MyApplication.get(mContext).getUser(), mStationID));
         mStationCall.enqueue(new Callback<StationModel>() {
             @Override
             public void onResponse(@NonNull Call<StationModel> call, @NonNull Response<StationModel> response) {
@@ -73,7 +72,7 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
 
             @Override
             public void onFailure(@NonNull Call<StationModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+
                 t.printStackTrace();
                 mView.hideProgress();
             }

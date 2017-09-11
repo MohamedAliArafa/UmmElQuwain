@@ -4,10 +4,9 @@
     android:layout_height="match_parent"
     tools:context="com.a700apps.ummelquwain.ui.screens.landing.stations.details.schedule.StationScheduleFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_schedule_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/_hello_blank_fragment" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

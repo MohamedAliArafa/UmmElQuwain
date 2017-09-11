@@ -65,7 +65,7 @@ public class AboutUsPresenter implements AboutUsContract.UserAction, LifecycleOb
 
             @Override
             public void onFailure(@NonNull Call<AboutUsModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+
                 t.printStackTrace();
                 mView.hideProgress();
             }

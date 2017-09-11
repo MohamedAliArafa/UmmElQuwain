@@ -74,9 +74,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         holder.mEndDateTextView.setText(model.getEventEndDate());
         holder.mLocationTextView.setText(model.getEventPlace());
         holder.mDescTextView.setText(model.getEventDescription());
-        holder.itemView.setOnClickListener(view -> {
-            mPresenter.openDetails(model.getEventID());
-        });
+        holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model));
     }
 
     @Override

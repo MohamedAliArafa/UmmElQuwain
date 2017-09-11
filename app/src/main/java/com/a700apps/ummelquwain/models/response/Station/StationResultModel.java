@@ -1,5 +1,6 @@
 package com.a700apps.ummelquwain.models.response.Station;
 
+import com.a700apps.ummelquwain.models.response.Station.Schedule.ScheduleModel;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -84,6 +85,9 @@ public class StationResultModel  extends RealmObject{
     @SerializedName("Programs")
     @Expose
     private RealmList<ProgramResultModel> programs;
+    @SerializedName("Schedule")
+    @Expose
+    private RealmList<ScheduleModel> schedule;
 
     public Boolean getLive() {
         return isLive;
@@ -291,5 +295,13 @@ public class StationResultModel  extends RealmObject{
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public RealmList<ScheduleModel> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(RealmList<ScheduleModel> schedule) {
+        this.schedule = schedule;
     }
 }

@@ -29,7 +29,8 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.MyViewHo
     private List<StationResultModel> mList = new ArrayList<>();
     private int mLayout;
     private StationsContract.UserAction mPresenter;
-    Picasso mPicasso;
+    private Picasso mPicasso;
+    private Context mContext;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_station_name)
@@ -44,6 +45,12 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.MyViewHo
         @BindView(R.id.iv_station_logo)
         ImageView mThumpImageView;
 
+        @BindView(R.id.iv_play)
+        ImageView mPlayImageView;
+
+        @BindView(R.id.iv_like)
+        ImageView mLikeImageView;
+
 
         MyViewHolder(View view) {
             super(view);
@@ -55,6 +62,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.MyViewHo
         mList = list;
         mLayout = layout;
         mPresenter = presenter;
+        mContext = context;
         mPicasso = ((MyApplication) context.getApplicationContext()).getPicasso();
     }
 
@@ -77,7 +85,18 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.MyViewHo
         holder.mCategoryTextView.setText(model.getCategoryName());
         holder.mProgramTextView.setText(model.getCurrentProgramName());
         mPicasso.load(model.getStationLogo()).into(holder.mThumpImageView);
-        holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model.getStationID()));
+        holder.mLikeImageView.setImageDrawable(mContext.getResources()
+                .getDrawable(model.getIsFavourite() == 1 ?
+                        R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+        holder.mLikeImageView.setOnClickListener(view -> {
+            holder.mLikeImageView.setImageDrawable(mContext.getResources()
+                    .getDrawable(model.getIsFavourite() == 1 ?
+                            R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+            mPresenter.setFav(model.getStationID(), model.getIsFavourite() == 1 ? 0 : 1);
+        });
+        holder.itemView.setOnClickListener(view ->
+                mPresenter.openDetails(model.getStationID())
+        );
     }
 
     @Override

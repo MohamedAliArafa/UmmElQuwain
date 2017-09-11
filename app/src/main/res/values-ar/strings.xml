@@ -1,7 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">أم القوين</string>
+    <string name="app_name">أم القيوين</string>
     <string name="desc_powered_by">مشغل بواسطة:</string>
     <string name="desc_search_a_program">إبحث عن برنامج</string>
     <string name="mock_2015">جميع الحقوق محفوظة لدائرة الحكومة الإلكترونية 2015</string>
+    <string name="title_about_us">عن الشبكة</string>
+    <string name="title_address">العنوان</string>
+    <string name="title_albums">البومات</string>
+    <string name="title_contact_us">إتصل بنا</string>
+    <string name="title_email">البريد الإلكترونى</string>
+    <string name="title_events">أحداث</string>
+    <string name="title_favs">المفضلة</string>
+    <string name="title_images">الصور</string>
+    <string name="title_join_us">إنضم لنا</string>
+    <string name="title_log_out">تسجيل خروج</string>
+    <string name="title_media">ميديا</string>
+    <string name="title_mission">الهدف</string>
+    <string name="title_more">المزيد</string>
+    <string name="title_name">إسم</string>
+    <string name="title_news">أخبار</string>
+    <string name="title_phone">هاتف</string>
+    <string name="title_program_albums">ألبوم البرنامج</string>
+    <string name="title_programs">برامج</string>
+    <string name="title_setting">إعدادات</string>
+    <string name="title_share">مشاركة</string>
+    <string name="title_sponsor">الرعاة</string>
+    <string name="title_stations">محطات</string>
+    <string name="title_submit">تأكيد</string>
+    <string name="title_videos">فيديو</string>
+    <string name="title_vision">الرؤية</string>
+    <string name="read_more">إقرأ المزيد</string>
+    <string name="title_info">معلومات</string>
+    <string name="title_schedule">جدول</string>
+    <string name="desc_on_start">الأن : </string>
+    <string name="btn_upload_mp3_or_video">إرفع (ملف mp3 او فيديو)</string>
+    <string name="btn_mark_my_calender">حدد في التقويم</string>
+    <string name="title_language">English</string>
+    <string name="desc_search_a_program_or_station">إبحث عن برنامج أو قناة</string>
+    <string name="desc_contact_us_on_the_following_channels">إتصل بنا على القنوات الأتية:</string>
+    <string name="mock_location_on_map">المكان على الخريطة</string>
+    <string name="title_search">إبحث</string>
+    <string name="error_network_connectivity">من فضلك تحقق من إتصالك بالإنترنت</string>
+    <string name="title_comment">تعليقات</string>
 </resources>

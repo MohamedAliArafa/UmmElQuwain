@@ -6,7 +6,6 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
@@ -56,7 +55,7 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
 
             @Override
             public void onFailure(@NonNull Call<EventsModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
+
                 t.printStackTrace();
                 mView.hideProgress();
             }
@@ -64,8 +63,8 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
     }
 
     @Override
-    public void openDetails(int eventID) {
+    public void openDetails(EventResultModel event) {
         mFragmentManager.beginTransaction().addToBackStack(null)
-                .add(R.id.fragment_container, EventDetailsFragment.newInstance(eventID)).commit();
+                .add(R.id.fragment_container, EventDetailsFragment.newInstance(event)).commit();
     }
 }

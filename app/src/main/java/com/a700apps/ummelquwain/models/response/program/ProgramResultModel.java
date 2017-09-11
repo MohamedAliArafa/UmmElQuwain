@@ -3,6 +3,7 @@ package com.a700apps.ummelquwain.models.response.program;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -64,6 +65,12 @@ public class ProgramResultModel extends RealmObject {
     @SerializedName("language")
     @Expose
     private Integer language;
+    @SerializedName("User_Comments")
+    @Expose
+    private RealmList<ProgramUserCommentResultModel> UserComments = null;
+    @SerializedName("Schedule")
+    @Expose
+    private RealmList<ProgramScheduleResultModel> Schedule = null;
 
     public Integer getProgramID() {
         return programID;
@@ -199,5 +206,37 @@ public class ProgramResultModel extends RealmObject {
 
     public void setLanguage(Integer language) {
         this.language = language;
+    }
+
+    public Boolean getLiveAudio() {
+        return isLiveAudio;
+    }
+
+    public void setLiveAudio(Boolean liveAudio) {
+        isLiveAudio = liveAudio;
+    }
+
+    public Boolean getLiveVideo() {
+        return isLiveVideo;
+    }
+
+    public void setLiveVideo(Boolean liveVideo) {
+        isLiveVideo = liveVideo;
+    }
+
+    public RealmList<ProgramUserCommentResultModel> getUserComments() {
+        return UserComments;
+    }
+
+    public void setUserComments(RealmList<ProgramUserCommentResultModel> userComments) {
+        UserComments = userComments;
+    }
+
+    public RealmList<ProgramScheduleResultModel> getSchedule() {
+        return Schedule;
+    }
+
+    public void setSchedule(RealmList<ProgramScheduleResultModel> schedule) {
+        Schedule = schedule;
     }
 }

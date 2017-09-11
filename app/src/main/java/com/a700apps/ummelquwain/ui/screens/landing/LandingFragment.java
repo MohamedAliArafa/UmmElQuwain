@@ -3,6 +3,7 @@ package com.a700apps.ummelquwain.ui.screens.landing;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,12 +15,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.a700apps.ummelquwain.R;
-import com.a700apps.ummelquwain.utilities.ViewPagerAdapter;
 import com.a700apps.ummelquwain.ui.screens.landing.favorite.FavFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.media.AlbumsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.MoreFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.programs.ProgramsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsFragment;
+import com.a700apps.ummelquwain.utilities.ViewPagerAdapter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +37,7 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
     ViewPager mViewPager;
 
     private LandingProvider mProvider;
+    private final String POSITION_KEY = "position";
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
@@ -51,9 +53,16 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
             Arrays.asList(StationsFragment.newInstance(), FavFragment.newInstance(),
                     ProgramsFragment.newInstance(), AlbumsFragment.newInstance(),
                     MoreFragment.newInstance());
+    private int mPosition = 0;
 
     public LandingFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(POSITION_KEY, mPosition);
+        super.onSaveInstanceState(outState);
     }
 
     public static LandingFragment newInstance() {
@@ -63,7 +72,22 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         mProvider = new LandingProvider(this, getLifecycle());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null)
+            mPosition = savedInstanceState.getInt(POSITION_KEY, 0);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null)
+            mPosition = savedInstanceState.getInt(POSITION_KEY, 0);
     }
 
     @Override
@@ -81,6 +105,23 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
         for (int i = 0; i < supplierFragments.size(); i++)
             adapter.addFragment(supplierFragments.get(i), getString(supplierNames.get(i)));
         mViewPager.setAdapter(adapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        mViewPager.setCurrentItem(mPosition, true);
     }
 
     @Override

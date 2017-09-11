@@ -1,4 +1,4 @@
-package com.a700apps.ummelquwain.models.response.Events;
+package com.a700apps.ummelquwain.models.response.program;
 
 import com.a700apps.ummelquwain.models.response.DataModel;
 import com.google.gson.annotations.Expose;
@@ -7,22 +7,22 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by mohamed.arafa on 8/28/2017.
+ * Created by mohamed.arafa on 9/6/2017.
  */
 
-public class EventDetailModel {
+public class ProgramModel {
     @SerializedName("result")
     @Expose
-    private EventResultModel result = null;
+    private ProgramResultModel result = null;
     @SerializedName("data")
     @Expose
     private List<DataModel> data = null;
 
-    public EventResultModel getResult() {
+    public ProgramResultModel getResult() {
         return result;
     }
 
-    public void setResult(EventResultModel result) {
+    public void setResult(ProgramResultModel result) {
         this.result = result;
     }
 
@@ -33,4 +33,5 @@ public class EventDetailModel {
     public void setData(List<DataModel> data) {
         this.data = data;
     }
+
 }

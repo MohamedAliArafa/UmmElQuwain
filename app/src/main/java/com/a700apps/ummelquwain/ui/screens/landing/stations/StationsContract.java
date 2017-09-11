@@ -18,5 +18,8 @@ public interface StationsContract {
     interface UserAction {
         void getData();
         void openDetails(int stationID);
+        void search(String keyword);
+
+        void setFav(int itemID, int isFav);
     }
 }

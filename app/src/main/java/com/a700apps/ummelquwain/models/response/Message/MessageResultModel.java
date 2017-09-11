@@ -1,13 +1,13 @@
-package com.a700apps.ummelquwain.models.response.Server;
+package com.a700apps.ummelquwain.models.response.Message;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by mohamed.arafa on 8/28/2017.
+ * Created by mohamed.arafa on 9/11/2017.
  */
 
-public class ServerResponseModel {
+public class MessageResultModel {
     @SerializedName("success")
     @Expose
     private Boolean success;

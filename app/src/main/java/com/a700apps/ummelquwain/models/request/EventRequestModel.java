@@ -15,6 +15,11 @@ public class EventRequestModel {
     @Expose
     private Integer eventID;
 
+    public EventRequestModel(Integer language, Integer eventID) {
+        this.language = language;
+        this.eventID = eventID;
+    }
+
     public Integer getLanguage() {
         return language;
     }

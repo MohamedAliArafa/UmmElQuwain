@@ -17,6 +17,6 @@ public interface EventsContract {
 
     interface UserAction {
         void getData();
-        void openDetails(int eventID);
+        void openDetails(EventResultModel eventID);
     }
 }

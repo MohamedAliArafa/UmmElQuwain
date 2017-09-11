@@ -1,4 +1,4 @@
-package com.a700apps.ummelquwain.models.response.Server;
+package com.a700apps.ummelquwain.models.response.Message;
 
 import com.a700apps.ummelquwain.models.response.DataModel;
 import com.google.gson.annotations.Expose;
@@ -6,23 +6,23 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by mohamed.arafa on 8/28/2017.
+/*
+ * Created by mohamed.arafa on 9/11/2017.
  */
 
-public class ServerModel {
+public class MessageModel {
     @SerializedName("result")
     @Expose
-    private ServerResponseModel result;
+    private MessageResultModel result;
     @SerializedName("data")
     @Expose
     private List<DataModel> data = null;
 
-    public ServerResponseModel getResult() {
+    public MessageResultModel getResult() {
         return result;
     }
 
-    public void setResult(ServerResponseModel result) {
+    public void setResult(MessageResultModel result) {
         this.result = result;
     }
 
