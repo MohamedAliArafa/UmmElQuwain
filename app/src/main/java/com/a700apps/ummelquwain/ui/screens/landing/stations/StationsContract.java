@@ -21,5 +21,7 @@ public interface StationsContract {
         void search(String keyword);
 
         void setFav(int itemID, int isFav);
+
+        void openLogin();
     }
 }

@@ -16,6 +16,7 @@ import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationsModel;
+import com.a700apps.ummelquwain.ui.screens.LoginFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragment;
 
 import java.util.List;
@@ -147,5 +148,11 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
                 }
             });
         }
+    }
+
+    @Override
+    public void openLogin() {
+        mFragmentManager.beginTransaction().replace(R.id.fragment_container, new LoginFragment())
+                .addToBackStack(null).commit();
     }
 }

@@ -89,10 +89,14 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.MyViewHo
                 .getDrawable(model.getIsFavourite() == 1 ?
                         R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
         holder.mLikeImageView.setOnClickListener(view -> {
-            holder.mLikeImageView.setImageDrawable(mContext.getResources()
-                    .getDrawable(model.getIsFavourite() == 1 ?
-                            R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
-            mPresenter.setFav(model.getStationID(), model.getIsFavourite() == 1 ? 0 : 1);
+            String userID = ((MyApplication) mContext.getApplicationContext()).getUser();
+            if (!userID.equals("-1")) {
+                holder.mLikeImageView.setImageDrawable(mContext.getResources()
+                        .getDrawable(model.getIsFavourite() == 1 ?
+                                R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+                mPresenter.setFav(model.getStationID(), model.getIsFavourite() == 1 ? 0 : 1);
+            } else
+                mPresenter.openLogin();
         });
         holder.itemView.setOnClickListener(view ->
                 mPresenter.openDetails(model.getStationID())
