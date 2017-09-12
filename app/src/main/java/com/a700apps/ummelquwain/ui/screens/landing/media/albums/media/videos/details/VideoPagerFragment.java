@@ -4,19 +4,16 @@ package com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.videos.de
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.a700apps.ummelquwain.BuildConfig;
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.Albums.MediaResultModel;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.squareup.picasso.Picasso;
 
@@ -30,7 +27,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VideoPagerFragment extends Fragment implements VideosDetailContract.View, YouTubePlayer.OnInitializedListener {
+public class VideoPagerFragment extends Fragment implements VideosDetailContract.View {
 
     private MediaResultModel mMedia;
     @BindView(R.id.tv_media_desc)
@@ -50,6 +47,16 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
         // Required empty public constructor
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,45 +76,31 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
                 .replace("http://108.179.204.213:8093/UploadedImages/", ""))
                 .into(mMediaVideoImageView);
         mMediaDescTextView.setText(mMedia.getDescription());
-        mMediaPlayButton.setVisibility(View.GONE);
-        mMediaVideoImageView.setVisibility(View.GONE);
-        mYouTubePlayerFragment.initialize(BuildConfig.YOUTUBE_API_KEY, this);
-
         return view;
-    }
-
-    @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player,
-                                        boolean wasRestored) {
-        if (!wasRestored) {
-            player.cueVideo("nCgQDjiotG0");
-        }
-    }
-
-    @Override
-    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
-        if (errorReason.isUserRecoverableError()) {
-            errorReason.getErrorDialog(getActivity(), RECOVERY_DIALOG_REQUEST).show();
-        } else {
-            Toast.makeText(getContext(), errorReason.toString(), Toast.LENGTH_LONG).show();
-        }
     }
 
     @OnClick(R.id.iv_media_vid)
     void play(){
+//        getActivity().startActivity(new Intent(getActivity(), YouTubeActivity.class));
 //        String url = mMedia.getAttachmentURL()
 //                .replace("http://108.179.204.213:8093/UploadedImages/", "");
 //        getActivity().startActivity(new Intent(getActivity(), YouTubeActivity.class));
 //        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-        mMediaPlayButton.setVisibility(View.GONE);
-        mMediaVideoImageView.setVisibility(View.GONE);
-        mYouTubePlayerFragment.initialize(BuildConfig.YOUTUBE_API_KEY, this);
-
+//        mMediaPlayButton.setVisibility(View.GONE);
+//        mMediaVideoImageView.setVisibility(View.GONE);
+        YoutubeFragment fragment = YoutubeFragment.newInstance(extractYoutubeId(mMedia.getAttachmentURL()));
+        FragmentManager manager = getChildFragmentManager();
+        manager.beginTransaction()
+                .replace(R.id.iv_media_player, fragment, "youtube_Player")
+                .addToBackStack(null)
+                .commit();
     }
 
     public String extractYoutubeId(String url) {
         try {
             String query = new URL(url).getQuery();
+            if (query== null || query.isEmpty())
+                return "";
             String[] param = query.split("&");
             String id = null;
             for (String row : param) {

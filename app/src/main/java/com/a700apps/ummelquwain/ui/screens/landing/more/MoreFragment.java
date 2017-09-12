@@ -13,14 +13,17 @@ import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.models.User;
+import com.a700apps.ummelquwain.ui.screens.landing.LandingFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.aboutus.AboutUsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.contactus.ContactUsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.events.EventsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.joinus.JoinUsFragment;
-import com.a700apps.ummelquwain.ui.screens.landing.LandingFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.news.NewsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.sponsors.SponsorsFragment;
 import com.a700apps.ummelquwain.utilities.Utility;
+
+import io.realm.Realm;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -101,7 +104,11 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 landingFragment.startFragmentFromChild(new ContactUsFragment());
                 break;
             case R.id.ll_logout:
-
+                Realm mRealm = Realm.getDefaultInstance();
+                mRealm.beginTransaction();
+                mRealm.where(User.class).findAll().deleteAllFromRealm();
+                mRealm.commitTransaction();
+                ((LandingFragment) getParentFragment()).moveToHome();
                 break;
         }
     }

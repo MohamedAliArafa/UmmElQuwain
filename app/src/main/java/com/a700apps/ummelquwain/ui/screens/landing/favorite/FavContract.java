@@ -2,8 +2,11 @@ package com.a700apps.ummelquwain.ui.screens.landing.favorite;
 
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsContract;
 
 import java.util.List;
+
+import io.realm.RealmResults;
 
 /**
  * Created by mohamed.arafa on 9/5/2017.
@@ -12,7 +15,7 @@ import java.util.List;
 public interface FavContract {
     interface View {
         void updateSponsorUI(List<SponsorResultModel> models);
-        void updateFavUI(List<StationResultModel> models);
+        void updateFavUI(RealmResults<StationResultModel> models);
         void showProgress();
         void hideProgress();
     }
@@ -21,5 +24,8 @@ public interface FavContract {
         void getStationData();
         void getSponsorData();
         void openDetails(int albumID);
+        void setFav(int itemID, int isFav, StationsContract.adapterCallback callback);
+
+        void openLogin();
     }
 }

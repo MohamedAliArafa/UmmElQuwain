@@ -20,10 +20,9 @@ import com.a700apps.ummelquwain.adapter.StationAdapter;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.utilities.ClickableEditText;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.RealmResults;
 
 
 /**
@@ -65,7 +64,7 @@ public class StationsFragment extends Fragment implements StationsContract.View,
         View view = inflater.inflate(R.layout.fragment_stations, container, false);
         ButterKnife.bind(this, view);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new StationAdapter(getContext(), null, R.layout.list_item_station, mPresenter);
+        mAdapter = new StationAdapter(getContext(), null, mPresenter);
         mRecycler.setAdapter(mAdapter);
         setupSearch();
         return view;
@@ -97,7 +96,6 @@ public class StationsFragment extends Fragment implements StationsContract.View,
                     if (!mSearchEditText.getText().toString().isEmpty())
                         mPresenter.search(mSearchEditText.getText().toString());
                     break;
-
                 default:
                     break;
             }
@@ -110,7 +108,7 @@ public class StationsFragment extends Fragment implements StationsContract.View,
     }
 
     @Override
-    public void updateUI(List<StationResultModel> models) {
+    public void updateUI(RealmResults<StationResultModel> models) {
         mAdapter.updateData(models);
     }
 

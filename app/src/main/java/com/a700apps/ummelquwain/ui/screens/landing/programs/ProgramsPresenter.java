@@ -17,6 +17,7 @@ import com.a700apps.ummelquwain.ui.screens.landing.programs.details.ProgramFragm
 
 import java.util.List;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -90,9 +91,10 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         mView.showProgress();
 
         mRealm = Realm.getDefaultInstance();
-        RealmResults<ProgramResultModel> query = mRealm.where(ProgramResultModel.class).findAll();
+        RealmResults<ProgramResultModel> query = mRealm.where(ProgramResultModel.class)
+                .contains("programName", keyword, Case.INSENSITIVE).findAll();
+        mModel = query;
         if (query.isLoaded() && !query.isEmpty()){
-            mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);
         }

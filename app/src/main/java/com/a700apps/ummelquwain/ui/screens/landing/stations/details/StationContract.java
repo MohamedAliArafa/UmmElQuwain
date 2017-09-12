@@ -21,5 +21,13 @@ public interface StationContract {
 
     interface UserAction {
         void getData();
+
+        void openLogin();
+
+        void setFav(int itemID, int isFav, StationContract.adapterCallback callback);
+    }
+
+    interface adapterCallback {
+        void favCallback(int fav);
     }
 }

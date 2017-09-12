@@ -13,6 +13,7 @@ import com.a700apps.ummelquwain.models.User;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
 import com.a700apps.ummelquwain.service.ApiService;
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.Twitter;
 
 import java.util.Locale;
 
@@ -55,6 +56,8 @@ public class MyApplication extends Application {
         ApplicationComponent applicationComponent = DaggerApplicationComponent.builder()
                 .contextModule(new ContextModule(this))
                 .build();
+
+        Twitter.initialize(this);
 
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder().build();

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@drawable/bg_main"
     tools:context="com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.images.details.ImagePagerFragment">
 
     <ImageView
@@ -18,33 +18,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <fragment
-        android:id="@+id/iv_media_player"
-        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="250dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_list_box"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <ImageView
         android:id="@+id/iv_media_vid"
         android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="250dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
+        android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:src="@drawable/image_list_box"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -75,6 +56,16 @@
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_play"
         app:layout_constraintBottom_toBottomOf="@+id/iv_media_vid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/iv_media_player"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_list_box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

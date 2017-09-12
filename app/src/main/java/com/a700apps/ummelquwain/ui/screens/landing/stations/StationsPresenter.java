@@ -16,11 +16,10 @@ import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationsModel;
-import com.a700apps.ummelquwain.ui.screens.LoginFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragment;
+import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
 
-import java.util.List;
-
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -37,7 +36,8 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     private FragmentManager mFragmentManager;
     private Call<StationsModel> mStationsCall;
     private Call<MessageModel> mFavCall;
-    private List<StationResultModel> mModel;
+    private RealmResults<StationResultModel> mModel;
+    private RealmResults<StationResultModel> mSearchModel;
     private Realm mRealm;
 
     public StationsPresenter(Context mContext, StationsContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
@@ -48,15 +48,15 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     }
 
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     @Override
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getData() {
         mView.showProgress();
 
         mRealm = Realm.getDefaultInstance();
         RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class).findAll();
+        mModel = query;
         if (query.isLoaded() && !query.isEmpty()) {
-            mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);
         }
@@ -65,14 +65,14 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
         mStationsCall.enqueue(new Callback<StationsModel>() {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
-                mModel = response.body().getResult();
+//                mModel = response.body().getResult();
                 mView.hideProgress();
 
                 mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
+                mRealm.copyToRealmOrUpdate(response.body().getResult());
                 mRealm.commitTransaction();
 
-                mView.updateUI(mModel);
+//                mView.updateUI(mModel);
             }
 
             @Override
@@ -81,6 +81,10 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
                 t.printStackTrace();
                 mView.hideProgress();
             }
+        });
+
+        mModel.addChangeListener(stationResultModels -> {
+            mView.updateUI(mModel);
         });
     }
 
@@ -95,24 +99,24 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
         mView.showProgress();
 
         mRealm = Realm.getDefaultInstance();
-        RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class).findAll();
+        RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class)
+                .contains("stationName", keyword, Case.INSENSITIVE).findAll();
+        mSearchModel = query;
         if (query.isLoaded() && !query.isEmpty()) {
-            mModel = query;
             mView.hideProgress();
-            mView.updateUI(mModel);
+            mView.updateUI(mSearchModel);
         }
         mStationsCall = MyApplication.get(mContext).getApiService()
                 .searchStations(new SearchRequestModel(keyword, MyApplication.get(mContext).getUser(), MyApplication.get(mContext).getLanguage()));
         mStationsCall.enqueue(new Callback<StationsModel>() {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
-                mModel = response.body().getResult();
+//                mModel = response.body().getResult();
                 mView.hideProgress();
-
                 mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
+                mRealm.copyToRealmOrUpdate(response.body().getResult());
                 mRealm.commitTransaction();
-                mView.updateUI(mModel);
+                mView.updateUI(mSearchModel);
             }
 
             @Override
@@ -123,14 +127,17 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
         });
     }
 
+    private int favStatus;
+
     @Override
-    public void setFav(int itemID, int isFav) {
+    public void setFav(int itemID, int isFav, StationsContract.adapterCallback callback) {
         String user = ((MyApplication) mContext.getApplicationContext()).getUser();
+        favStatus = isFav;
         if (!user.equals("-1")) {
             mView.showProgress();
             if (isFav == 0)
-            mFavCall = MyApplication.get(mContext).getApiService()
-                    .addTofav(new FavouriteRequestModel(user, 1, itemID));
+                mFavCall = MyApplication.get(mContext).getApiService()
+                        .addTofav(new FavouriteRequestModel(user, 1, itemID));
             else
                 mFavCall = MyApplication.get(mContext).getApiService()
                         .removeFromfav(new FavouriteRequestModel(user, 0, itemID));
@@ -138,12 +145,15 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
                 @Override
                 public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
                     MessageResultModel model = response.body().getResult();
+                    if (model.getSuccess())
+                        callback.favCallback(favStatus == 1 ? 0 : 1);
                     mView.hideProgress();
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<MessageModel> call, @NonNull Throwable t) {
                     t.printStackTrace();
+                    callback.favCallback(favStatus);
                     mView.hideProgress();
                 }
             });
@@ -152,7 +162,7 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
 
     @Override
     public void openLogin() {
-        mFragmentManager.beginTransaction().replace(R.id.fragment_container, new LoginFragment())
+        mFragmentManager.beginTransaction().replace(R.id.fragment_container, new LoginFragment(), "login_fragment")
                 .addToBackStack(null).commit();
     }
 }

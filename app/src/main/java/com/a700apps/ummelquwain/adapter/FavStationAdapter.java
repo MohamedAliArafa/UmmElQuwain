@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
-import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsContract;
+import com.a700apps.ummelquwain.ui.screens.landing.favorite.FavContract;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -24,10 +24,11 @@ import io.realm.RealmResults;
  * Created by mohamed.arafa on 8/28/2017.
  */
 
-public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel, StationAdapter.MyViewHolder> {
+public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultModel, FavStationAdapter.MyViewHolder> {
 
     private RealmResults<StationResultModel> mList;
-    private StationsContract.UserAction mPresenter;
+    private int mLayout;
+    private FavContract.UserAction mPresenter;
     private Picasso mPicasso;
     private Context mContext;
     private Realm mRealm;
@@ -58,7 +59,7 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
         }
     }
 
-    public StationAdapter(Context context, RealmResults<StationResultModel> list, StationsContract.UserAction presenter) {
+    public FavStationAdapter(Context context, RealmResults<StationResultModel> list, FavContract.UserAction presenter) {
         super(list, true);
         mList = list;
         mPresenter = presenter;
@@ -80,6 +81,7 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
     }
 
 
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         StationResultModel model = mList.get(position);
@@ -97,9 +99,7 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
                     mRealm.beginTransaction();
                     model.setIsFavourite(fav);
                     mRealm.commitTransaction();
-                    holder.mLikeImageView.setImageDrawable(mContext.getResources()
-                            .getDrawable(fav == 1 ?
-                                    R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+                    mPresenter.getStationData();
                     notifyDataSetChanged();
                 });
 

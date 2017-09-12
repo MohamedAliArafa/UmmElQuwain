@@ -27,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +40,8 @@ public class StationFragment extends Fragment implements StationContract.View, L
     RtlViewPager mViewPager;
     @BindView(R.id.iv_toolbar_back)
     ImageView mBackToolbarBtn;
+    @BindView(R.id.iv_like)
+    ImageView mLikeBtn;
 
     @BindView(R.id.iv_station_logo)
     ImageView mStationLogoImageView;
@@ -63,6 +66,7 @@ public class StationFragment extends Fragment implements StationContract.View, L
     private static List<Fragment> supplierFragments;
 
     private static int mStationID;
+    private Realm mRealm;
 
     public StationFragment() {
         // Required empty public constructor
@@ -77,7 +81,8 @@ public class StationFragment extends Fragment implements StationContract.View, L
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPicasso = MyApplication.get(getContext()).getPicasso();
-        mPresenter = new StationPresenter(getContext(), mStationID,this, getLifecycle());
+        mPresenter = new StationPresenter(getContext(), mStationID, getFragmentManager(), this, getLifecycle());
+        mRealm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -100,6 +105,26 @@ public class StationFragment extends Fragment implements StationContract.View, L
         mPicasso.load(model.getStationImage()).into(mStationBackImageView);
         supplierFragments = Arrays.asList(StationInfoFragment.newInstance(model),
                 StationScheduleFragment.newInstance(model));
+
+        mLikeBtn.setImageDrawable(getContext().getResources()
+                .getDrawable(model.getIsFavourite() == 1 ?
+                        R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+        mLikeBtn.setOnClickListener((View view) -> {
+            String userID = ((MyApplication) getContext().getApplicationContext()).getUser();
+            if (!userID.equals("-1")) {
+                mPresenter.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
+                    mRealm.beginTransaction();
+                    model.setIsFavourite(fav);
+                    mRealm.commitTransaction();
+                    mPresenter.getData();
+                });
+
+                mLikeBtn.setImageDrawable(getContext().getResources()
+                        .getDrawable(model.getIsFavourite() == 1 ?
+                                R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+            } else
+                mPresenter.openLogin();
+        });
     }
 
     @Override
@@ -145,6 +170,7 @@ public class StationFragment extends Fragment implements StationContract.View, L
         switch (viewId) {
             case R.id.iv_toolbar_back:
                 getFragmentManager().popBackStack();
+                break;
         }
     }
 }

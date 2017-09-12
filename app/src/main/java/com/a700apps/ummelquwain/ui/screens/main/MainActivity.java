@@ -1,5 +1,6 @@
 package com.a700apps.ummelquwain.ui.screens.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -74,5 +75,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 android.R.anim.slide_out_right);
         fragmentTransaction.commit();
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("login_fragment");
+        fragment.onActivityResult(requestCode, resultCode, data);
+//        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

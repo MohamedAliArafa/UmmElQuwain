@@ -2,7 +2,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.stations;
 
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Created by mohamed.arafa on 8/24/2017.
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface StationsContract {
     interface View {
-        void updateUI(List<StationResultModel> models);
+        void updateUI(RealmResults<StationResultModel> models);
         void showProgress();
         void hideProgress();
     }
@@ -19,9 +19,11 @@ public interface StationsContract {
         void getData();
         void openDetails(int stationID);
         void search(String keyword);
-
-        void setFav(int itemID, int isFav);
-
+        void setFav(int itemID, int isFav, adapterCallback callback);
         void openLogin();
+    }
+
+    interface adapterCallback {
+        void favCallback(int fav);
     }
 }

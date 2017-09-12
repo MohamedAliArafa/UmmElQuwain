@@ -15,6 +15,7 @@ apply plugin: 'realm-android'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
+
 }
 
 android {
@@ -78,6 +79,10 @@ dependencies {
     //UnitTest
     testCompile 'junit:junit:4.12'
 
+    //RealmRecycler
+//    compile 'com.github.thorbenprimke:realm-recyclerview:0.9.25'
+    compile 'io.realm:android-adapters:2.0.0'
+
     //Network
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -96,4 +101,9 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:2.11"
     compile 'com.jakewharton.timber:timber:4.5.1'
 //    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    //Social
+    compile 'com.facebook.android:facebook-android-sdk:4.26.0'
+    compile 'com.twitter.sdk.android:twitter-core:3.1.1'
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
 }

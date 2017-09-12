@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/tools">
     <!-- TODO: Remove or change this placeholder text -->
     <string name="_hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+    <string name="facebook_app_id" translatable="false">183600388851301</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb183600388851301</string>
+
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">cdktyqVl9t2FCinHrDzkL1Bdt </string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">i8pm84dZPoTHzdJhS6xIc2gaZBxKLu26p5PejcChC3OHAy89uY</string>
 
     <string name="app_name">UmmAlQuwain</string>
 

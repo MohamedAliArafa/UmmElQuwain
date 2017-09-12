@@ -110,6 +110,8 @@ public interface ApiService {
     @POST("Favourite/RemoveFromFav")
     Call<MessageModel> removeFromfav(@Body FavouriteRequestModel model);
 
+    @POST("Favourite/GetAll")
+    Call<StationsModel> getFavStations(@Body StationsRequestModel model);
 
     //UserRequests
     @POST("UserRequests/JoinsUs")
