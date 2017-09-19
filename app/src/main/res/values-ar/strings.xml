@@ -42,4 +42,13 @@
     <string name="title_search">إبحث</string>
     <string name="error_network_connectivity">من فضلك تحقق من إتصالك بالإنترنت</string>
     <string name="title_comment">تعليقات</string>
+    <string name="share_with">مشاركة عن طريق</string>
+    <string name="title_log_in">تسجيل دخول</string>
+    <string name="skip">تخطي</string>
+    <string name="login_with_twitter">تسجيل الدخول بتويتر</string>
+    <string name="it_s_better_with_friends">إنة أفضل مع الأصدقاء...</string>
+    <string name="login_with_facebook">تسجيل الدخول بالفيسبوك</string>
+    <string name="log_in_to_enjoy_the_immense_experience">سجل الدخول للإستمتاع بتجربة هائلة</string>
+    <string name="header_on">الأن:</string>
+    <string name="header_live">مباشر:</string>
 </resources>

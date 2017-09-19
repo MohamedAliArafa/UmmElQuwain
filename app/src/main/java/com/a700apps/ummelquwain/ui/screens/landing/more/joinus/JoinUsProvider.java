@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,18 +28,20 @@ import retrofit2.Response;
 public class JoinUsProvider implements JoinUsContract.UserAction {
 
     private final JoinUsContract.View mView;
+    private final FragmentManager mFragmentManager;
     private Context mContext;
     private Call<MessageModel> mJoinUsCall;
     private MessageModel mModel;
     String mResponse;
 
-    public JoinUsProvider(Context mContext, JoinUsContract.View mView) {
+    public JoinUsProvider(Context mContext, JoinUsContract.View mView, FragmentManager mFragmentManager) {
+        this.mFragmentManager = mFragmentManager;
         this.mView = mView;
         this.mContext = mContext;
     }
 
     @Override
-    public String uploadFile(Intent data) {
+    public void uploadFile(Intent data, JoinUsContract.fileCallback callback) {
         Uri selectedFile = data.getData();
         String path = selectedFile.getPath();
         File file = new File(path);
@@ -49,18 +52,24 @@ public class JoinUsProvider implements JoinUsContract.UserAction {
         responseBodyCall.enqueue(new Callback<MessageModel>() {
             @Override
             public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                Log.d("Success", "success " + response.code());
-                Log.d("Success", "success " + response.message());
-                Log.d("Success", "body " + response.body());
-                mResponse = response.body().getResult().getMessage();
+                try {
+                    Log.d("Success", "success " + response.code());
+                    Log.d("Success", "success " + response.message());
+                    Log.d("Success", "body " + response.body());
+                    mResponse = response.body().getResult().getMessage();
+                    callback.onFileUploaded(mResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
+
             @Override
             public void onFailure(Call<MessageModel> call, Throwable t) {
                 Log.d("failure", "message = " + t.getMessage());
                 Log.d("failure", "cause = " + t.getCause());
             }
         });
-        return mResponse;
     }
 
     @Override
@@ -74,6 +83,7 @@ public class JoinUsProvider implements JoinUsContract.UserAction {
                 mModel = response.body();
                 if (mModel.getResult().getMessage().equals("1"))
                     Toast.makeText(mContext, "Thanks for your contribution", Toast.LENGTH_SHORT).show();
+                mFragmentManager.popBackStack();
                 mView.hideProgress();
             }
 

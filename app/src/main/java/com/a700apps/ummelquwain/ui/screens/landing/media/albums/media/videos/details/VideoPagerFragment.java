@@ -39,6 +39,8 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
     @BindView(R.id.iv_media_vid)
     ImageView mMediaVideoImageView;
 
+    Fragment mediaVideoFragment;
+
     Picasso mPicasso;
     private static final int RECOVERY_DIALOG_REQUEST = 1;
     YouTubePlayerSupportFragment mYouTubePlayerFragment;
@@ -68,7 +70,7 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this mediaVideoFragment
         View view = inflater.inflate(R.layout.fragment_video_pager, container, false);
         ButterKnife.bind(this, view);
         mYouTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
@@ -80,18 +82,21 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
     }
 
     @OnClick(R.id.iv_media_vid)
-    void play(){
-//        getActivity().startActivity(new Intent(getActivity(), YouTubeActivity.class));
-//        String url = mMedia.getAttachmentURL()
-//                .replace("http://108.179.204.213:8093/UploadedImages/", "");
-//        getActivity().startActivity(new Intent(getActivity(), YouTubeActivity.class));
-//        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-//        mMediaPlayButton.setVisibility(View.GONE);
-//        mMediaVideoImageView.setVisibility(View.GONE);
-        YoutubeFragment fragment = YoutubeFragment.newInstance(extractYoutubeId(mMedia.getAttachmentURL()));
+    void play() {
+        if (mMedia.getAttachmentURL().contains("www.youtube.com/watch?v=")) {
+            mediaVideoFragment = new YoutubeFragment();
+            Bundle args = new Bundle();
+            args.putString("video_url", extractYoutubeId(mMedia.getAttachmentURL()));
+            mediaVideoFragment.setArguments(args);
+        } else {
+            mediaVideoFragment = new VideoPlayerFragment();
+            Bundle args = new Bundle();
+            args.putString("video_url", mMedia.getAttachmentURL());
+            mediaVideoFragment.setArguments(args);
+        }
         FragmentManager manager = getChildFragmentManager();
         manager.beginTransaction()
-                .replace(R.id.iv_media_player, fragment, "youtube_Player")
+                .replace(R.id.iv_media_player, mediaVideoFragment, "youtube_Player")
                 .addToBackStack(null)
                 .commit();
     }
@@ -99,7 +104,7 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
     public String extractYoutubeId(String url) {
         try {
             String query = new URL(url).getQuery();
-            if (query== null || query.isEmpty())
+            if (query == null || query.isEmpty())
                 return "";
             String[] param = query.split("&");
             String id = null;
@@ -110,11 +115,10 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
                 }
             }
             return id;
-        }catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
         }
-
     }
 
     @Override

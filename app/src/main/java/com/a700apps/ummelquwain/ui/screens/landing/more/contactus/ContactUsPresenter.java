@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
+import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
 import com.a700apps.ummelquwain.models.response.ContactUs.ContactUsModel;
 import com.a700apps.ummelquwain.models.response.ContactUs.ContactUsResultModel;
@@ -43,7 +45,7 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
         mView.showProgress();
         mRealm = Realm.getDefaultInstance();
         ContactUsResultModel query = mRealm.where(ContactUsResultModel.class).findFirst();
-        if (query != null){
+        if (query != null) {
             mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);
@@ -53,15 +55,20 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
         mGetContactUsCall.enqueue(new Callback<ContactUsModel>() {
             @Override
             public void onResponse(@NonNull Call<ContactUsModel> call, @NonNull Response<ContactUsModel> response) {
-                Log.i("response", response.body().getResult().getFacebookUrl());
-                mModel = response.body().getResult();
+                try {
+                    Log.i("response", response.body().getResult().getFacebookUrl());
+                    mModel = response.body().getResult();
+
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+
+                    mView.updateUI(mModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
 
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-
-                mView.updateUI(mModel);
             }
 
             @Override
@@ -82,33 +89,41 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
 
     @Override
     public void showFacebook() {
-        if (mModel != null) {
+        if (mModel != null && mModel.getFacebookUrl() != null) {
             Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getFacebookUrl()));
             mContext.startActivity(in);
+        } else {
+            Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void showTwitter() {
-        if (mModel != null) {
+        if (mModel != null && mModel.getTwitterUrl() != null) {
             Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getTwitterUrl()));
             mContext.startActivity(in);
+        } else {
+            Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void showInstagram() {
-        if (mModel != null) {
+        if (mModel != null && mModel.getInstagramUrl() != null) {
             Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getInstagramUrl()));
             mContext.startActivity(in);
+        } else {
+            Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void showLinkedIn() {
-        if (mModel != null) {
-//        Intent in = new  Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getWebsiteLink()));
-//        mContext.startActivity(in);
+        if (mModel != null && mModel.getInstagramUrl() != null) {
+            Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getWebsiteLink()));
+            mContext.startActivity(in);
+        } else {
+            Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
         }
     }
 

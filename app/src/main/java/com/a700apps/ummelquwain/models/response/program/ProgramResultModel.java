@@ -53,6 +53,9 @@ public class ProgramResultModel extends RealmObject {
     @SerializedName("ProgramTypeName")
     @Expose
     private String programTypeName;
+    @SerializedName("BroadcasterName")
+    @Expose
+    private String broadcasterName;
     @SerializedName("IsFavourite")
     @Expose
     private Integer isFavourite;
@@ -174,6 +177,14 @@ public class ProgramResultModel extends RealmObject {
 
     public void setProgramTypeName(String programTypeName) {
         this.programTypeName = programTypeName;
+    }
+
+    public String getBroadcasterName() {
+        return broadcasterName;
+    }
+
+    public void setBroadcasterName(String broadcasterName) {
+        this.broadcasterName = broadcasterName;
     }
 
     public Integer getIsFavourite() {

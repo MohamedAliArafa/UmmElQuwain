@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.adapter.AlbumMediaAdapter;
@@ -26,10 +27,13 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ImagesFragment extends Fragment implements LifecycleRegistryOwner, MediaContract.View{
+public class ImagesFragment extends Fragment implements LifecycleRegistryOwner, MediaContract.View {
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     MediaContract.UserAction mPresenter;
+
+    @BindView(R.id.tv_album_desc)
+    TextView mAlbumDescTextView;
 
     @BindView(R.id.recycler)
     RecyclerView mRecycler;
@@ -39,13 +43,15 @@ public class ImagesFragment extends Fragment implements LifecycleRegistryOwner, 
 
     AlbumMediaAdapter mAdapter;
     private static int mAlbumID;
+    private static String mAlbumDesc;
 
     public ImagesFragment() {
         // Required empty public constructor
     }
 
-    public static ImagesFragment newInstance(int albumID) {
+    public static ImagesFragment newInstance(int albumID, String albumDesc) {
         mAlbumID = albumID;
+        mAlbumDesc = albumDesc;
         return new ImagesFragment();
     }
 
@@ -60,6 +66,7 @@ public class ImagesFragment extends Fragment implements LifecycleRegistryOwner, 
         mRecycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         mPresenter = new ImagesPresenter(getContext(), this, getParentFragment().getFragmentManager(), getLifecycle(), mAlbumID, 1);
         mAdapter = new AlbumMediaAdapter(getContext(), null, R.layout.list_item_album, mPresenter);
+        mAlbumDescTextView.setText(mAlbumDesc);
         mRecycler.setAdapter(mAdapter);
         return view;
     }

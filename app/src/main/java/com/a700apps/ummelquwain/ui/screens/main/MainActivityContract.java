@@ -7,6 +7,8 @@ interface MainActivityContract {
 
     interface View {
         void launchLanding();
+        void launchLogin();
+        void requestReadPermission();
     }
 
     interface UserActions {

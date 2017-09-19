@@ -3,12 +3,15 @@ package com.a700apps.ummelquwain.ui.screens.landing.stations.details.info;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.adapter.StationProgramsAdapter;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 
 import butterknife.BindView;
@@ -28,6 +31,11 @@ public class StationInfoFragment extends Fragment {
     TextView mInfoFreqTextView;
     @BindView(R.id.tv_info_language)
     TextView mInfoLanguageTextView;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecycler;
+
+    private StationProgramsAdapter mAdapter;
 
     public StationInfoFragment() {
         // Required empty public constructor
@@ -54,5 +62,8 @@ public class StationInfoFragment extends Fragment {
         mInfoFreqTextView.setText(mModel.getStationFrequency());
         mInfoLanguageTextView.setText(mModel.getStationLanguage());
         mInfoSiteTextView.setText(mModel.getStationWebsite());
+        mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new StationProgramsAdapter(mModel.getPrograms(), R.layout.list_item_days_schedule);
+        mRecycler.setAdapter(mAdapter);
     }
 }

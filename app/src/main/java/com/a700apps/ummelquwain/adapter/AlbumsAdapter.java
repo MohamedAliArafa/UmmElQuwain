@@ -70,7 +70,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
         holder.mTitleTextView.setText(model.getAlbumName());
         mPicasso.load(model.getAlbumImage()).into(holder.mThumpImageView);
         holder.itemView.setOnClickListener(view -> {
-            mPresenter.openDetails(model.getAlbumID());
+            mPresenter.openDetails(model.getAlbumID(), model.getAlbumDescription());
         });
     }
 

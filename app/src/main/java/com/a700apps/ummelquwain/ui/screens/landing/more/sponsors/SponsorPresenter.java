@@ -6,7 +6,6 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
@@ -46,10 +45,14 @@ public class SponsorPresenter implements SponsorsContract.UserAction, LifecycleO
         mGetSponsorCall.enqueue(new Callback<SponsorModel>() {
             @Override
             public void onResponse(@NonNull Call<SponsorModel> call, @NonNull Response<SponsorModel> response) {
-                Log.i("response", response.body().getResult().toString());
-                mModel = response.body().getResult();
+                try {
+                    Log.i("response", response.body().getResult().toString());
+                    mModel = response.body().getResult();
+                    mView.updateUI(mModel);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-                mView.updateUI(mModel);
             }
 
             @Override

@@ -1,14 +1,19 @@
 package com.a700apps.ummelquwain.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.Events.EventResultModel;
 import com.a700apps.ummelquwain.ui.screens.landing.more.events.EventsContract;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,8 @@ import butterknife.ButterKnife;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> {
 
+    private final Context mContext;
+    private final Picasso mPicasso;
     private List<EventResultModel> mList = new ArrayList<>();
     private int mLayout;
     private EventsContract.UserAction mPresenter;
@@ -42,16 +49,27 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         @BindView(R.id.tv_event_desc)
         TextView mDescTextView;
 
+        @BindView(R.id.btn_event_share)
+        Button mEventShareButton;
+
+        @BindView(R.id.btn_event_calender)
+        Button mEventCalenderButton;
+
+        @BindView(R.id.iv_event_image)
+        ImageView mEventImageView;
+
         MyViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
     }
 
-    public EventsAdapter(ArrayList<EventResultModel> list, int layout, EventsContract.UserAction presenter) {
+    public EventsAdapter(Context context, ArrayList<EventResultModel> list, int layout, EventsContract.UserAction presenter) {
+        mContext = context;
         mList = list;
         mLayout = layout;
         mPresenter = presenter;
+        mPicasso = MyApplication.get(mContext).getPicasso();
     }
 
     public void updateData(List<EventResultModel> list) {
@@ -74,7 +92,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         holder.mEndDateTextView.setText(model.getEventEndDate());
         holder.mLocationTextView.setText(model.getEventPlace());
         holder.mDescTextView.setText(model.getEventDescription());
+        mPicasso.load(model.getEventImage()).resize(800, 600)
+                .onlyScaleDown().into(holder.mEventImageView);
         holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model));
+        holder.mEventShareButton.setOnClickListener(view -> mPresenter.shareEvent(model));
+        holder.mEventCalenderButton.setOnClickListener(view -> mPresenter.addToCalender(model));
     }
 
     @Override

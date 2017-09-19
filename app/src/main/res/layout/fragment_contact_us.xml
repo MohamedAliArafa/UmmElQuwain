@@ -108,7 +108,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="@string/mock_contact_phone_no"
         app:layout_constraintBottom_toBottomOf="@+id/iv_phone"
         app:layout_constraintStart_toEndOf="@+id/iv_phone"
         app:layout_constraintTop_toTopOf="@+id/iv_phone" />
@@ -118,7 +117,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="@string/mock_contact_fax"
         app:layout_constraintBottom_toBottomOf="@+id/iv_fax"
         app:layout_constraintStart_toEndOf="@+id/iv_fax"
         app:layout_constraintTop_toTopOf="@+id/iv_fax" />
@@ -128,7 +126,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="@string/mock_contact_mail"
         app:layout_constraintBottom_toBottomOf="@+id/iv_mail"
         app:layout_constraintStart_toEndOf="@+id/iv_mail"
         app:layout_constraintTop_toTopOf="@+id/iv_mail" />
@@ -144,16 +141,17 @@
         app:layout_constraintTop_toTopOf="@+id/iv_location" />
 
     <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_location">
 
         <ImageView
@@ -162,7 +160,7 @@
             android:layout_height="35dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_face_active" />
+            app:srcCompat="@drawable/ic_face_unactive" />
 
         <ImageView
             android:id="@+id/iv_twitter"
@@ -203,5 +201,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499" />
+
+    <TextView
+        android:id="@+id/tv_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

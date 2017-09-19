@@ -21,6 +21,7 @@ import com.a700apps.ummelquwain.models.response.Station.StationsModel;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsContract;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragment;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
+import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ import retrofit2.Response;
 public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
 
     private Context mContext;
-    private FavContract.View mView;
+    private FavFragment mView;
     private FragmentManager mFragmentManager;
     private Call<StationsModel> mStationCall;
     private RealmResults<StationResultModel> mStationModel;
@@ -47,9 +48,9 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
 
     private Realm mRealm;
     private Call<MessageModel> mFavCall;
-    private int favStatus   ;
+    private int favStatus;
 
-    public FavPresenter(Context mContext, FavContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
+    public FavPresenter(Context mContext, FavFragment mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;
@@ -63,7 +64,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         mRealm = Realm.getDefaultInstance();
         RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class).equalTo("isFavourite", 1).findAll();
         mStationModel = query;
-        if (query.isLoaded() && !query.isEmpty()){
+        if (query.isLoaded() && !query.isEmpty()) {
             mView.hideProgress();
             mView.updateFavUI(mStationModel);
         }
@@ -73,10 +74,15 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
                 mView.hideProgress();
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(response.body().getResult());
-                mRealm.commitTransaction();
+               try {
+                   mRealm.beginTransaction();
+                   mRealm.copyToRealmOrUpdate(response.body().getResult());
+                   mRealm.commitTransaction();
 //                mView.updateFavUI(mStationModel);
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+
             }
 
             @Override
@@ -97,7 +103,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         mView.showProgress();
         mRealm = Realm.getDefaultInstance();
         RealmResults<SponsorResultModel> query = mRealm.where(SponsorResultModel.class).findAll();
-        if (query.isLoaded() && !query.isEmpty()){
+        if (query.isLoaded() && !query.isEmpty()) {
             mSponsorModel = query;
             mView.hideProgress();
             mView.updateSponsorUI(mSponsorModel);
@@ -107,14 +113,19 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         mSponsorCall.enqueue(new Callback<SponsorModel>() {
             @Override
             public void onResponse(@NonNull Call<SponsorModel> call, @NonNull Response<SponsorModel> response) {
-                mSponsorModel = response.body().getResult();
+                try {
+                    mSponsorModel = response.body().getResult();
+
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mStationModel);
+                    mRealm.commitTransaction();
+
+                    mView.updateSponsorUI(mSponsorModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
 
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mStationModel);
-                mRealm.commitTransaction();
-
-                mView.updateSponsorUI(mSponsorModel);
             }
 
             @Override
@@ -128,33 +139,43 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
 
     @Override
     public void setFav(int itemID, int isFav, StationsContract.adapterCallback callback) {
-        String user = ((MyApplication) mContext.getApplicationContext()).getUser();
+        String user = MyApplication.get(mContext).getUser();
+        String deviceId = MyApplication.get(mContext).getDeviceID();
         favStatus = isFav;
-        if (!user.equals("-1")) {
-            mView.showProgress();
-            if (isFav == 0)
-                mFavCall = MyApplication.get(mContext).getApiService()
-                        .addTofav(new FavouriteRequestModel(user, 1, itemID));
-            else
-                mFavCall = MyApplication.get(mContext).getApiService()
-                        .removeFromfav(new FavouriteRequestModel(user, 0, itemID));
-            mFavCall.enqueue(new Callback<MessageModel>() {
-                @Override
-                public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
+        if (user.equals("-1"))
+            user = null;
+        if (deviceId == null) {
+            ((MainActivity) mView.getActivity()).requestReadPermission();
+            return;
+        }
+        mView.showProgress();
+        if (isFav == 0)
+            mFavCall = MyApplication.get(mContext).getApiService()
+                    .addTofav(new FavouriteRequestModel(user, deviceId, 1, itemID));
+        else
+            mFavCall = MyApplication.get(mContext).getApiService()
+                    .removeFromfav(new FavouriteRequestModel(user, deviceId, 1, itemID));
+        mFavCall.enqueue(new Callback<MessageModel>() {
+            @Override
+            public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
+                try {
                     MessageResultModel model = response.body().getResult();
                     if (model.getSuccess())
                         callback.favCallback(favStatus == 1 ? 0 : 1);
-                    mView.hideProgress();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void onFailure(@NonNull Call<MessageModel> call, @NonNull Throwable t) {
-                    t.printStackTrace();
-                    callback.favCallback(favStatus);
-                    mView.hideProgress();
-                }
-            });
-        }
+                mView.hideProgress();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MessageModel> call, @NonNull Throwable t) {
+                t.printStackTrace();
+                callback.favCallback(favStatus);
+                mView.hideProgress();
+            }
+        });
     }
 
     @Override

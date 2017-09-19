@@ -37,7 +37,6 @@ public class AlbumFragment extends Fragment implements AlbumContract.View, Lifec
     @BindView(R.id.iv_toolbar_back)
     ImageView mBackToolbarBtn;
 
-
     AlbumPresenter mPresenter;
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
@@ -102,9 +101,9 @@ public class AlbumFragment extends Fragment implements AlbumContract.View, Lifec
         }
     }
 
-    public static AlbumFragment newInstance(int albumID) {
-        supplierFragments = Arrays.asList(ImagesFragment.newInstance(albumID),
-                VideosFragment.newInstance(albumID));
+    public static AlbumFragment newInstance(int albumID, String albumDesc) {
+        supplierFragments = Arrays.asList(ImagesFragment.newInstance(albumID, albumDesc),
+                VideosFragment.newInstance(albumID, albumDesc));
         return new AlbumFragment();
     }
 }

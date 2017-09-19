@@ -101,6 +101,13 @@ public class AlbumsFragment extends Fragment implements AlbumsContract.View, Lif
                     mPresenter.getData();
             }
         });
+        mSearchEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (!mSearchEditText.getText().toString().isEmpty()) {
+                mPresenter.search(mSearchEditText.getText().toString());
+                return true;
+            }
+            return false;
+        });
         mSearchEditText.setDrawableClickListener(target -> {
             switch (target) {
                 case RIGHT:

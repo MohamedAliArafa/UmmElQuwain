@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/transColorPrimary"
     tools:context="com.a700apps.ummelquwain.ui.screens.landing.more.news.details.NewsDetailsFragment">
 
 

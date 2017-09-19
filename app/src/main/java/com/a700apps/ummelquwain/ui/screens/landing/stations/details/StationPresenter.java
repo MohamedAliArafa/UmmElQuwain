@@ -16,6 +16,7 @@ import com.a700apps.ummelquwain.models.response.Message.MessageResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
+import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 
 import io.realm.Realm;
 import retrofit2.Call;
@@ -30,7 +31,7 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
     private final FragmentManager mFragmentManager;
     private final Lifecycle mLifeCycle;
     private Context mContext;
-    private StationContract.View mView;
+    private StationFragment mView;
     private Call<StationModel> mStationCall;
     private StationResultModel mModel;
     private Realm mRealm;
@@ -39,7 +40,7 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
     private Call<MessageModel> mFavCall;
 
     public StationPresenter(Context mContext, int mStationID, FragmentManager mFragmentManager
-            , StationContract.View mView, Lifecycle mLifeCycle) {
+            , StationFragment mView, Lifecycle mLifeCycle) {
         this.mLifeCycle = mLifeCycle;
         this.mLifeCycle.addObserver(this);
         this.mFragmentManager = mFragmentManager;
@@ -62,25 +63,31 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
             mView.setupViewPager();
             mView.setupTabLayout();
         }
+        String user = MyApplication.get(mContext).getUser();
+        String deviceId = MyApplication.get(mContext).getDeviceID();
+        if (user.equals("-1"))
+            user = deviceId;
         mStationCall = MyApplication.get(mContext).getApiService()
                 .getStationDetails(
                         new StationDetailsRequestModel(MyApplication.get(mContext).getLanguage(),
-                                MyApplication.get(mContext).getUser(), mStationID));
+                                user, mStationID));
         mStationCall.enqueue(new Callback<StationModel>() {
             @Override
             public void onResponse(@NonNull Call<StationModel> call, @NonNull Response<StationModel> response) {
-                mModel = response.body().getResult();
+                try {
+                    mModel = response.body().getResult();
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+                    if (!mLifeCycle.getCurrentState().isAtLeast(Lifecycle.State.DESTROYED))
+                        mView.updateUI(mModel);
+                    mView.setupViewPager();
+                    mView.setupTabLayout();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 mView.hideProgress();
-
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-
-                if (!mLifeCycle.getCurrentState().isAtLeast(Lifecycle.State.DESTROYED))
-                    mView.updateUI(mModel);
-
-                mView.setupViewPager();
-                mView.setupTabLayout();
 
             }
 
@@ -106,32 +113,42 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
 
     @Override
     public void setFav(int itemID, int isFav, StationContract.adapterCallback callback) {
-        String user = ((MyApplication) mContext.getApplicationContext()).getUser();
+        String user = MyApplication.get(mContext).getUser();
+        String deviceId = MyApplication.get(mContext).getDeviceID();
         favStatus = isFav;
-        if (!user.equals("-1")) {
-            mView.showProgress();
-            if (isFav == 0)
-                mFavCall = MyApplication.get(mContext).getApiService()
-                        .addTofav(new FavouriteRequestModel(user, 1, itemID));
-            else
-                mFavCall = MyApplication.get(mContext).getApiService()
-                        .removeFromfav(new FavouriteRequestModel(user, 0, itemID));
-            mFavCall.enqueue(new Callback<MessageModel>() {
-                @Override
-                public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
+        if (user.equals("-1"))
+            user = null;
+        if (deviceId == null) {
+            ((MainActivity) mView.getActivity()).requestReadPermission();
+            return;
+        }
+        mView.showProgress();
+        if (isFav == 0)
+            mFavCall = MyApplication.get(mContext).getApiService()
+                    .addTofav(new FavouriteRequestModel(user, deviceId, 1, itemID));
+        else
+            mFavCall = MyApplication.get(mContext).getApiService()
+                    .removeFromfav(new FavouriteRequestModel(user, deviceId, 1, itemID));
+        mFavCall.enqueue(new Callback<MessageModel>() {
+            @Override
+            public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
+                try {
                     MessageResultModel model = response.body().getResult();
                     if (model.getSuccess())
                         callback.favCallback(favStatus == 1 ? 0 : 1);
-                    mView.hideProgress();
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+                mView.hideProgress();
+            }
 
-                @Override
-                public void onFailure(@NonNull Call<MessageModel> call, @NonNull Throwable t) {
-                    t.printStackTrace();
-                    callback.favCallback(favStatus);
-                    mView.hideProgress();
-                }
-            });
-        }
+            @Override
+            public void onFailure(@NonNull Call<MessageModel> call, @NonNull Throwable t) {
+                t.printStackTrace();
+                callback.favCallback(favStatus);
+                mView.hideProgress();
+            }
+        });
+
     }
 }

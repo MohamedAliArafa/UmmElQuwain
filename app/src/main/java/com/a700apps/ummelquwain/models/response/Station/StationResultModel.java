@@ -1,5 +1,8 @@
 package com.a700apps.ummelquwain.models.response.Station;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.a700apps.ummelquwain.models.response.Station.Schedule.ScheduleModel;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.google.gson.annotations.Expose;
@@ -13,7 +16,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by mohamed.arafa on 9/5/2017.
  */
 
-public class StationResultModel  extends RealmObject{
+public class StationResultModel  extends RealmObject implements Parcelable{
 
     @PrimaryKey
     @SerializedName("StationID")
@@ -304,4 +307,76 @@ public class StationResultModel  extends RealmObject{
     public void setSchedule(RealmList<ScheduleModel> schedule) {
         this.schedule = schedule;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.stationID);
+        dest.writeString(this.categoryName);
+        dest.writeString(this.stationName);
+        dest.writeString(this.stationInfo);
+        dest.writeString(this.stationWebsite);
+        dest.writeString(this.stationLogo);
+        dest.writeString(this.stationImage);
+        dest.writeString(this.stationFrequency);
+        dest.writeValue(this.isLive);
+        dest.writeValue(this.isVideo);
+        dest.writeString(this.streamLink);
+        dest.writeString(this.whiteLabelURL);
+        dest.writeString(this.uRLPLS);
+        dest.writeString(this.videoLink);
+        dest.writeString(this.facebookLink);
+        dest.writeString(this.twitterLink);
+        dest.writeString(this.currentProgramName);
+        dest.writeValue(this.isFavourite);
+        dest.writeString(this.stationLanguage);
+        dest.writeValue(this.language);
+        dest.writeValue(this.userID);
+        dest.writeString(this.keyword);
+    }
+
+    public StationResultModel() {
+    }
+
+    protected StationResultModel(Parcel in) {
+        this.stationID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.categoryName = in.readString();
+        this.stationName = in.readString();
+        this.stationInfo = in.readString();
+        this.stationWebsite = in.readString();
+        this.stationLogo = in.readString();
+        this.stationImage = in.readString();
+        this.stationFrequency = in.readString();
+        this.isLive = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.isVideo = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.streamLink = in.readString();
+        this.whiteLabelURL = in.readString();
+        this.uRLPLS = in.readString();
+        this.videoLink = in.readString();
+        this.facebookLink = in.readString();
+        this.twitterLink = in.readString();
+        this.currentProgramName = in.readString();
+        this.isFavourite = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.stationLanguage = in.readString();
+        this.language = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.userID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.keyword = in.readString();
+    }
+
+    public static final Creator<StationResultModel> CREATOR = new Creator<StationResultModel>() {
+        @Override
+        public StationResultModel createFromParcel(Parcel source) {
+            return new StationResultModel(source);
+        }
+
+        @Override
+        public StationResultModel[] newArray(int size) {
+            return new StationResultModel[size];
+        }
+    };
 }

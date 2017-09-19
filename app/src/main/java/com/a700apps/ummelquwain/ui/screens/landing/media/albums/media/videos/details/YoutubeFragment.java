@@ -2,12 +2,15 @@ package com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.videos.de
 
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.BuildConfig;
 import com.a700apps.ummelquwain.R;
@@ -43,7 +46,7 @@ public class YoutubeFragment extends Fragment implements YouTubePlayer.OnInitial
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.youtube_layout, mYouTubePlayerFragment).commit();
-
+        VIDEO_ID = getArguments().getString("video_url");
         mYouTubePlayerFragment.initialize(BuildConfig.YOUTUBE_API_KEY, this);
         return rootView;
     }
@@ -53,8 +56,27 @@ public class YoutubeFragment extends Fragment implements YouTubePlayer.OnInitial
         if (!wasRestored) {
             player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
             player.loadVideo(VIDEO_ID);
-            player.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
+            player.setOnFullscreenListener(b -> {
+                if (!b)
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            });
+//            player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE);
+            player.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
             player.play();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            // handle change here
+            Toast.makeText(getContext(), "Portrait", Toast.LENGTH_SHORT).show();
+        }
+        else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        {
+            // or here
         }
     }
 

@@ -6,7 +6,6 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
@@ -49,9 +48,13 @@ public class NewsPresenter implements NewsContract.UserAction, LifecycleObserver
         mNewsCall.enqueue(new Callback<NewsBarModel>() {
             @Override
             public void onResponse(@NonNull Call<NewsBarModel> call, @NonNull Response<NewsBarModel> response) {
-                mModel = response.body().getResult();
+                try {
+                    mModel = response.body().getResult();
+                    mView.updateUI(mModel);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-                mView.updateUI(mModel);
             }
 
             @Override

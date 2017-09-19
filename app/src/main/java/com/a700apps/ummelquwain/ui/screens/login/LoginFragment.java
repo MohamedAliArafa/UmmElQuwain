@@ -10,10 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.User;
+import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -44,10 +47,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.btn_twitter_login)
     LinearLayout mTwitterLoginButton;
 
+    @BindView(R.id.tv_skip)
+    TextView mSkipTextView;
+
     private CallbackManager mCallbackManager;
     private LoginPresenter mPresenter;
     private TwitterAuthClient mTwitterAuthClient;
     private Callback<TwitterSession> mTwitterCallback;
+    private static String mDeviceId;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -57,6 +64,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = new LoginPresenter(getContext());
+        mDeviceId = MyApplication.get(getActivity()).getDeviceID();
     }
 
     @Override
@@ -67,6 +75,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, view);
         mFacebookLoginButton.setOnClickListener(this);
         mTwitterLoginButton.setOnClickListener(this);
+        mSkipTextView.setOnClickListener(this);
         initFacebook();
         initTwitter();
         return view;
@@ -81,12 +90,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 user.setSocialMediaID(String.valueOf(result.data.getUserId())); // 01/31/1980 format
                 user.setName(result.data.getUserName());
                 user.setSocialMediaType(2); //1 for facebook 2 for twitter
+                user.setDeviceID(mDeviceId);
                 mTwitterAuthClient.requestEmail(result.data, new Callback<String>() {
                     @Override
                     public void success(Result<String> result) {
                         user.setEmail(result.data);
                         mPresenter.socialLogin(user);
-                        getFragmentManager().popBackStack();
+                        if (getFragmentManager().getBackStackEntryCount() == 0)
+                            ((MainActivity) getActivity()).launchLanding();
+                        else
+                            getFragmentManager().popBackStack();
                     }
 
                     @Override
@@ -120,7 +133,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                     // Application code
                                     try {
                                         user.setEmail(object.getString("email"));
-                                        user.setSocialMediaID(object.getString("id")); // 01/31/1980 format
+                                        user.setSocialMediaID(object.getString("id"));
+                                        user.setDeviceID(mDeviceId);
                                         user.setName(object.getString("name"));
                                         user.setSocialMediaType(1); //1 for facebook 2 for twitter
                                         mPresenter.socialLogin(user);
@@ -133,7 +147,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         parameters.putString("fields", "id,name,email,gender,birthday");
                         request.setParameters(parameters);
                         request.executeAsync();
-                        getFragmentManager().popBackStack();
+                        if (getFragmentManager().getBackStackEntryCount() == 0)
+                            ((MainActivity) getActivity()).launchLanding();
+                        else
+                            getFragmentManager().popBackStack();
                     }
 
                     @Override
@@ -161,6 +178,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btn_twitter_login:
                 mTwitterAuthClient.authorize(getActivity(), mTwitterCallback);
+                break;
+            case R.id.tv_skip:
+                if (getFragmentManager().getBackStackEntryCount() == 0)
+                    ((MainActivity) getActivity()).launchLanding();
+                else
+                    getFragmentManager().popBackStack();
                 break;
         }
     }

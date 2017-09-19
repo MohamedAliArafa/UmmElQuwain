@@ -6,7 +6,6 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
@@ -52,15 +51,17 @@ public class AboutUsPresenter implements AboutUsContract.UserAction, LifecycleOb
         mGetContactUsCall.enqueue(new Callback<AboutUsModel>() {
             @Override
             public void onResponse(@NonNull Call<AboutUsModel> call, @NonNull Response<AboutUsModel> response) {
-                Log.i("response", response.body().getResult().getMangerName());
-                mModel = response.body().getResult();
+                try {
+                    Log.i("response", response.body().getResult().getMangerName());
+                    mModel = response.body().getResult();
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+                    mView.updateUI(mModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-
-                mView.updateUI(mModel);
             }
 
             @Override

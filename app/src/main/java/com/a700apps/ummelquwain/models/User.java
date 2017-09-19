@@ -15,7 +15,10 @@ public class User extends RealmObject{
     @PrimaryKey
     @SerializedName("ID")
     @Expose
-    private String iD;
+    private String id;
+    @SerializedName("DeviceID")
+    @Expose
+    private String deviceID;
     @SerializedName("SocialMediaID")
     @Expose
     private String socialMediaID;
@@ -30,11 +33,19 @@ public class User extends RealmObject{
     private String email;
 
     public String getID() {
-        return iD;
+        return id;
     }
 
     public void setID(String iD) {
-        this.iD = iD;
+        this.id = iD;
+    }
+
+    public String getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(String deviceID) {
+        this.deviceID = deviceID;
     }
 
     public String getSocialMediaID() {

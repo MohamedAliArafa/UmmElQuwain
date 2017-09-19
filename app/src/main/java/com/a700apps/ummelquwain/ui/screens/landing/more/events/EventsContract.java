@@ -13,10 +13,15 @@ public interface EventsContract {
         void updateUI(List<EventResultModel> models);
         void showProgress();
         void hideProgress();
+        boolean requestReadPermission();
     }
 
     interface UserAction {
         void getData();
         void openDetails(EventResultModel eventID);
+
+        void shareEvent(EventResultModel model);
+
+        void addToCalender(EventResultModel model);
     }
 }

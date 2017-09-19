@@ -5,7 +5,6 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.models.request.EventRequestModel;
@@ -43,9 +42,13 @@ public class EventDetailPresenter implements EventDetailContract.UserAction, Lif
         mEventCall.enqueue(new Callback<EventModel>() {
             @Override
             public void onResponse(@NonNull Call<EventModel> call, @NonNull Response<EventModel> response) {
-                mModel = response.body().getResult();
+                try {
+                    mModel = response.body().getResult();
+                    mView.updateUI(mModel);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-                mView.updateUI(mModel);
             }
 
             @Override

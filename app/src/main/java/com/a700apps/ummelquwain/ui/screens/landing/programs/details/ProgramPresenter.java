@@ -56,18 +56,18 @@ public class ProgramPresenter implements ProgramContract.UserAction, LifecycleOb
         mProgramCall.enqueue(new Callback<ProgramModel>() {
             @Override
             public void onResponse(@NonNull Call<ProgramModel> call, @NonNull Response<ProgramModel> response) {
-                mModel = response.body().getResult();
+                try {
+                    mModel = response.body().getResult();
+                    mView.updateUI(mModel);
+                    mView.setupViewPager();
+                    mView.setupTabLayout();
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-
-                mView.updateUI(mModel);
-
-                mView.setupViewPager();
-                mView.setupTabLayout();
-
             }
 
             @Override

@@ -6,14 +6,15 @@
     android:background="@drawable/bg_main"
     android:clickable="true"
     android:focusable="true"
-    tools:context=".ui.screens.landing.media.albums.media.images.details.ImageDetailsFragment">
+    tools:context=".ui.screens.landing.media.albums.media.images.details.ImageDetailsFragment"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="25dp">
 
     <ImageView
         android:id="@+id/iv_station_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="400dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginBottom="300dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,15 +25,27 @@
         app:srcCompat="@drawable/logo" />
 
 
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_detalis_image_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <RelativeLayout
         android:id="@+id/rl_toolbar_container"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@drawable/bg_trans_gradiant_white"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -52,19 +65,17 @@
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="150dp"
         android:background="@color/trans_white_10"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_station_image">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/iv_station_logo"
-            android:layout_width="@dimen/logo_dimension"
-            android:layout_height="@dimen/logo_dimension"
+            android:layout_width="@dimen/logo_dimension_small"
+            android:layout_height="@dimen/logo_dimension_small"
             android:layout_marginBottom="0dp"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
@@ -74,29 +85,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/image_list" />
-
-        <TextView
-            android:id="@+id/tv_station_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/mock_station_name"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toEndOf="@+id/iv_station_logo"
-            app:layout_constraintTop_toTopOf="@+id/iv_station_logo" />
-
-        <TextView
-            android:id="@+id/tv_station_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:paddingBottom="8dp"
-            android:text="@string/mock_station_category_mock"
-            android:textColor="@android:color/white"
-            app:layout_constraintStart_toEndOf="@+id/iv_station_logo"
-            app:layout_constraintTop_toBottomOf="@+id/tv_station_name" />
 
         <ImageView
             android:id="@+id/iv_like"
@@ -121,7 +109,47 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_paly_liste" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_station_logo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="127dp">
+
+            <TextView
+                android:id="@+id/tv_station_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mock_station_name"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tv_station_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mock_station_category_mock"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
     </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_station_current_program_Live_on"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <TextView
         android:id="@+id/tv_station_current_program"
@@ -131,9 +159,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_station_current_program_Live_on"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <TextView
@@ -142,8 +170,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:maxLines="2"
-        android:ellipsize="end"
         android:text="TextView"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -154,11 +180,11 @@
         android:id="@+id/tl_details"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_station_desc"
         app:tabGravity="fill"
         app:tabMode="fixed" />
@@ -170,9 +196,9 @@
         android:layout_marginBottom="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tl_details"
         app:layout_constraintVertical_bias="0.0">
 

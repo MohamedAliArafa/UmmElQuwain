@@ -1,7 +1,6 @@
 package com.a700apps.ummelquwain.ui.screens.landing.more;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
@@ -21,15 +21,39 @@ import com.a700apps.ummelquwain.ui.screens.landing.more.events.EventsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.joinus.JoinUsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.news.NewsFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.more.sponsors.SponsorsFragment;
+import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
 import com.a700apps.ummelquwain.utilities.Utility;
+import com.facebook.login.LoginManager;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MoreFragment extends Fragment implements View.OnClickListener {
+    @BindView(R.id.ll_language)
+    LinearLayout LanguageBtn;
+    @BindView(R.id.ll_news)
+    LinearLayout newsBtn;
+    @BindView(R.id.ll_events)
+    LinearLayout eventsBtn;
+    @BindView(R.id.ll_sponser)
+    LinearLayout sponsorsBtn;
+    @BindView(R.id.ll_join)
+    LinearLayout joinBtn;
+    @BindView(R.id.ll_about)
+    LinearLayout aboutBtn;
+    @BindView(R.id.ll_contact)
+    LinearLayout contactBtn;
+    @BindView(R.id.ll_logout)
+    LinearLayout logoutBtn;
 
+    @BindView(R.id.tv_logout)
+    TextView logoutTextView;
+
+    Realm mRealm;
 
     public MoreFragment() {
         // Required empty public constructor
@@ -47,16 +71,15 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        LinearLayout LanguageBtn = view.findViewById(R.id.ll_language);
-        LinearLayout eventsBtn = view.findViewById(R.id.ll_events);
-        LinearLayout newsBtn = view.findViewById(R.id.ll_news);
-        LinearLayout sponsorsBtn = view.findViewById(R.id.ll_sponser);
-        LinearLayout joinBtn = view.findViewById(R.id.ll_join);
-        LinearLayout aboutBtn = view.findViewById(R.id.ll_about);
-        LinearLayout contactBtn = view.findViewById(R.id.ll_contact);
-        LinearLayout logoutBtn = view.findViewById(R.id.ll_logout);
+    public void onResume() {
+        super.onResume();
+//        ((LandingFragment) getParentFragment()).moveToHome();
+    }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        ButterKnife.bind(this, view);
+        mRealm = Realm.getDefaultInstance();
         LanguageBtn.setOnClickListener(this);
         eventsBtn.setOnClickListener(this);
         newsBtn.setOnClickListener(this);
@@ -72,16 +95,12 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         int viewId = view.getId();
         LandingFragment landingFragment = (LandingFragment) getParentFragment();
-        switch (viewId){
+        switch (viewId) {
             case R.id.ll_language:
                 if (Utility.isConnected(getContext())) {
                     MyApplication.get(getContext()).toggleLanguage();
-                    Intent i = getActivity().getPackageManager()
-                            .getLaunchIntentForPackage(getActivity().getPackageName());
-                    assert i != null;
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(i);
-                }else {
+                    getActivity().recreate();
+                } else {
                     Toast.makeText(getContext(), getString(R.string.error_network_connectivity), Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -104,11 +123,26 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 landingFragment.startFragmentFromChild(new ContactUsFragment());
                 break;
             case R.id.ll_logout:
-                Realm mRealm = Realm.getDefaultInstance();
-                mRealm.beginTransaction();
-                mRealm.where(User.class).findAll().deleteAllFromRealm();
-                mRealm.commitTransaction();
-                ((LandingFragment) getParentFragment()).moveToHome();
+                String user = MyApplication.get(getContext()).getUser();
+                if (!user.equals("-1")) {
+                    mRealm.beginTransaction();
+                    mRealm.where(User.class).findAll().deleteAllFromRealm();
+                    mRealm.commitTransaction();
+                    getParentFragment().getFragmentManager()
+                            .beginTransaction().replace(R.id.fragment_container,
+                            new LoginFragment(), "login_fragment")
+                            .addToBackStack(null).commit();
+                    logoutTextView.setText(getString(R.string.title_log_out));
+                    LoginManager.getInstance().logOut();
+                }
+                else {
+                    getParentFragment().getFragmentManager()
+                            .beginTransaction().replace(R.id.fragment_container,
+                            new LoginFragment(), "login_fragment")
+                            .addToBackStack(null).commit();
+                    logoutTextView.setText(getString(R.string.title_log_in));
+                    LoginManager.getInstance().logOut();
+                }
                 break;
         }
     }

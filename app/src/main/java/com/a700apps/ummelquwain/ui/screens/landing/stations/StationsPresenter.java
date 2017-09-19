@@ -16,8 +16,10 @@ import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationsModel;
+import com.a700apps.ummelquwain.player.PlayerCallback;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragment;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
+import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 
 import io.realm.Case;
 import io.realm.Realm;
@@ -32,15 +34,15 @@ import retrofit2.Response;
 
 public class StationsPresenter implements StationsContract.UserAction, LifecycleObserver {
     private Context mContext;
-    private StationsContract.View mView;
+    private StationsFragment mView;
     private FragmentManager mFragmentManager;
     private Call<StationsModel> mStationsCall;
     private Call<MessageModel> mFavCall;
     private RealmResults<StationResultModel> mModel;
-    private RealmResults<StationResultModel> mSearchModel;
+//    private RealmResults<StationResultModel> mSearchModel;
     private Realm mRealm;
 
-    public StationsPresenter(Context mContext, StationsContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
+    public StationsPresenter(Context mContext, StationsFragment mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;
@@ -60,18 +62,24 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
             mView.hideProgress();
             mView.updateUI(mModel);
         }
+        String user = MyApplication.get(mContext).getUser();
+        String deviceId = MyApplication.get(mContext).getDeviceID();
+        if (user.equals("-1"))
+            user = deviceId;
         mStationsCall = MyApplication.get(mContext).getApiService()
-                .getAllStations(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), MyApplication.get(mContext).getUser()));
+                .getAllStations(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), user));
         mStationsCall.enqueue(new Callback<StationsModel>() {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
-//                mModel = response.body().getResult();
                 mView.hideProgress();
-
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(response.body().getResult());
-                mRealm.commitTransaction();
-
+                try {
+                    //                mModel = response.body().getResult();
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(response.body().getResult());
+                    mRealm.commitTransaction();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 //                mView.updateUI(mModel);
             }
 
@@ -95,28 +103,55 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     }
 
     @Override
+    public void playStream(StationResultModel station, PlayerCallback callback) {
+        MyApplication.get(mContext).startService(station, callback);
+    }
+
+    @Override
     public void search(String keyword) {
         mView.showProgress();
 
         mRealm = Realm.getDefaultInstance();
         RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class)
-                .contains("stationName", keyword, Case.INSENSITIVE).findAll();
-        mSearchModel = query;
+                .contains("stationName", keyword, Case.INSENSITIVE)
+                .findAll();
+        if (query.isLoaded() && query.isEmpty()) {
+           query = mRealm.where(StationResultModel.class)
+                    .contains("categoryName", keyword, Case.INSENSITIVE)
+                    .findAll();
+            if (query.isLoaded() && query.isEmpty())
+                query = mRealm.where(StationResultModel.class)
+                    .contains("stationLanguage", keyword, Case.INSENSITIVE)
+                    .findAll();
+        }
         if (query.isLoaded() && !query.isEmpty()) {
             mView.hideProgress();
-            mView.updateUI(mSearchModel);
+            mModel = query;
+            mView.updateUI(mModel);
+        }
+        String user = MyApplication.get(mContext).getUser();
+        String deviceId = MyApplication.get(mContext).getDeviceID();
+        if (user.equals("-1"))
+            user = deviceId;
+        if (deviceId == null) {
+            ((MainActivity) mView.getActivity()).requestReadPermission();
+            return;
         }
         mStationsCall = MyApplication.get(mContext).getApiService()
-                .searchStations(new SearchRequestModel(keyword, MyApplication.get(mContext).getUser(), MyApplication.get(mContext).getLanguage()));
+                .searchStations(new SearchRequestModel(keyword, user, MyApplication.get(mContext).getLanguage()));
         mStationsCall.enqueue(new Callback<StationsModel>() {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
 //                mModel = response.body().getResult();
                 mView.hideProgress();
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(response.body().getResult());
-                mRealm.commitTransaction();
-                mView.updateUI(mSearchModel);
+                try {
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(response.body().getResult());
+                    mRealm.commitTransaction();
+                    mView.updateUI(mModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -131,33 +166,45 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
 
     @Override
     public void setFav(int itemID, int isFav, StationsContract.adapterCallback callback) {
-        String user = ((MyApplication) mContext.getApplicationContext()).getUser();
+        String user = MyApplication.get(mContext).getUser();
+        String deviceId = MyApplication.get(mContext).getDeviceID();
+        if (user.equals("-1"))
+            user = null;
+        if (deviceId == null) {
+            ((MainActivity) mView.getActivity()).requestReadPermission();
+            return;
+        }
         favStatus = isFav;
-        if (!user.equals("-1")) {
-            mView.showProgress();
-            if (isFav == 0)
-                mFavCall = MyApplication.get(mContext).getApiService()
-                        .addTofav(new FavouriteRequestModel(user, 1, itemID));
-            else
-                mFavCall = MyApplication.get(mContext).getApiService()
-                        .removeFromfav(new FavouriteRequestModel(user, 0, itemID));
-            mFavCall.enqueue(new Callback<MessageModel>() {
-                @Override
-                public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
+
+        mView.showProgress();
+        if (isFav == 0)
+            mFavCall = MyApplication.get(mContext).getApiService()
+                    .addTofav(new FavouriteRequestModel(user, deviceId, 1, itemID));
+        else
+            mFavCall = MyApplication.get(mContext).getApiService()
+                    .removeFromfav(new FavouriteRequestModel(user, deviceId, 1, itemID));
+        mFavCall.enqueue(new Callback<MessageModel>() {
+            @Override
+            public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
+                try {
                     MessageResultModel model = response.body().getResult();
                     if (model.getSuccess())
                         callback.favCallback(favStatus == 1 ? 0 : 1);
-                    mView.hideProgress();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void onFailure(@NonNull Call<MessageModel> call, @NonNull Throwable t) {
-                    t.printStackTrace();
-                    callback.favCallback(favStatus);
-                    mView.hideProgress();
-                }
-            });
-        }
+                mView.hideProgress();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MessageModel> call, @NonNull Throwable t) {
+                t.printStackTrace();
+                callback.favCallback(favStatus);
+                mView.hideProgress();
+            }
+        });
+
     }
 
     @Override

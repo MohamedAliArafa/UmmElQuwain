@@ -53,6 +53,8 @@ public class StationFragment extends Fragment implements StationContract.View, L
     TextView mStationCategoryTextView;
     @BindView(R.id.tv_station_current_program)
     TextView mStationCurrentProgramTextView;
+    @BindView(R.id.tv_station_current_program_Live_on)
+    TextView mStationCurrentProgramIsLiveTextView;
     @BindView(R.id.tv_station_desc)
     TextView mStationDescTextView;
 
@@ -99,32 +101,31 @@ public class StationFragment extends Fragment implements StationContract.View, L
     public void updateUI(StationResultModel model) {
         mStationNameTextView.setText(model.getStationName());
         mStationCategoryTextView.setText(model.getCategoryName());
+        mStationCurrentProgramIsLiveTextView.setText(model.getIsLive() ? getString(R.string.header_live) : getString(R.string.header_on));
         mStationCurrentProgramTextView.setText(model.getCurrentProgramName());
         mStationDescTextView.setText(model.getStationInfo());
         mPicasso.load(model.getStationLogo()).into(mStationLogoImageView);
         mPicasso.load(model.getStationImage()).into(mStationBackImageView);
         supplierFragments = Arrays.asList(StationInfoFragment.newInstance(model),
                 StationScheduleFragment.newInstance(model));
-
-        mLikeBtn.setImageDrawable(getContext().getResources()
-                .getDrawable(model.getIsFavourite() == 1 ?
-                        R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
-        mLikeBtn.setOnClickListener((View view) -> {
-            String userID = ((MyApplication) getContext().getApplicationContext()).getUser();
-            if (!userID.equals("-1")) {
+        try {
+            mLikeBtn.setImageDrawable(getContext().getResources()
+                    .getDrawable(model.getIsFavourite() == 1 ?
+                            R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+            mLikeBtn.setOnClickListener((View view) -> {
                 mPresenter.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
                     mRealm.beginTransaction();
                     model.setIsFavourite(fav);
                     mRealm.commitTransaction();
-                    mPresenter.getData();
+//                    mPresenter.getData();
+                    mLikeBtn.setImageDrawable(getContext().getResources()
+                            .getDrawable(model.getIsFavourite() == 1 ?
+                                    R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
                 });
-
-                mLikeBtn.setImageDrawable(getContext().getResources()
-                        .getDrawable(model.getIsFavourite() == 1 ?
-                                R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
-            } else
-                mPresenter.openLogin();
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -1,11 +1,17 @@
 package com.a700apps.ummelquwain.ui.screens.landing.more.events;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
@@ -24,6 +30,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_CALENDER_PERMISSION;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +52,6 @@ public class EventsFragment extends Fragment implements View.OnClickListener, Ev
 
     @BindView(R.id.recycler)
     RecyclerView mRecycler;
-
 
     public EventsFragment() {
         // Required empty public constructor
@@ -69,7 +76,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener, Ev
         ButterKnife.bind(this, view);
         mBackToolbarBtn.setOnClickListener(this);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new EventsAdapter(null, R.layout.list_item_events, mPresenter);
+        mAdapter = new EventsAdapter(getContext(), null, R.layout.list_item_events, mPresenter);
         mRecycler.setAdapter(mAdapter);
         mGesture = new GestureDetector(getActivity(),
                 new SwipeToDismissHelper(getFragmentManager()));
@@ -103,5 +110,25 @@ public class EventsFragment extends Fragment implements View.OnClickListener, Ev
     @Override
     public void hideProgress() {
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean requestReadPermission() {
+        if (CheckPermission(this.getActivity(), Manifest.permission.READ_CALENDAR)) {
+            return true;
+        } else {
+            RequestPermission(this.getActivity(), Manifest.permission.READ_CALENDAR, REQUEST_READ_CALENDER_PERMISSION);
+            return false;
+        }
+    }
+
+    public void RequestPermission(Activity thisActivity, String Permission, int Code) {
+        if (ContextCompat.checkSelfPermission(thisActivity, Permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(thisActivity, new String[]{Permission}, Code);
+        }
+    }
+
+    public boolean CheckPermission(Context context, String Permission) {
+        return ContextCompat.checkSelfPermission(context, Permission) == PackageManager.PERMISSION_GRANTED;
     }
 }

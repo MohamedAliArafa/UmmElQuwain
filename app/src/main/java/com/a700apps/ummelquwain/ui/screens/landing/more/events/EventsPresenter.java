@@ -1,11 +1,16 @@
 package com.a700apps.ummelquwain.ui.screens.landing.more.events;
 
+import android.Manifest;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
@@ -13,8 +18,14 @@ import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
 import com.a700apps.ummelquwain.models.response.Events.EventResultModel;
 import com.a700apps.ummelquwain.models.response.Events.EventsModel;
 import com.a700apps.ummelquwain.ui.screens.landing.more.events.details.EventDetailsFragment;
+import com.a700apps.ummelquwain.utilities.Utility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,9 +59,13 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
         mEventsCall.enqueue(new Callback<EventsModel>() {
             @Override
             public void onResponse(@NonNull Call<EventsModel> call, @NonNull Response<EventsModel> response) {
-                mModel = response.body().getResult();
+                try {
+                    mModel = response.body().getResult();
+                    mView.updateUI(mModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-                mView.updateUI(mModel);
             }
 
             @Override
@@ -66,5 +81,48 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
     public void openDetails(EventResultModel event) {
         mFragmentManager.beginTransaction().addToBackStack(null)
                 .add(R.id.fragment_container, EventDetailsFragment.newInstance(event)).commit();
+    }
+
+    @Override
+    public void shareEvent(EventResultModel model) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, model.getEventName()
+                + "\n" + model.getEventPlace()
+                + "\n" + model.getEventStartDate() + "-" + model.getEventEndDate()
+                + "\n" + model.getEventDescription());
+        sendIntent.setType("text/plain");
+        mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.share_with)));
+    }
+
+    @Override
+    public void addToCalender(EventResultModel model) {
+        if (ActivityCompat.checkSelfPermission(this.mContext.getApplicationContext(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        if (!mView.requestReadPermission())
+            return;
+        if (Utility.isEventInCal(mContext, model.getEventName())) {
+            Toast.makeText(mContext.getApplicationContext(), "Already Added", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        try {
+            Date date = sdf.parse(model.getEventStartDate());
+            cal.setTime(date);
+            intent.putExtra("beginTime", cal.getTimeInMillis());
+            date = sdf.parse(model.getEventEndDate());
+            cal.setTime(date);
+            intent.putExtra("endTime", cal.getTimeInMillis());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        intent.putExtra("allDay", true);
+        intent.putExtra("rrule", "FREQ=YEARLY");
+        intent.putExtra("title", model.getEventName());
+        mContext.startActivity(intent);
     }
 }

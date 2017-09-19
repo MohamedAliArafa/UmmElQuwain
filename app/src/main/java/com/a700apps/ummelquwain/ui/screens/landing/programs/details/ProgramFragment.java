@@ -48,10 +48,10 @@ public class ProgramFragment extends Fragment implements ProgramContract.View, L
     TextView mProgramNameTextView;
     @BindView(R.id.tv_program_category)
     TextView mProgramCategoryTextView;
-    @BindView(R.id.tv_program_current_program)
-    TextView mProgramCurrentProgramTextView;
-    @BindView(R.id.tv_program_desc)
-    TextView mProgramDescTextView;
+    @BindView(R.id.tv_program_anchor_live)
+    TextView mProgramAnchorLiveTextView;
+    @BindView(R.id.tv_program_anchor)
+    TextView mProgramAnchorTextView;
 
     Picasso mPicasso;
 
@@ -108,8 +108,8 @@ public class ProgramFragment extends Fragment implements ProgramContract.View, L
     public void updateUI(ProgramResultModel model) {
         mProgramNameTextView.setText(model.getProgramName());
         mProgramCategoryTextView.setText(model.getCategorName());
-        mProgramCurrentProgramTextView.setText(model.getProgramDescription());
-        mProgramDescTextView.setText(model.getProgramInfo());
+        mProgramAnchorTextView.setText(model.getBroadcasterName());
+        mProgramAnchorLiveTextView.setText(model.getIsLiveAudio() ? getString(R.string.header_live) : getString(R.string.header_on));
         mPicasso.load(model.getProgramLogo()).into(mProgramLogoImageView);
         mPicasso.load(model.getProgramImage()).into(mProgramBackImageView);
         supplierFragments = Arrays.asList(ProgramCommentsFragment.newInstance(model),

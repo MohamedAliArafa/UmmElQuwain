@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 
@@ -18,7 +19,7 @@ import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 
 public class SplashFragment extends Fragment implements SplashContract.View, LifecycleRegistryOwner {
 
-    private static final long SPLASH_DISPLAY_LENGTH = 5000;
+    private static final long SPLASH_DISPLAY_LENGTH = 3000;
     SplashPresenter splashPresenter;
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
@@ -46,14 +47,10 @@ public class SplashFragment extends Fragment implements SplashContract.View, Lif
     public void startTimer() {
         mRunnable = () -> {
             /* Create an Intent that will start the Menu-Activity. */
-            ((MainActivity) getActivity()).launchLanding();
-//                FragmentManager fragmentManager = getFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.fragment_container, new LandingFragment(), "landing");
-//                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
-//                        android.R.anim.slide_out_right, android.R.anim.slide_in_left,
-//                        android.R.anim.slide_out_right);
-//                fragmentTransaction.commit();
+            if (!((MyApplication) getContext().getApplicationContext()).getUser().equals("-1"))
+                ((MainActivity) getActivity()).launchLanding();
+            else
+                ((MainActivity) getActivity()).launchLogin();
         };
         mHandler = new Handler();
 

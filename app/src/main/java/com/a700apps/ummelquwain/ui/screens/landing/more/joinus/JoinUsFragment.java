@@ -2,7 +2,10 @@ package com.a700apps.ummelquwain.ui.screens.landing.more.joinus;
 
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.support.v4.app.Fragment;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -16,6 +19,10 @@ import android.widget.Toast;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.JoinUsRequestModel;
 import com.a700apps.ummelquwain.utilities.SwipeToDismissHelper;
+
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,7 +78,7 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
         mAttachBtn.setOnClickListener(this);
         mGesture = new GestureDetector(getActivity(),
                 new SwipeToDismissHelper(getFragmentManager()));
-        mProvider = new JoinUsProvider(getContext(), this);
+        mProvider = new JoinUsProvider(getContext(), this, getFragmentManager());
         view.setOnTouchListener((v, event) -> mGesture.onTouchEvent(event));
         return view;
     }
@@ -93,47 +100,53 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
                 break;
             case R.id.btn_submit:
                 if (mNameEditText.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Please Enter Your Name", Toast.LENGTH_SHORT).show();
+                    mNameEditText.setBackgroundResource(R.drawable.bg_trans_holo_red);
                     nameBool = false;
-                }
-                else {
+                } else {
                     requestModel.setName(mNameEditText.getText().toString());
+                    mNameEditText.setBackgroundResource(R.drawable.bg_trans_holo_white);
                     nameBool = true;
                 }
 
                 if (mEmailEditText.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Please Enter Your Email", Toast.LENGTH_SHORT).show();
+                    mEmailEditText.setBackgroundResource(R.drawable.bg_trans_holo_red);
                     emailBool = false;
-                }
-                else {
-                    requestModel.setEmail(mEmailEditText.getText().toString());
-                    emailBool = true;
+                } else {
+                    if (isEmailValid(mEmailEditText.getText().toString())) {
+                        requestModel.setEmail(mEmailEditText.getText().toString());
+                        mEmailEditText.setBackgroundResource(R.drawable.bg_trans_holo_white);
+                        emailBool = true;
+                    } else {
+                        mEmailEditText.setBackgroundResource(R.drawable.bg_trans_holo_red);
+                        emailBool = false;
+                    }
                 }
 
                 if (mPhoneEditText.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Please Enter Your Phone", Toast.LENGTH_SHORT).show();
+                    mPhoneEditText.setBackgroundResource(R.drawable.bg_trans_holo_red);
                     phoneBool = false;
-                }
-                else {
+                } else {
                     requestModel.setPhone(mPhoneEditText.getText().toString());
+                    mPhoneEditText.setBackgroundResource(R.drawable.bg_trans_holo_white);
                     phoneBool = true;
                 }
 
                 if (mAddressEditText.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Please Enter Your Address", Toast.LENGTH_SHORT).show();
+                    mAddressEditText.setBackgroundResource(R.drawable.bg_trans_holo_red);
                     addressBool = false;
-                }
-                else {
+                } else {
                     requestModel.setAddress(mAddressEditText.getText().toString());
+                    mAddressEditText.setBackgroundResource(R.drawable.bg_trans_holo_white);
                     addressBool = true;
                 }
 
                 if (mFile == null || mFile.isEmpty()) {
                     Toast.makeText(getContext(), "Please Upload File", Toast.LENGTH_SHORT).show();
+                    mAttachBtn.setBackgroundResource(R.drawable.bg_trans_holo_red);
                     fileBool = false;
-                }
-                else {
+                } else {
                     requestModel.setAttachment(mFile);
+                    mAttachBtn.setBackgroundResource(R.drawable.bg_trans_holo_white);
                     fileBool = true;
                 }
 
@@ -143,12 +156,43 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
         }
     }
 
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECT_AUDIO) {
-            mAttachBtn.setText(data.getData().getPath());
-            mFile = mProvider.uploadFile(data);
+            try {
+                Uri uri = data.getData();
+                String uriString = uri.toString();
+                File myFile = new File(uriString);
+                String path = myFile.getAbsolutePath();
+                String displayName = null;
+
+                if (uriString.startsWith("content://")) {
+                    try (Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null)) {
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        }
+                    }
+                } else if (uriString.startsWith("file://")) {
+                    displayName = myFile.getName();
+
+                }
+                mAttachBtn.setText(displayName);
+                mProvider.uploadFile(data, fileName -> {
+                    mFile = fileName;
+                    return mFile;
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

@@ -60,32 +60,31 @@ public class ImagesPresenter implements MediaContract.UserAction, LifecycleObser
             mView.hideProgress();
             mView.updateUI(mModel);
         }
-
         mAlbumsCall = MyApplication.get(mContext).getApiService()
                 .getAlbumContent(new AlbumContentRequestModel(
                         MyApplication.get(mContext).getLanguage(), albumID, mediaType));
         mAlbumsCall.enqueue(new Callback<AlbumModel>() {
             @Override
             public void onResponse(@NonNull Call<AlbumModel> call, @NonNull Response<AlbumModel> response) {
-                mModel = response.body().getResult().getLstAlbumContent();
+                try {
+                    mModel = response.body().getResult().getLstAlbumContent();
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+                    mView.updateUI(mModel);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-
-                mView.updateUI(mModel);
             }
 
             @Override
             public void onFailure(@NonNull Call<AlbumModel> call, @NonNull Throwable t) {
-
                 t.printStackTrace();
                 mView.hideProgress();
             }
         });
     }
-
 
     @Override
     public void openDetails(List<MediaResultModel> media, int position) {

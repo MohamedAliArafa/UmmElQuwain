@@ -17,7 +17,7 @@ public interface AlbumsContract {
 
     interface UserAction {
         void getData();
-        void openDetails(int albumID);
+        void openDetails(int albumID, String albumDesc);
 
         void search(String keyword);
     }

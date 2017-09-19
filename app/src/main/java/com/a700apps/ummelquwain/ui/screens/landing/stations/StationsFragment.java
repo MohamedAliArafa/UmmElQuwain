@@ -28,7 +28,8 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StationsFragment extends Fragment implements StationsContract.View, LifecycleRegistryOwner {
+public class StationsFragment extends Fragment implements StationsContract.View,
+        LifecycleRegistryOwner {
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     @BindView(R.id.recycler_stations)
@@ -89,6 +90,13 @@ public class StationsFragment extends Fragment implements StationsContract.View,
                     mPresenter.getData();
             }
         });
+        mSearchEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (!mSearchEditText.getText().toString().isEmpty()) {
+                mPresenter.search(mSearchEditText.getText().toString());
+                return true;
+            }
+            return false;
+        });
         mSearchEditText.setDrawableClickListener(target -> {
             switch (target) {
                 case RIGHT:
@@ -101,6 +109,8 @@ public class StationsFragment extends Fragment implements StationsContract.View,
             }
         });
     }
+
+
 
     @Override
     public LifecycleRegistry getLifecycle() {

@@ -69,11 +69,10 @@
                 android:id="@+id/tv_manager_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:background="@color/trans_white_50"
-                android:text="@string/mock_his_highness_shieikh"
                 android:textAlignment="center" />
 
             <ImageView
@@ -81,20 +80,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                app:srcCompat="@drawable/sheikh" />
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp" />
 
             <TextView
                 android:id="@+id/tv_manager_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/mock_shieikh_saoud_bin_rashid_al_mualla"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark" />
 
@@ -102,11 +99,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
                 android:background="@color/trans_white_50"
-                android:text="@string/mock_his_highness_shieikh_saoud"
                 android:textAlignment="center" />
 
             <TextView
@@ -124,11 +120,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="7dp"
                 android:background="@color/trans_white_50"
-                android:text="@string/mock_ali_jassim_ahmed_director_general_of_the_network_said_that"
                 android:textAlignment="center" />
 
             <TextView
@@ -147,11 +142,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="32dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="7dp"
                 android:background="@color/trans_white_50"
-                android:text="@string/mock_he_added_that_zee_middle_east_network"
                 android:textAlignment="center" />
 
         </LinearLayout>

@@ -46,7 +46,7 @@ public class ScheduleNestedAdapter extends RecyclerView.Adapter<ScheduleNestedAd
 
     public ScheduleNestedAdapter(Context context, List<ScheduleModel> list, int layout) {
         mContext = context;
-        for (ScheduleModel scheduleModel: list)
+        for (ScheduleModel scheduleModel : list)
             if (!scheduleModel.getSchedule().isEmpty())
                 mList.add(scheduleModel);
         mLayout = layout;
@@ -73,7 +73,7 @@ public class ScheduleNestedAdapter extends RecyclerView.Adapter<ScheduleNestedAd
         holder.mRecycler.setAdapter(adapter);
         holder.mDateTitle.setText(model.getDayName());
 
-//        holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model.getStationID()));
+        holder.itemView.setOnClickListener(view -> holder.mRecycler.setVisibility(holder.mRecycler.getVisibility() == View.GONE ? View.VISIBLE : View.GONE));
     }
 
     @Override

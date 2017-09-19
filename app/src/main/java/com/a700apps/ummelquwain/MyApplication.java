@@ -2,16 +2,22 @@ package com.a700apps.ummelquwain;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.a700apps.ummelquwain.dagger.Application.component.ApplicationComponent;
 import com.a700apps.ummelquwain.dagger.Application.component.DaggerApplicationComponent;
 import com.a700apps.ummelquwain.dagger.Application.module.ContextModule;
 import com.a700apps.ummelquwain.models.User;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
+import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.player.PlayerCallback;
+import com.a700apps.ummelquwain.player.PlayerService;
 import com.a700apps.ummelquwain.service.ApiService;
+import com.a700apps.ummelquwain.utilities.Constants;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.Twitter;
 
@@ -36,6 +42,9 @@ public class MyApplication extends Application {
     Configuration mConfiguration;
     DisplayMetrics mDisplayMetrics;
     Resources mResources;
+    private String mDeviceID;
+    private static boolean started = false;
+    private static int started_station;
 
     public static MyApplication get(Context context) {
         return (MyApplication) context.getApplicationContext();
@@ -80,6 +89,25 @@ public class MyApplication extends Application {
         mApiService = applicationComponent.getService();
     }
 
+    public void startService(StationResultModel model, PlayerCallback callback) {
+        Intent serviceIntent = new Intent(this, PlayerService.class);
+        serviceIntent.putExtra(Constants.STATION_INTENT_SERVICE_KEY, model);
+        serviceIntent.putExtra(Constants.CALLBACK_INTENT_SERVICE_KEY, callback);
+        serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+        if (!started) {
+            startService(serviceIntent);
+            started = true;
+            started_station = model.getStationID();
+        } else if (started_station == model.getStationID()){
+            stopService(serviceIntent);
+            started = false;
+        }else {
+            stopService(serviceIntent);
+            startService(serviceIntent);
+            started_station = model.getStationID();
+        }
+    }
+
     public void setLocale(int lang) {
         if (lang == 1) {
             Locale.setDefault(mArLocale);
@@ -90,6 +118,7 @@ public class MyApplication extends Application {
             mConfiguration.setLocale(mEnLocale);
             mResources.updateConfiguration(mConfiguration, mDisplayMetrics);
         }
+        onConfigurationChanged(mConfiguration);
         getApplicationContext().createConfigurationContext(mConfiguration);
     }
 
@@ -114,6 +143,15 @@ public class MyApplication extends Application {
         return userID == null ? "-1" : userID.getID();
     }
 
+    public String getDeviceID() {
+        return mDeviceID;
+    }
+
+    public void setDeviceId(String deviceId) {
+        Log.d("LoginID:", deviceId);
+        mDeviceID = deviceId;
+    }
+
     public void toggleLanguage() {
         switch (mLanguageRequestModel.getLanguage()) {
             case 1:
@@ -129,5 +167,11 @@ public class MyApplication extends Application {
                 mRealm.commitTransaction();
                 break;
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // refresh your views here
+        super.onConfigurationChanged(newConfig);
     }
 }

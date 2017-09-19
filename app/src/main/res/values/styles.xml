@@ -7,10 +7,15 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textViewStyle">@style/fancyTextView</item>
+        <item name="editTextStyle">@style/fancyEditText</item>
         <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="fancyTextView" parent="android:Widget.TextView">
-        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:fontFamily">@font/gothic</item>
+    </style>
+
+    <style name="fancyEditText" parent="android:Widget.EditText">
+        <item name="android:fontFamily">@font/gothic</item>
     </style>
 </resources>

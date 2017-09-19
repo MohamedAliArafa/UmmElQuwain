@@ -46,10 +46,15 @@ public class NewsDetailPresenter implements NewsDetailContract.UserAction, Lifec
         mGetNewsDetails.enqueue(new Callback<NewsBarDetailModel>() {
             @Override
             public void onResponse(@NonNull Call<NewsBarDetailModel> call, @NonNull Response<NewsBarDetailModel> response) {
-                Log.i("response", response.body().getResult().toString());
-                mModel = response.body().getResult();
+                try {
+                    Log.i("response", response.body().getResult().toString());
+                    mModel = response.body().getResult();
+
+                    mView.updateUI(mModel);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-                mView.updateUI(mModel);
             }
 
             @Override

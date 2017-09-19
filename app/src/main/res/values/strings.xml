@@ -6,10 +6,10 @@
     <string name="facebook_app_id" translatable="false">183600388851301</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb183600388851301</string>
 
-    <string name="com.twitter.sdk.android.CONSUMER_KEY">cdktyqVl9t2FCinHrDzkL1Bdt </string>
-    <string name="com.twitter.sdk.android.CONSUMER_SECRET">i8pm84dZPoTHzdJhS6xIc2gaZBxKLu26p5PejcChC3OHAy89uY</string>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">cdktyqVl9t2FCinHrDzkL1Bdt </string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">i8pm84dZPoTHzdJhS6xIc2gaZBxKLu26p5PejcChC3OHAy89uY</string>
 
-    <string name="app_name">UmmAlQuwain</string>
+    <string name="app_name">UBN</string>
 
     <string name="btn_mark_my_calender">Mark my calender</string>
     <string name="btn_upload_mp3_or_video">Upload (mp3 or video)</string>
@@ -21,8 +21,8 @@
     <string name="desc_search_a_program_or_station">Search a program or station</string>
 
     <string name="mock_2015">جميع الحقوق محفوظة لدائرة الحكومة الإلكترونية 2015</string>
-    <string name="mock_ali_jassim_ahmed_director_general_of_the_network_said_that">Ali Jassim Ahmed, Director General of the Network, said that the network has worked since it\'s inception in march 1978 to achieve advanced position among the radio stations operating in the country, in accordance with it\'s vision of civilization, humanity and community, and to enhance it\'s competitive position to achieve greater uniqueness and excellence.</string>
-    <string name="mock_all_stations_will_introduce">all stations will introduce a singer from this channel</string>
+    <string name="mock_ali_jassim_ahmed_director_general_of_the_network_said_that" translatable="false">Ali Jassim Ahmed, Director General of the Network, said that the network has worked since it\'s inception in march 1978 to achieve advanced position among the radio stations operating in the country, in accordance with it\'s vision of civilization, humanity and community, and to enhance it\'s competitive position to achieve greater uniqueness and excellence.</string>
+    <string name="mock_all_stations_will_introduce" translatable="false">all stations will introduce a singer from this channel</string>
     <string name="mock_an_hdhomerun_is_a_simple_tv">An HDHomeRun is a simple TV tuner that can broadcast television over your home network to any room in your house</string>
     <string name="mock_contact_fax">+971 7777 6088</string>
     <string name="mock_contact_mail">ump@uae.com</string>
@@ -73,10 +73,25 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_info">Info</string>
-    <string name="title_schedule">Schedule</string>
     <string name="mock_info_desc">Dance FM 97.8. 36K likes. Dance FM 97.8 The UAE\'s only dance station brings you exclusively the best in electronic music from over 100 local</string>
     <string name="title_language">العربية</string>
     <string name="title_search">Search</string>
     <string name="error_network_connectivity">Please Check your Internet Connection</string>
     <string name="title_comment">Comments</string>
+    <string name="share_with">Share With</string>
+    <string name="title_log_in">Log In</string>
+
+    <string name="cd_repeat">Repeat one or all</string>
+    <string name="cd_previous">Skip backwards</string>
+    <string name="cd_play">Play and pause</string>
+    <string name="cd_next">Skip forwards</string>
+    <string name="header_live">Live:</string>
+    <string name="header_on">On:</string>
+    <string name="title_schedule">Schedule</string>
+    <string name="log_in_to_enjoy_the_immense_experience">Log in to enjoy the immense experience</string>
+    <string name="login_with_facebook">Login with facebook</string>
+    <string name="it_s_better_with_friends">It\'s better with friends..</string>
+    <string name="login_with_twitter">Login with twitter</string>
+    <string name="skip">Skip</string>
+    <string name="error_open">Can\'t Open</string>
 </resources>

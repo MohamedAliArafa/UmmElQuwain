@@ -27,6 +27,9 @@ public class ProgramInfoFragment extends Fragment {
     @BindView(R.id.tv_program_info_dec)
     TextView mProgramInfoTextView;
 
+    @BindView(R.id.tv_program_info_type)
+    TextView mProgramInfoTypeTextView;
+
     @BindView(R.id.recycler_program_schedule)
     RecyclerView mScheduleRecycler;
     private ProgramScheduleAdapter mAdapter;
@@ -51,6 +54,7 @@ public class ProgramInfoFragment extends Fragment {
 
     private void updateView() {
         mProgramInfoTextView.setText(mModel.getProgramInfo());
+        mProgramInfoTypeTextView.setText(String.format("%s %s", getString(R.string.title_schedule), mModel.getProgramTypeName()));
         mAdapter.updateData(mModel.getSchedule());
     }
 

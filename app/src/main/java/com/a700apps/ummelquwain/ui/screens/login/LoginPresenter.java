@@ -2,6 +2,7 @@ package com.a700apps.ummelquwain.ui.screens.login;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.models.User;
@@ -16,7 +17,7 @@ import retrofit2.Response;
  * Created by mohamed.arafa on 9/11/2017.
  */
 
-public class LoginPresenter implements LoginContract.UserAction{
+public class LoginPresenter implements LoginContract.UserAction {
     private Context mContext;
     private Call<MessageModel> mLoginCall;
     private User mModel;
@@ -37,10 +38,17 @@ public class LoginPresenter implements LoginContract.UserAction{
         mLoginCall.enqueue(new Callback<MessageModel>() {
             @Override
             public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
-                mModel.setID(response.body().getResult().getMessage());
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
+                try {
+                    mModel.setID(response.body().getResult().getMessage());
+                    Log.d("LoginID:", mModel.getID());
+                    if (mModel.getDeviceID() != null)
+                        Log.d("LoginDeviceID:", mModel.getDeviceID());
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

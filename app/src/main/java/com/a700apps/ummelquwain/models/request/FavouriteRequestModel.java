@@ -11,6 +11,9 @@ public class FavouriteRequestModel {
     @SerializedName("UserID")
     @Expose
     private String userID;
+    @SerializedName("DeviceID")
+    @Expose
+    private String deviceID;
     @SerializedName("FavouriteType")
     @Expose
     private Integer favouriteType;
@@ -18,10 +21,19 @@ public class FavouriteRequestModel {
     @Expose
     private Integer itemID;
 
-    public FavouriteRequestModel(String userID, Integer favouriteType, Integer itemID) {
+    public FavouriteRequestModel(String userID,String deviceID, Integer favouriteType, Integer itemID) {
+        this.deviceID = deviceID;
         this.userID = userID;
         this.favouriteType = favouriteType;
         this.itemID = itemID;
+    }
+
+    public String getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(String deviceID) {
+        this.deviceID = deviceID;
     }
 
     public String getUserID() {

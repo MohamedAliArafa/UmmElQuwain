@@ -6,7 +6,6 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
@@ -67,14 +66,16 @@ public class VideosPresenter implements MediaContract.UserAction, LifecycleObser
         mAlbumsCall.enqueue(new Callback<AlbumModel>() {
             @Override
             public void onResponse(@NonNull Call<AlbumModel> call, @NonNull Response<AlbumModel> response) {
-                mModel = response.body().getResult().getLstAlbumContent();
+                try {
+                    mModel = response.body().getResult().getLstAlbumContent();
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+                    mView.updateUI(mModel);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-
-                mView.updateUI(mModel);
             }
 
             @Override

@@ -16,8 +16,12 @@ public interface JoinUsContract {
         void hideProgress();
     }
 
+    interface fileCallback {
+        String onFileUploaded(String fileName);
+    }
+
     interface UserAction {
-        String uploadFile(Intent data);
+        void uploadFile(Intent data, JoinUsContract.fileCallback callback);
         void join(JoinUsRequestModel data);
     }
 }

@@ -50,7 +50,7 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
 
         mRealm = Realm.getDefaultInstance();
         RealmResults<AlbumResultModel> query = mRealm.where(AlbumResultModel.class).findAll();
-        if (query.isLoaded() && !query.isEmpty()){
+        if (query.isLoaded() && !query.isEmpty()) {
             mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);
@@ -60,14 +60,18 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
         mAlbumsCall.enqueue(new Callback<AlbumsModel>() {
             @Override
             public void onResponse(@NonNull Call<AlbumsModel> call, @NonNull Response<AlbumsModel> response) {
-                mModel = response.body().getResult();
+                try {
+                    mModel = response.body().getResult();
+
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+
+                    mView.updateUI(mModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-
-                mView.updateUI(mModel);
             }
 
             @Override
@@ -80,9 +84,9 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
     }
 
     @Override
-    public void openDetails(int albumID) {
+    public void openDetails(int albumID, String albumDesc) {
         mFragmentManager.beginTransaction().addToBackStack(null)
-                .add(R.id.fragment_container, AlbumFragment.newInstance(albumID)).commit();
+                .add(R.id.fragment_container, AlbumFragment.newInstance(albumID, albumDesc)).commit();
     }
 
     @Override
@@ -91,7 +95,7 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
 
         mRealm = Realm.getDefaultInstance();
         RealmResults<AlbumResultModel> query = mRealm.where(AlbumResultModel.class).findAll();
-        if (query.isLoaded() && !query.isEmpty()){
+        if (query.isLoaded() && !query.isEmpty()) {
             mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);
@@ -101,14 +105,17 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
         mAlbumsCall.enqueue(new Callback<AlbumsModel>() {
             @Override
             public void onResponse(@NonNull Call<AlbumsModel> call, @NonNull Response<AlbumsModel> response) {
-                mModel = response.body().getResult();
+                try {
+                    mModel = response.body().getResult();
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+
+                    mView.updateUI(mModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-
-                mView.updateUI(mModel);
             }
 
             @Override

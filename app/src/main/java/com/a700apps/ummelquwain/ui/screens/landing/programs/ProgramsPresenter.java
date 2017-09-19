@@ -28,7 +28,7 @@ import retrofit2.Response;
  * Created by mohamed.arafa on 9/10/2017.
  */
 
-public class ProgramsPresenter implements ProgramsContract.UserAction, LifecycleObserver{
+public class ProgramsPresenter implements ProgramsContract.UserAction, LifecycleObserver {
     private Context mContext;
     private ProgramsContract.View mView;
     private FragmentManager mFragmentManager;
@@ -50,7 +50,7 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
 
         mRealm = Realm.getDefaultInstance();
         RealmResults<ProgramResultModel> query = mRealm.where(ProgramResultModel.class).findAll();
-        if (query.isLoaded() && !query.isEmpty()){
+        if (query.isLoaded() && !query.isEmpty()) {
             mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);
@@ -60,14 +60,16 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         mStationsCall.enqueue(new Callback<ProgramsModel>() {
             @Override
             public void onResponse(@NonNull Call<ProgramsModel> call, @NonNull Response<ProgramsModel> response) {
-                mModel = response.body().getResult();
+                try {
+                    mModel = response.body().getResult();
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+                    mView.updateUI(mModel);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mView.hideProgress();
-
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-
-                mView.updateUI(mModel);
             }
 
             @Override
@@ -94,7 +96,7 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         RealmResults<ProgramResultModel> query = mRealm.where(ProgramResultModel.class)
                 .contains("programName", keyword, Case.INSENSITIVE).findAll();
         mModel = query;
-        if (query.isLoaded() && !query.isEmpty()){
+        if (query.isLoaded() && !query.isEmpty()) {
             mView.hideProgress();
             mView.updateUI(mModel);
         }
@@ -103,13 +105,17 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         mStationsCall.enqueue(new Callback<ProgramsModel>() {
             @Override
             public void onResponse(@NonNull Call<ProgramsModel> call, @NonNull Response<ProgramsModel> response) {
-                mModel = response.body().getResult();
-                mView.hideProgress();
+                try {
+                    mModel = response.body().getResult();
+                    mView.updateUI(mModel);
+                    mRealm.beginTransaction();
+                    mRealm.copyToRealmOrUpdate(mModel);
+                    mRealm.commitTransaction();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                mRealm.beginTransaction();
-                mRealm.copyToRealmOrUpdate(mModel);
-                mRealm.commitTransaction();
-                mView.updateUI(mModel);
+                mView.hideProgress();
             }
 
             @Override

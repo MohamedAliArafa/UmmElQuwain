@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.adapter.AlbumMediaAdapter;
@@ -31,6 +32,9 @@ public class VideosFragment extends Fragment implements LifecycleRegistryOwner, 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     MediaContract.UserAction mPresenter;
 
+    @BindView(R.id.tv_album_desc)
+    TextView mAlbumDescTextView;
+
     @BindView(R.id.recycler)
     RecyclerView mRecycler;
 
@@ -39,12 +43,14 @@ public class VideosFragment extends Fragment implements LifecycleRegistryOwner, 
 
     AlbumMediaAdapter mAdapter;
     private static int mAlbumID;
+    private static String mAlbumDesc;
 
     public VideosFragment() {
         // Required empty public constructor
     }
 
-    public static VideosFragment newInstance(int albumID) {
+    public static VideosFragment newInstance(int albumID, String albumDesc) {
+        mAlbumDesc = albumDesc;
         mAlbumID = albumID;
         return new VideosFragment();
     }
@@ -61,6 +67,7 @@ public class VideosFragment extends Fragment implements LifecycleRegistryOwner, 
         mPresenter = new VideosPresenter(getContext(), this, getParentFragment().getFragmentManager(), getLifecycle(), mAlbumID, 2);
         mAdapter = new AlbumMediaAdapter(getContext(), null, R.layout.list_item_album, mPresenter);
         mRecycler.setAdapter(mAdapter);
+        mAlbumDescTextView.setText(mAlbumDesc);
         return view;
     }
 

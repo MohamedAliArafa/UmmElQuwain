@@ -91,6 +91,13 @@ public class ProgramsFragment extends Fragment implements ProgramsContract.View,
                     mPresenter.getData();
             }
         });
+        mSearchEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (!mSearchEditText.getText().toString().isEmpty()) {
+                mPresenter.search(mSearchEditText.getText().toString());
+                return true;
+            }
+            return false;
+        });
         mSearchEditText.setDrawableClickListener(target -> {
             switch (target) {
                 case RIGHT:

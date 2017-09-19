@@ -4,14 +4,17 @@ import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.a700apps.ummelquwain.R;
@@ -35,6 +38,13 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
     TabLayout mTabLayout;
     @BindView(R.id.vp_landing)
     ViewPager mViewPager;
+    @BindView(R.id.iv_play)
+    ImageView mPlayImageView;
+    @BindView(R.id.cl_container)
+    ConstraintLayout mConstrainContainer;
+
+    @BindView(R.id.iv_player_bg)
+    ImageView mPlayerImageView;
 
     private LandingProvider mProvider;
     private final String POSITION_KEY = "position";
@@ -96,6 +106,9 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_landing, container, false);
         ButterKnife.bind(this, view);
+//        mPlayImageView.setOnClickListener(view1 -> MyApplication.get(LandingFragment.this.getContext()).startService());
+        mPlayerImageView.setOnTouchListener(new TouchListener(mConstrainContainer));
+        mPlayerImageView.setClickable(true);
         return view;
     }
 
@@ -162,5 +175,45 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
         fragmentTransaction.commit();
     }
 
+    private class TouchListener implements View.OnTouchListener {
+
+        View slidingView;
+
+        int initHeight;
+        float initPos;
+        private ConstraintLayout.LayoutParams params;
+        int parentHeight;
+
+        private TouchListener(ConstraintLayout slidingView) {
+            this.slidingView = slidingView;
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (params == null) {
+                params = (ConstraintLayout.LayoutParams) slidingView.getLayoutParams();
+                parentHeight = slidingView.getHeight();
+            }
+
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN: //get initial state
+                    initHeight = slidingView.getHeight();
+                    initPos = event.getRawY();
+                    break;
+                case MotionEvent.ACTION_MOVE: //do the sliding
+                    float dPos = initPos - event.getRawY();
+                    if ((initHeight + dPos) > parentHeight)
+                        params.height = parentHeight;
+                    else if ((initHeight + dPos) < parentHeight / 2)
+                        params.height = Math.round( parentHeight / 2);
+                    else
+                        params.height = Math.round(initHeight + dPos);
+                    slidingView.requestLayout(); //refresh layout
+                    break;
+            }
+
+            return false;
+        }
+    }
 
 }

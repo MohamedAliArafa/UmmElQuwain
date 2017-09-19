@@ -3,6 +3,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.more.contactus;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.GestureDetector;
@@ -47,6 +48,9 @@ public class ContactUsFragment extends Fragment implements ContactUsContract.Vie
     @BindView(R.id.tv_location)
     TextView mLocationTextView;
 
+    @BindView(R.id.tv_website)
+    TextView mWebsiteTextView;
+
     @BindView(R.id.iv_facebook)
     ImageView mFacebookButton;
 
@@ -81,6 +85,7 @@ public class ContactUsFragment extends Fragment implements ContactUsContract.Vie
 //        mBackToolbarBtn.setOnClickListener(this);
         mGesture = new GestureDetector(getActivity(),
                 new SwipeToDismissHelper(getFragmentManager()));
+        mLocationTextView.setPaintFlags(mLocationTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         view.setOnTouchListener((v, event) -> mGesture.onTouchEvent(event));
     }
 
@@ -124,6 +129,7 @@ public class ContactUsFragment extends Fragment implements ContactUsContract.Vie
     public void updateUI(ContactUsResultModel mModel) {
         mPhoneTextView.setText(mModel.getPhoneNumber());
         mFaxTextView.setText(mModel.getFax());
+        mWebsiteTextView.setText(mModel.getWebsiteLink());
         mMailTextView.setText(mModel.getEMail());
     }
 
