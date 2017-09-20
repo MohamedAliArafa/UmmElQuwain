@@ -13,6 +13,8 @@ import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by mohamed.arafa on 8/23/2017.
@@ -65,5 +67,12 @@ public class Utility {
         }
         cursor.close();
         return false;
+    }
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

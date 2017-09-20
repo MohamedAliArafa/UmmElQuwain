@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ResultReceiver;
@@ -30,68 +31,127 @@ public class PlayerService extends Service {
     private final String LOG_TAG = "NotificationService";
     Notification status;
     private MediaPlayer player;
+    private IBinder mBinder = new ServiceBinder();
+    private StationResultModel mModel;
+
+    private boolean isRetry = false;
+    public boolean isPreparing = false;
+
+    private String mStreamLink = "http://ca.rcast.net:8058/;stream.mp3";
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         //stopping the player when service is destroyed
-        if (player.isPlaying()) {
-            player.stop();
-            callback.send(0, new Bundle());
-        }
+//        if (player.isPlaying()) {
+//            player.stop();
+//            callback.send(0, new Bundle());
+//        }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 
     ResultReceiver callback;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        player = new MediaPlayer();
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        player.setOnBufferingUpdateListener((mp, percent) -> Log.i("Persent", String.valueOf(percent)));
+        player.setOnCompletionListener(mp -> {
+            isPreparing = false;
+            Log.i("Completed", "true");
+//            Toast.makeText(PlayerService.this.getApplicationContext(), R.string.toas_completed, Toast.LENGTH_SHORT).show();
+            if (isRetry)
+                try {
+                    player.setDataSource(mStreamLink);
+                    player.prepareAsync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            if (views != null)
+                views.setImageViewResource(R.id.status_bar_play,
+                        R.drawable.ic_paly_liste);
+            callback.send(0, new Bundle());
+        });
+        player.setOnErrorListener((mp, what, extra) -> {
+            isPreparing = false;
+//            Toast.makeText(PlayerService.this.getApplicationContext(), R.string.toast_error, Toast.LENGTH_SHORT).show();
+            if (views != null)
+                views.setImageViewResource(R.id.status_bar_play,
+                        R.drawable.ic_paly_liste);
+            callback.send(0, new Bundle());
+            return false;
+        });
+        // TODO Auto-generated method stub
+        player.setOnPreparedListener(mediaPlayer -> {
+            isPreparing = false;
+//            Toast.makeText(PlayerService.this.getApplicationContext(), R.string.toast_prepared, Toast.LENGTH_SHORT).show();
+            mediaPlayer.start();
+            callback.send(1, new Bundle());
+        });
+    }
+
+    public void preparePlayer(StationResultModel model, PlayerCallback callback) {
+//        showNotification(model.getStationName(), model.getCurrentProgramName(), model.getStationImage());
+        mModel = model;
+        this.callback = callback;
+        if (player.isPlaying() || isPreparing) {
+            player.stop();
+            player.reset();
+            isRetry = true;
+            return;
+        }
+        try {
+            player.setDataSource(mStreamLink);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        player.prepareAsync();
+        isPreparing = true;
+//        Toast.makeText(this.getApplicationContext(), R.string.toast_service_started, Toast.LENGTH_SHORT).show();
+    }
+
+    public void togglePlay(PlayerCallback callback) {
+//        Toast.makeText(this.getApplicationContext(), R.string.toast_clicked_play, Toast.LENGTH_SHORT).show();
+        Log.i(LOG_TAG, "Clicked Play");
+        if (player.isPlaying()) {
+//            Toast.makeText(PlayerService.this.getApplicationContext(), R.string.toast_pause, Toast.LENGTH_SHORT).show();
+            player.pause();
+            callback.send(0, new Bundle());
+            if (views != null)
+                views.setImageViewResource(R.id.status_bar_play,
+                        R.drawable.ic_paly_active);
+        } else {
+//            Toast.makeText(PlayerService.this.getApplicationContext(), R.string.toast_start, Toast.LENGTH_SHORT).show();
+            player.start();
+            callback.send(1, new Bundle());
+            if (views != null)
+                views.setImageViewResource(R.id.status_bar_play,
+                        R.drawable.ic_puss);
+        }
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
             StationResultModel model = intent.getParcelableExtra(Constants.STATION_INTENT_SERVICE_KEY);
             callback = intent.getParcelableExtra(Constants.CALLBACK_INTENT_SERVICE_KEY);
-            showNotification(model.getStationName(), model.getCurrentProgramName(), model.getStationImage());
-            player = new MediaPlayer();
-            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//            showNotification(model.getStationName(), model.getCurrentProgramName(), model.getStationImage());
             try {
-                player.setDataSource(model.getStreamLink());
+                player.setDataSource(mStreamLink);
                 player.prepareAsync();
-                player.setOnBufferingUpdateListener((mp, percent) -> Log.i("Persent", String.valueOf(percent)));
-                player.setOnCompletionListener(mp -> {
-                    Log.i("Completed", "true");
-                    Toast.makeText(PlayerService.this.getApplicationContext(), "Completed", Toast.LENGTH_SHORT).show();
-                    if (player.isPlaying())
-                        mp.stop();
-                    views.setImageViewResource(R.id.status_bar_play,
-                            R.drawable.ic_paly_liste);
-                    callback.send(0, new Bundle());
-                });
-                player.setOnErrorListener((mp, what, extra) -> {
-                    Toast.makeText(PlayerService.this.getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                    views.setImageViewResource(R.id.status_bar_play,
-                            R.drawable.ic_puss);
-                    callback.send(1, new Bundle());
-                    return false;
-                });
-                // TODO Auto-generated method stub
-                player.setOnPreparedListener(mediaPlayer -> {
-                    Toast.makeText(PlayerService.this.getApplicationContext(), "Prepared", Toast.LENGTH_SHORT).show();
-                    mediaPlayer.start();
-                    callback.send(1, new Bundle());
-                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //setting loop play to true
-            //this will make the ringtone continuously playing
-
             Toast.makeText(this.getApplicationContext(), "Service Started", Toast.LENGTH_SHORT).show();
         } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
-            Toast.makeText(this.getApplicationContext(), "Clicked Previous", Toast.LENGTH_SHORT).show();
-            Log.i(LOG_TAG, "Clicked Previous");
+//            Toast.makeText(this.getApplicationContext(), R.string.toast_clicked_previous, Toast.LENGTH_SHORT).show();
+            Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
         } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
             Toast.makeText(this.getApplicationContext(), "Clicked Play", Toast.LENGTH_SHORT).show();
             Log.i(LOG_TAG, "Clicked Play");
@@ -99,23 +159,25 @@ public class PlayerService extends Service {
                 Toast.makeText(PlayerService.this.getApplicationContext(), "pause", Toast.LENGTH_SHORT).show();
                 player.pause();
                 callback.send(0, new Bundle());
-                views.setImageViewResource(R.id.status_bar_play,
-                        R.drawable.ic_paly_active);
+                if (views != null)
+                    views.setImageViewResource(R.id.status_bar_play,
+                            R.drawable.ic_paly_active);
             } else {
                 Toast.makeText(PlayerService.this.getApplicationContext(), "start", Toast.LENGTH_SHORT).show();
                 player.start();
                 callback.send(1, new Bundle());
-                views.setImageViewResource(R.id.status_bar_play,
-                        R.drawable.ic_puss);
+                if (views != null)
+                    views.setImageViewResource(R.id.status_bar_play,
+                            R.drawable.ic_puss);
             }
         } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
-            Toast.makeText(this.getApplicationContext(), "Clicked Next", Toast.LENGTH_SHORT).show();
-            Log.i(LOG_TAG, "Clicked Next");
+//            Toast.makeText(this.getApplicationContext(), R.string.toast_clicked_next, Toast.LENGTH_SHORT).show();
+            Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
         } else if (intent.getAction().equals(
                 Constants.ACTION.STOPFOREGROUND_ACTION)) {
-            Log.i(LOG_TAG, "Received Stop Foreground Intent");
+            Log.i(LOG_TAG, getString(R.string.toast_foreground_recived));
             callback.send(1, new Bundle());
-            Toast.makeText(this.getApplicationContext(), "Service Stoped", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this.getApplicationContext(), R.string.toast_service_stoped, Toast.LENGTH_SHORT).show();
             stopForeground(true);
             stopSelf();
         }
@@ -128,8 +190,7 @@ public class PlayerService extends Service {
 
     private void showNotification(String stationName, String programName, String stationImage) {
         // Using RemoteViews to bind custom layouts into Notification
-        views = new RemoteViews(getPackageName(),
-                R.layout.status_bar);
+        views = new RemoteViews(getPackageName(), R.layout.status_bar);
 
         // showing default album image
         views.setViewVisibility(R.id.status_bar_icon, View.VISIBLE);
@@ -179,5 +240,11 @@ public class PlayerService extends Service {
         status.icon = R.drawable.logo;
         status.contentIntent = pendingIntent;
         startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, status);
+    }
+
+    public class ServiceBinder extends Binder {
+        public PlayerService getService() {
+            return PlayerService.this;
+        }
     }
 }

@@ -9,14 +9,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
+import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.JoinUsRequestModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageModel;
+import com.a700apps.ummelquwain.service.ProgressRequestBody;
 
 import java.io.File;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,7 +25,7 @@ import retrofit2.Response;
  * Created by mohamed.arafa on 8/30/2017.
  */
 
-public class JoinUsProvider implements JoinUsContract.UserAction {
+public class JoinUsProvider implements JoinUsContract.UserAction, ProgressRequestBody.UploadCallbacks{
 
     private final JoinUsContract.View mView;
     private final FragmentManager mFragmentManager;
@@ -43,9 +43,10 @@ public class JoinUsProvider implements JoinUsContract.UserAction {
     @Override
     public void uploadFile(Intent data, JoinUsContract.fileCallback callback) {
         Uri selectedFile = data.getData();
-        String path = selectedFile.getPath();
+        String path = selectedFile.toString();
         File file = new File(path);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), path);
+//        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        ProgressRequestBody requestFile = new ProgressRequestBody(file, this);
         MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         Call<MessageModel> responseBodyCall = MyApplication
                 .get(mContext).getApiService().addRecord(multipartBody);
@@ -55,13 +56,16 @@ public class JoinUsProvider implements JoinUsContract.UserAction {
                 try {
                     Log.d("Success", "success " + response.code());
                     Log.d("Success", "success " + response.message());
-                    Log.d("Success", "body " + response.body());
-                    mResponse = response.body().getResult().getMessage();
-                    callback.onFileUploaded(mResponse);
+                    try {
+                        Log.d("Success", "body " + response.body().getResult().getMessage());
+                        mResponse = response.body().getResult().getMessage();
+                        callback.onFileUploaded(mResponse);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -82,7 +86,7 @@ public class JoinUsProvider implements JoinUsContract.UserAction {
             public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
                 mModel = response.body();
                 if (mModel.getResult().getMessage().equals("1"))
-                    Toast.makeText(mContext, "Thanks for your contribution", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.toast_thanks_for_your_contribution, Toast.LENGTH_SHORT).show();
                 mFragmentManager.popBackStack();
                 mView.hideProgress();
             }
@@ -93,5 +97,20 @@ public class JoinUsProvider implements JoinUsContract.UserAction {
                 mView.hideProgress();
             }
         });
+    }
+
+    @Override
+    public void onProgressUpdate(int percentage) {
+        Toast.makeText(mContext, "Uploaded:" + String.valueOf(percentage), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onError() {
+        Toast.makeText(mContext, "Upload Error", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFinish() {
+        Toast.makeText(mContext, "Upload Finished", Toast.LENGTH_SHORT).show();
     }
 }

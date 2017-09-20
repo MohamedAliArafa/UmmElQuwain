@@ -4,10 +4,12 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.a700apps.ummelquwain.MyApplication;
+import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.NewsDetailsRequestModel;
 import com.a700apps.ummelquwain.models.response.NewsBar.NewsBarDetailModel;
 import com.a700apps.ummelquwain.models.response.NewsBar.NewsBarResultModel;
@@ -64,5 +66,16 @@ public class NewsDetailPresenter implements NewsDetailContract.UserAction, Lifec
                 mView.hideProgress();
             }
         });
+    }
+
+    @Override
+    public void shareNews(NewsBarResultModel model) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, model.getNewsTitle()
+                + "\n" + model.getNewsTime() + " - " +model.getNewsDate()
+                + "\n" + model.getNewsDescription());
+        sendIntent.setType("text/plain");
+        mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.share_with)));
     }
 }

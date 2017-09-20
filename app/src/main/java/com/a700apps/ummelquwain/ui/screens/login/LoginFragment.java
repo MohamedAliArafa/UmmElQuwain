@@ -104,14 +104,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void failure(TwitterException exception) {
-                        Toast.makeText(getContext(), "Twitter Email Login error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.toast_twitter_login_error, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
             @Override
             public void failure(TwitterException exception) {
-                Toast.makeText(getContext(), "Twitter Login error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.toast_twitter_login_error, Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -124,7 +124,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // Handle success
-                        Toast.makeText(getContext(), "Facebook Login Sucess", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.toast_facebook_login_success, Toast.LENGTH_SHORT).show();
                         User user = new User();
                         GraphRequest request = GraphRequest.newMeRequest(
                                 loginResult.getAccessToken(),
@@ -155,12 +155,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onCancel() {
-                        Toast.makeText(getContext(), "Facebook Login canceled", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.toast_facebook_login_canceled, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
-                        Toast.makeText(getContext(), "Facebook Login error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.toast_facebook_login_error, Toast.LENGTH_SHORT).show();
                     }
                 }
         );

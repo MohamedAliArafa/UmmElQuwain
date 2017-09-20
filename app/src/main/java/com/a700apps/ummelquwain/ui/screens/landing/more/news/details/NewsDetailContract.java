@@ -15,5 +15,6 @@ public interface NewsDetailContract {
 
     interface UserAction {
         void getData();
+        void shareNews(NewsBarResultModel model);
     }
 }

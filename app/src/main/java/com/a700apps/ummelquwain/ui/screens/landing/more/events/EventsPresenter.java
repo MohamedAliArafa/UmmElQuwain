@@ -98,12 +98,13 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
     @Override
     public void addToCalender(EventResultModel model) {
         if (ActivityCompat.checkSelfPermission(this.mContext.getApplicationContext(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            mView.requestReadPermission();
             return;
         }
         if (!mView.requestReadPermission())
             return;
         if (Utility.isEventInCal(mContext, model.getEventName())) {
-            Toast.makeText(mContext.getApplicationContext(), "Already Added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext.getApplicationContext(), R.string.toast_event_already_added, Toast.LENGTH_SHORT).show();
             return;
         }
         Calendar cal = Calendar.getInstance();

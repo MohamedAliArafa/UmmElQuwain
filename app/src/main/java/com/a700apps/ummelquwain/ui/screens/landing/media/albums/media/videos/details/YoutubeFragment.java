@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.a700apps.ummelquwain.BuildConfig;
 import com.a700apps.ummelquwain.R;
@@ -54,7 +53,7 @@ public class YoutubeFragment extends Fragment implements YouTubePlayer.OnInitial
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
         if (!wasRestored) {
-            player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+            player.setPlayerStyle(YouTubePlayer.PlayerStyle.MINIMAL);
             player.loadVideo(VIDEO_ID);
             player.setOnFullscreenListener(b -> {
                 if (!b)
@@ -72,7 +71,6 @@ public class YoutubeFragment extends Fragment implements YouTubePlayer.OnInitial
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
         {
             // handle change here
-            Toast.makeText(getContext(), "Portrait", Toast.LENGTH_SHORT).show();
         }
         else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
         {

@@ -39,7 +39,6 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     private Call<StationsModel> mStationsCall;
     private Call<MessageModel> mFavCall;
     private RealmResults<StationResultModel> mModel;
-//    private RealmResults<StationResultModel> mSearchModel;
     private Realm mRealm;
 
     public StationsPresenter(Context mContext, StationsFragment mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
@@ -102,6 +101,11 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
                 .add(R.id.fragment_container, StationFragment.newInstance(stationID)).commit();
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void destroy() {
+        //Invoke it #onDestroy
+    }
+
     @Override
     public void playStream(StationResultModel station, PlayerCallback callback) {
         MyApplication.get(mContext).startService(station, callback);
@@ -116,13 +120,13 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
                 .contains("stationName", keyword, Case.INSENSITIVE)
                 .findAll();
         if (query.isLoaded() && query.isEmpty()) {
-           query = mRealm.where(StationResultModel.class)
+            query = mRealm.where(StationResultModel.class)
                     .contains("categoryName", keyword, Case.INSENSITIVE)
                     .findAll();
             if (query.isLoaded() && query.isEmpty())
                 query = mRealm.where(StationResultModel.class)
-                    .contains("stationLanguage", keyword, Case.INSENSITIVE)
-                    .findAll();
+                        .contains("stationLanguage", keyword, Case.INSENSITIVE)
+                        .findAll();
         }
         if (query.isLoaded() && !query.isEmpty()) {
             mView.hideProgress();

@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.a700apps.ummelquwain.R;
@@ -38,13 +37,13 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
     TabLayout mTabLayout;
     @BindView(R.id.vp_landing)
     ViewPager mViewPager;
-    @BindView(R.id.iv_play)
-    ImageView mPlayImageView;
-    @BindView(R.id.cl_container)
-    ConstraintLayout mConstrainContainer;
+//    @BindView(R.id.iv_play)
+//    ImageView mPlayImageView;
+//    @BindView(R.id.cl_container)
+//    ConstraintLayout mConstrainContainer;
 
-    @BindView(R.id.iv_player_bg)
-    ImageView mPlayerImageView;
+//    @BindView(R.id.iv_player_bg)
+//    ImageView mPlayerImageView;
 
     private LandingProvider mProvider;
     private final String POSITION_KEY = "position";
@@ -107,8 +106,8 @@ public class LandingFragment extends Fragment implements LandingContract.View, L
         View view = inflater.inflate(R.layout.fragment_landing, container, false);
         ButterKnife.bind(this, view);
 //        mPlayImageView.setOnClickListener(view1 -> MyApplication.get(LandingFragment.this.getContext()).startService());
-        mPlayerImageView.setOnTouchListener(new TouchListener(mConstrainContainer));
-        mPlayerImageView.setClickable(true);
+//        mPlayerImageView.setOnTouchListener(new TouchListener(mConstrainContainer));
+//        mPlayerImageView.setClickable(true);
         return view;
     }
 

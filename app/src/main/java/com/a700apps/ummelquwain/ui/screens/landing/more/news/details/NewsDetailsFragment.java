@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -52,6 +53,9 @@ public class NewsDetailsFragment extends Fragment implements NewsDetailContract.
     @BindView(R.id.iv_back_image)
     ImageView mNewsImageView;
 
+    @BindView(R.id.btn_share)
+    Button mShareButton;
+
 
     public NewsDetailsFragment() {
         // Required empty public constructor
@@ -78,6 +82,7 @@ public class NewsDetailsFragment extends Fragment implements NewsDetailContract.
         View view = inflater.inflate(R.layout.fragment_details_news, container, false);
         ButterKnife.bind(this, view);
         mBackToolbarBtn.setOnClickListener(this);
+        mShareButton.setOnClickListener(this);
         return view;
     }
 
@@ -93,6 +98,7 @@ public class NewsDetailsFragment extends Fragment implements NewsDetailContract.
         mDateTextView.setText(model.getNewsDate());
         mDescTextView.setText(model.getNewsDescription());
         mPicasso.load(model.getNewsImage()).into(mNewsImageView);
+        mShareButton.setOnClickListener(view -> mPresenter.shareNews(model));
     }
 
     @Override
@@ -111,6 +117,7 @@ public class NewsDetailsFragment extends Fragment implements NewsDetailContract.
         switch (viewId){
             case R.id.iv_toolbar_back:
                 getFragmentManager().popBackStack();
+                break;
         }
     }
 }

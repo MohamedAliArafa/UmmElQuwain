@@ -49,7 +49,7 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         mView.showProgress();
 
         mRealm = Realm.getDefaultInstance();
-        RealmResults<ProgramResultModel> query = mRealm.where(ProgramResultModel.class).findAll();
+        RealmResults<ProgramResultModel> query = mRealm.where(ProgramResultModel.class).findAll().sort("programID");
         if (query.isLoaded() && !query.isEmpty()) {
             mModel = query;
             mView.hideProgress();

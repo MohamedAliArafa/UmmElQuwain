@@ -94,4 +94,23 @@
     <string name="login_with_twitter">Login with twitter</string>
     <string name="skip">Skip</string>
     <string name="error_open">Can\'t Open</string>
+    <string name="toast_facebook_login_success">Facebook Login Success</string>
+    <string name="toas_completed">Completed</string>
+    <string name="toast_error">Error</string>
+    <string name="toast_prepared">Prepared</string>
+    <string name="toast_service_started">Service Started</string>
+    <string name="toast_clicked_play">Clicked Play</string>
+    <string name="toast_pause">pause</string>
+    <string name="toast_start">start</string>
+    <string name="toast_clicked_previous">Clicked Previous</string>
+    <string name="toast_clicked_next">Clicked Next</string>
+    <string name="toast_service_stoped">Service Stoped</string>
+    <string name="toast_foreground_recived">Received Stop Foreground Intent</string>
+    <string name="toast_thanks_for_your_contribution">Thanks for your contribution</string>
+    <string name="toast_twitter_login_error">Twitter Email Login error</string>
+    <string name="toast_facebook_login_canceled">Facebook Login canceled</string>
+    <string name="toast_facebook_login_error">Facebook Login error</string>
+    <string name="toast_please_upload_file">Please Upload File</string>
+    <string name="toast_event_already_added">Already Added</string>
+    <string name="toast_main_activity_permisstion_allow">Please Allow Permission</string>
 </resources>

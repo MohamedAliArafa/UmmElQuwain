@@ -19,10 +19,9 @@ import android.widget.Toast;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.JoinUsRequestModel;
 import com.a700apps.ummelquwain.utilities.SwipeToDismissHelper;
+import com.a700apps.ummelquwain.utilities.Utility;
 
 import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,7 +93,7 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
                 mFile = null;
                 mAttachBtn.setText(getString(R.string.btn_upload_mp3_or_video));
                 Intent intent = new Intent();
-                intent.setType("audio/*");
+                intent.setType("audio/* video/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Audio"), SELECT_AUDIO);
                 break;
@@ -112,7 +111,7 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
                     mEmailEditText.setBackgroundResource(R.drawable.bg_trans_holo_red);
                     emailBool = false;
                 } else {
-                    if (isEmailValid(mEmailEditText.getText().toString())) {
+                    if (Utility.isEmailValid(mEmailEditText.getText().toString())) {
                         requestModel.setEmail(mEmailEditText.getText().toString());
                         mEmailEditText.setBackgroundResource(R.drawable.bg_trans_holo_white);
                         emailBool = true;
@@ -141,7 +140,7 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
                 }
 
                 if (mFile == null || mFile.isEmpty()) {
-                    Toast.makeText(getContext(), "Please Upload File", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.toast_please_upload_file, Toast.LENGTH_SHORT).show();
                     mAttachBtn.setBackgroundResource(R.drawable.bg_trans_holo_red);
                     fileBool = false;
                 } else {
@@ -154,13 +153,6 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
                     mProvider.join(requestModel);
                 break;
         }
-    }
-
-    public static boolean isEmailValid(String email) {
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 
     @Override

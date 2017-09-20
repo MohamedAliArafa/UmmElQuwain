@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     registerDeviceID();
                 } else {
-                    Toast.makeText(this, "Please Allow Permission", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_main_activity_permisstion_allow, Toast.LENGTH_SHORT).show();
                 }
             }
             break;
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                    registerDeviceID();
                 } else {
-                    Toast.makeText(this, "Please Allow Permission", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_main_activity_permisstion_allow, Toast.LENGTH_SHORT).show();
                 }
                 break;
             }

@@ -1,10 +1,13 @@
 package com.a700apps.ummelquwain;
 
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -43,8 +46,12 @@ public class MyApplication extends Application {
     DisplayMetrics mDisplayMetrics;
     Resources mResources;
     private String mDeviceID;
-    private static boolean started = false;
-    private static int started_station;
+    private static boolean isServiceStarted = false;
+    private static int mCurrentStationID;
+
+    private PlayerService mPlayerService;
+    private ServiceConnection mServiceConnection;
+    private Intent mServiceIntent;
 
     public static MyApplication get(Context context) {
         return (MyApplication) context.getApplicationContext();
@@ -87,24 +94,48 @@ public class MyApplication extends Application {
 
         mPicasso = applicationComponent.getPicasso();
         mApiService = applicationComponent.getService();
+
+        mServiceIntent = new Intent(this, PlayerService.class);
+        mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
     }
 
     public void startService(StationResultModel model, PlayerCallback callback) {
-        Intent serviceIntent = new Intent(this, PlayerService.class);
-        serviceIntent.putExtra(Constants.STATION_INTENT_SERVICE_KEY, model);
-        serviceIntent.putExtra(Constants.CALLBACK_INTENT_SERVICE_KEY, callback);
-        serviceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-        if (!started) {
-            startService(serviceIntent);
-            started = true;
-            started_station = model.getStationID();
-        } else if (started_station == model.getStationID()){
-            stopService(serviceIntent);
-            started = false;
-        }else {
-            stopService(serviceIntent);
-            startService(serviceIntent);
-            started_station = model.getStationID();
+        if (mServiceConnection == null) {
+            mServiceConnection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                    PlayerService.ServiceBinder binder = (PlayerService.ServiceBinder) iBinder;
+                    mPlayerService = binder.getService();
+                    mPlayerService.preparePlayer(model, callback);
+                    isServiceStarted = true;
+                    mCurrentStationID = model.getStationID();
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName componentName) {
+                    isServiceStarted = false;
+                }
+            };
+        } else {
+            if (mPlayerService != null) {
+//                if (mCurrentStationID == model.getStationID())
+                if (!mPlayerService.isPreparing)
+                    mPlayerService.togglePlay(callback);
+//                else
+//                    mPlayerService.preparePlayer(model, callback);
+            }
+        }
+        bindService(mServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    public void stopPlayer() {
+        unBindService();
+    }
+
+    private void unBindService() {
+        if (isServiceStarted) {
+            unbindService(mServiceConnection);
+            isServiceStarted = false;
         }
     }
 
