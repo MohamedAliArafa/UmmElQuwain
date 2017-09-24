@@ -1,13 +1,11 @@
 package com.a700apps.ummelquwain;
 
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -16,8 +14,6 @@ import com.a700apps.ummelquwain.dagger.Application.component.DaggerApplicationCo
 import com.a700apps.ummelquwain.dagger.Application.module.ContextModule;
 import com.a700apps.ummelquwain.models.User;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
-import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
-import com.a700apps.ummelquwain.player.PlayerCallback;
 import com.a700apps.ummelquwain.player.PlayerService;
 import com.a700apps.ummelquwain.service.ApiService;
 import com.a700apps.ummelquwain.utilities.Constants;
@@ -76,10 +72,17 @@ public class MyApplication extends Application {
         Twitter.initialize(this);
 
         Realm.init(this);
-        RealmConfiguration config = new RealmConfiguration.Builder().build();
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded().build();
         Realm.setDefaultConfiguration(config);
 
         mRealm = Realm.getDefaultInstance();
+//        new RealmBrowser.Builder(this)
+//        // add class, you want to view
+//                .add(mRealm, StationResultModel.class)
+//                .add(mRealm, ProgramResultModel.class)
+//        // call method showNotification()
+//                .showNotification();
 
         mLanguageRequestModel = mRealm.where(LanguageRequestModel.class).findFirst();
         if (mLanguageRequestModel == null) {
@@ -97,46 +100,6 @@ public class MyApplication extends Application {
 
         mServiceIntent = new Intent(this, PlayerService.class);
         mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-    }
-
-    public void startService(StationResultModel model, PlayerCallback callback) {
-        if (mServiceConnection == null) {
-            mServiceConnection = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                    PlayerService.ServiceBinder binder = (PlayerService.ServiceBinder) iBinder;
-                    mPlayerService = binder.getService();
-                    mPlayerService.preparePlayer(model, callback);
-                    isServiceStarted = true;
-                    mCurrentStationID = model.getStationID();
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName componentName) {
-                    isServiceStarted = false;
-                }
-            };
-        } else {
-            if (mPlayerService != null) {
-//                if (mCurrentStationID == model.getStationID())
-                if (!mPlayerService.isPreparing)
-                    mPlayerService.togglePlay(callback);
-//                else
-//                    mPlayerService.preparePlayer(model, callback);
-            }
-        }
-        bindService(mServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    public void stopPlayer() {
-        unBindService();
-    }
-
-    private void unBindService() {
-        if (isServiceStarted) {
-            unbindService(mServiceConnection);
-            isServiceStarted = false;
-        }
     }
 
     public void setLocale(int lang) {

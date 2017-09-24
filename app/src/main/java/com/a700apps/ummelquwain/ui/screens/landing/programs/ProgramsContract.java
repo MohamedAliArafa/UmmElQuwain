@@ -18,7 +18,7 @@ public interface ProgramsContract {
     interface UserAction {
         void getData();
         void openDetails(int programID);
-
+        void playStream(ProgramResultModel station);
         void search(String keyword);
     }
 }

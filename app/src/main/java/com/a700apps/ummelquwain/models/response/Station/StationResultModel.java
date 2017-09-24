@@ -74,7 +74,8 @@ public class StationResultModel  extends RealmObject implements Parcelable{
     @Expose
     private Integer isFavourite;
 
-    private Boolean isPlaying;
+    private boolean Playing;
+
     @SerializedName("StationLanguage")
     @Expose
     private String stationLanguage;
@@ -270,12 +271,12 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.isFavourite = isFavourite;
     }
 
-    public Boolean getIsPlaying() {
-        return isPlaying;
+    public boolean isPlaying() {
+        return Playing;
     }
 
-    public void setIsPlaying(Boolean isPlaying) {
-        this.isPlaying = isPlaying;
+    public void setPlaying(boolean playing) {
+        Playing = playing;
     }
 
     public String getStationLanguage() {

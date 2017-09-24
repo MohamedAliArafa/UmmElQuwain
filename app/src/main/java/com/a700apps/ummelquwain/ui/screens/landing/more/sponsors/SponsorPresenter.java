@@ -6,8 +6,10 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
+import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorModel;
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorResultModel;
@@ -57,6 +59,7 @@ public class SponsorPresenter implements SponsorsContract.UserAction, LifecycleO
 
             @Override
             public void onFailure(@NonNull Call<SponsorModel> call, @NonNull Throwable t) {
+                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
 
                 t.printStackTrace();
                 mView.hideProgress();

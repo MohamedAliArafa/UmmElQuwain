@@ -75,6 +75,16 @@ public class ProgramResultModel extends RealmObject {
     @Expose
     private RealmList<ProgramScheduleResultModel> Schedule = null;
 
+    private boolean Playing;
+
+    public boolean isPlaying() {
+        return Playing;
+    }
+
+    public void setPlaying(boolean playing) {
+        Playing = playing;
+    }
+
     public Integer getProgramID() {
         return programID;
     }

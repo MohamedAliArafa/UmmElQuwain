@@ -20,6 +20,13 @@ allprojects {
         jcenter()
         maven { url 'https://maven.google.com' }
         maven { url "https://jitpack.io" }
+        maven {
+            url 's3://assets.scand.com/maven/repository/RealmBrowser'
+            credentials(AwsCredentials) {
+                accessKey "AKIAIQXKP5XUVFLEEAKA"
+                secretKey "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"
+            }
+        }
     }
 }
 

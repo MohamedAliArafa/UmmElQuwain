@@ -1,6 +1,7 @@
 package com.a700apps.ummelquwain.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
+import com.a700apps.ummelquwain.player.PlayerCallback;
 import com.a700apps.ummelquwain.ui.screens.landing.programs.ProgramsContract;
 import com.squareup.picasso.Picasso;
 
@@ -26,6 +28,7 @@ import butterknife.ButterKnife;
 
 public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.MyViewHolder> {
 
+    private final Context mContext;
     private List<ProgramResultModel> mList = new ArrayList<>();
     private int mLayout;
     private ProgramsContract.UserAction mPresenter;
@@ -41,6 +44,9 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.MyViewHo
         @BindView(R.id.tv_program_desc)
         TextView mProgramTextView;
 
+        @BindView(R.id.iv_play)
+        ImageView mPlayImageView;
+
         @BindView(R.id.iv_program_logo)
         ImageView mThumpImageView;
 
@@ -52,6 +58,7 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.MyViewHo
     }
 
     public ProgramAdapter(Context context, ArrayList<ProgramResultModel> list, int layout, ProgramsContract.UserAction presenter) {
+        mContext = context;
         mList = list;
         mLayout = layout;
         mPresenter = presenter;
@@ -78,6 +85,23 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.MyViewHo
         holder.mProgramTextView.setText(model.getProgramDescription());
         mPicasso.load(model.getProgramLogo()).into(holder.mThumpImageView);
         holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model.getProgramID()));
+        holder.mPlayImageView.setImageDrawable(mContext.getResources()
+                .getDrawable(model.isPlaying() ?
+                        R.drawable.ic_puss : R.drawable.ic_paly_liste));
+        PlayerCallback callback = new PlayerCallback(new Handler());
+        callback.setReceiver((resultCode, resultData) -> {
+            if (resultCode == 0)
+                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+            else
+                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+        });
+        holder.itemView.setOnClickListener(view ->
+                mPresenter.openDetails(model.getProgramID())
+        );
+        holder.mPlayImageView.setOnClickListener(view -> {
+                    mPresenter.playStream(model);
+                }
+        );
     }
 
     @Override

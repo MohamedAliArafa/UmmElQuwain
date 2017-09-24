@@ -75,6 +75,9 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
             public void onFailure(@NonNull Call<ContactUsModel> call, @NonNull Throwable t) {
 
                 t.printStackTrace();
+
+                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+
                 mView.hideProgress();
             }
         });

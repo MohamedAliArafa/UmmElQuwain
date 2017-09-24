@@ -113,4 +113,5 @@
     <string name="toast_please_upload_file">Please Upload File</string>
     <string name="toast_event_already_added">Already Added</string>
     <string name="toast_main_activity_permisstion_allow">Please Allow Permission</string>
+    <string name="no_internet">Sorry No Internet Some Feature May not Work</string>
 </resources>

@@ -49,6 +49,7 @@
             </intent-filter>
         </activity>
         <service android:name=".player.PlayerService"/>
+        <service android:name=".player.ProgramPlayerService"/>
     </application>
 
 </manifest>

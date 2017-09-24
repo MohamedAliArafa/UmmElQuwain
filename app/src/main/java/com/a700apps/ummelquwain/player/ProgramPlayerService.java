@@ -14,7 +14,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.R;
-import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 import com.a700apps.ummelquwain.utilities.Constants;
 
@@ -26,16 +26,17 @@ import io.realm.Realm;
  * Created by mohamed.arafa on 8/29/2017.
  */
 
-public class PlayerService extends Service {
+public class ProgramPlayerService extends Service {
 
     private final String LOG_TAG = "NotificationService";
     Notification status;
     private MediaPlayer player;
     private IBinder mBinder = new ServiceBinder();
-    private StationResultModel mModel;
+    private ProgramResultModel mModel;
 
     public boolean isPreparing = false;
     private Realm mRealm;
+
 
     @Override
     public void onDestroy() {
@@ -59,7 +60,7 @@ public class PlayerService extends Service {
         mRealm = Realm.getDefaultInstance();
         player = new MediaPlayer();
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        player.setOnBufferingUpdateListener((mp, percent) -> Log.i("Percent", String.valueOf(percent)));
+        player.setOnBufferingUpdateListener((mp, percent) -> Log.i("Persent", String.valueOf(percent)));
         player.setOnCompletionListener(mp -> {
             isPreparing = false;
             mRealm.beginTransaction();
@@ -91,13 +92,13 @@ public class PlayerService extends Service {
             if (mModel != null)
                 mModel.setPlaying(true);
             mRealm.commitTransaction();
-//            showNotification(mModel.getStationName(), mModel.getCurrentProgramName(), mModel.getStationImage());
+//            showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramImage());
             Log.i("Prepared", "true");
             mediaPlayer.start();
         });
     }
 
-    public void preparePlayer(StationResultModel model) {
+    public void preparePlayer(ProgramResultModel model) {
 //        showNotification(model.getStationName(), model.getCurrentProgramName(), model.getStationImage());
         mRealm.beginTransaction();
         if (mModel != null)
@@ -113,7 +114,7 @@ public class PlayerService extends Service {
             mRealm.commitTransaction();
             player.reset();
             try {
-                player.setDataSource(mModel.getStreamLink());
+                player.setDataSource(mModel.getAudioProgramLink());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -122,7 +123,7 @@ public class PlayerService extends Service {
         }
     }
 
-    public void togglePlay(StationResultModel station) {
+    public void togglePlay(ProgramResultModel station) {
         Log.i(LOG_TAG, "Clicked Play");
         mModel = station;
         if (player.isPlaying()) {
@@ -136,7 +137,7 @@ public class PlayerService extends Service {
         } else {
             try {
                 player.reset();
-                player.setDataSource(station.getStreamLink());
+                player.setDataSource(station.getAudioProgramLink());
                 player.prepareAsync();
                 if (views != null)
                     views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
@@ -151,8 +152,9 @@ public class PlayerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
+            ProgramPlayerService model = intent.getParcelableExtra(Constants.STATION_INTENT_SERVICE_KEY);
             try {
-                player.setDataSource(mModel.getStreamLink());
+                player.setDataSource(mModel.getAudioProgramLink());
                 player.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -172,6 +174,7 @@ public class PlayerService extends Service {
         }
         return START_STICKY;
     }
+
 
     RemoteViews views;
 
@@ -229,8 +232,8 @@ public class PlayerService extends Service {
     }
 
     public class ServiceBinder extends Binder {
-        public PlayerService getService() {
-            return PlayerService.this;
+        public ProgramPlayerService getService() {
+            return ProgramPlayerService.this;
         }
     }
 }

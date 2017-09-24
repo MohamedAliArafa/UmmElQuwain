@@ -70,6 +70,7 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
 
             @Override
             public void onFailure(@NonNull Call<EventsModel> call, @NonNull Throwable t) {
+                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
 
                 t.printStackTrace();
                 mView.hideProgress();

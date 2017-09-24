@@ -1,6 +1,7 @@
 package com.a700apps.ummelquwain.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.player.PlayerCallback;
 import com.a700apps.ummelquwain.ui.screens.landing.favorite.FavContract;
 import com.squareup.picasso.Picasso;
 
@@ -81,7 +83,6 @@ public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultMod
     }
 
 
-
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         StationResultModel model = mList.get(position);
@@ -92,20 +93,31 @@ public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultMod
         holder.mLikeImageView.setImageDrawable(mContext.getResources()
                 .getDrawable(model.getIsFavourite() == 1 ?
                         R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+        holder.mPlayImageView.setImageDrawable(mContext.getResources()
+                .getDrawable(model.isPlaying() ?
+                        R.drawable.ic_puss : R.drawable.ic_paly_liste));
         holder.mLikeImageView.setOnClickListener(view -> {
-            String userID = ((MyApplication) mContext.getApplicationContext()).getUser();
-            if (!userID.equals("-1")) {
-                mPresenter.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
-                    mRealm.beginTransaction();
-                    model.setIsFavourite(fav);
-                    mRealm.commitTransaction();
-                    mPresenter.getStationData();
-                    notifyDataSetChanged();
-                });
-
-            } else
-                mPresenter.openLogin();
+            mPresenter.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
+                mRealm.beginTransaction();
+                model.setIsFavourite(fav);
+                mRealm.commitTransaction();
+                mPresenter.getStationData();
+            });
         });
+        PlayerCallback callback = new PlayerCallback(new Handler());
+        callback.setReceiver((resultCode, resultData) -> {
+            if (resultCode == 0)
+                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+            else
+                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+        });
+        holder.itemView.setOnClickListener(view ->
+                mPresenter.openDetails(model.getStationID())
+        );
+        holder.mPlayImageView.setOnClickListener(view -> {
+                    mPresenter.playStream(model);
+                }
+        );
         holder.itemView.setOnClickListener(view ->
                 mPresenter.openDetails(model.getStationID())
         );

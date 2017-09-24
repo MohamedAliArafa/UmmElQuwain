@@ -3,9 +3,14 @@ package com.a700apps.ummelquwain.ui.screens.landing.favorite;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
@@ -18,10 +23,13 @@ import com.a700apps.ummelquwain.models.response.Sponsors.SponsorModel;
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationsModel;
+import com.a700apps.ummelquwain.player.PlayerService;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsContract;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragment;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
 import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
+import com.a700apps.ummelquwain.utilities.Constants;
+import com.a700apps.ummelquwain.utilities.Utility;
 
 import java.util.List;
 
@@ -50,11 +58,19 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
     private Call<MessageModel> mFavCall;
     private int favStatus;
 
+    private ServiceConnection mServiceConnection;
+    private Intent mServiceIntent;
+    private PlayerService mPlayerService;
+
+    private static boolean isServiceStarted = false;
+
     public FavPresenter(Context mContext, FavFragment mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;
         this.mFragmentManager = mFragmentManager;
+        mServiceIntent = new Intent(mContext, PlayerService.class);
+        mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -75,10 +91,10 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
                 mView.hideProgress();
                try {
-                   mRealm.beginTransaction();
-                   mRealm.copyToRealmOrUpdate(response.body().getResult());
-                   mRealm.commitTransaction();
-//                mView.updateFavUI(mStationModel);
+                   Utility.addStationsToRealm(response.body().getResult(),
+                           () -> mStationModel.addChangeListener(stationResultModels -> {
+                               mView.updateFavUI(mStationModel);
+                           }));
                } catch (Exception e) {
                    e.printStackTrace();
                }
@@ -88,13 +104,14 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             @Override
             public void onFailure(@NonNull Call<StationsModel> call, @NonNull Throwable t) {
                 t.printStackTrace();
+                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
                 mView.hideProgress();
             }
         });
 
-        mStationModel.addChangeListener(stationResultModels -> {
-            mView.updateFavUI(mStationModel);
-        });
+//        mStationModel.addChangeListener(stationResultModels -> {
+//            mView.updateFavUI(mStationModel);
+//        });
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -176,6 +193,43 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
                 mView.hideProgress();
             }
         });
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void destroy() {
+        //Invoke it #onDestroy
+        if (isServiceStarted) {
+            mContext.unbindService(mServiceConnection);
+            isServiceStarted = false;
+        }
+    }
+
+    @Override
+    public void playStream(StationResultModel station) {
+        if (mServiceConnection == null) {
+            mServiceConnection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                    PlayerService.ServiceBinder binder = (PlayerService.ServiceBinder) iBinder;
+                    mPlayerService = binder.getService();
+                    mPlayerService.preparePlayer(station);
+                    isServiceStarted = true;
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName componentName) {
+                    isServiceStarted = false;
+                }
+            };
+        } else {
+            if (mPlayerService != null) {
+                if (station.isPlaying())
+                    mPlayerService.togglePlay(station);
+                else
+                    mPlayerService.preparePlayer(station);
+            }
+        }
+        mContext.bindService(mServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override

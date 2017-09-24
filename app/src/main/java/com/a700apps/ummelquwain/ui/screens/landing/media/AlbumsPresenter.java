@@ -6,6 +6,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
@@ -63,9 +64,9 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
                 try {
                     mModel = response.body().getResult();
 
-                    mRealm.beginTransaction();
-                    mRealm.copyToRealmOrUpdate(mModel);
-                    mRealm.commitTransaction();
+                    mRealm.executeTransaction(realm -> realm.copyToRealmOrUpdate(mModel));
+//                    mRealm.copyToRealmOrUpdate(mModel);
+//                    mRealm.commitTransaction();
 
                     mView.updateUI(mModel);
                 } catch (Exception e) {
@@ -78,6 +79,8 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
             public void onFailure(@NonNull Call<AlbumsModel> call, @NonNull Throwable t) {
 
                 t.printStackTrace();
+                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+
                 mView.hideProgress();
             }
         });
@@ -120,8 +123,8 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
 
             @Override
             public void onFailure(@NonNull Call<AlbumsModel> call, @NonNull Throwable t) {
-
                 t.printStackTrace();
+                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
                 mView.hideProgress();
             }
         });

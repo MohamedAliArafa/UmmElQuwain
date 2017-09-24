@@ -23,6 +23,9 @@ public interface FavContract {
     interface UserAction {
         void getStationData();
         void getSponsorData();
+
+        void playStream(StationResultModel station);
+
         void openDetails(int albumID);
         void setFav(int itemID, int isFav, StationsContract.adapterCallback callback);
 

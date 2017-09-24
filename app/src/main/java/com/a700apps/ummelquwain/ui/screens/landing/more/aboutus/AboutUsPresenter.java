@@ -6,8 +6,10 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
+import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
 import com.a700apps.ummelquwain.models.response.AboutUs.AboutUsModel;
 import com.a700apps.ummelquwain.models.response.AboutUs.AboutUsResultModel;
@@ -68,6 +70,8 @@ public class AboutUsPresenter implements AboutUsContract.UserAction, LifecycleOb
             public void onFailure(@NonNull Call<AboutUsModel> call, @NonNull Throwable t) {
 
                 t.printStackTrace();
+                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+
                 mView.hideProgress();
             }
         });

@@ -51,4 +51,19 @@
     <string name="log_in_to_enjoy_the_immense_experience">سجل الدخول للإستمتاع بتجربة هائلة</string>
     <string name="header_on">الأن:</string>
     <string name="header_live">مباشر:</string>
+    <string name="toast_facebook_login_success">تم تسجيل الدخول بنجاح</string>
+    <string name="toas_completed">إكتمل</string>
+    <string name="toast_error">خطأ</string>
+    <string name="toast_prepared">جاهز</string>
+    <string name="toast_service_started">بدء الخدمة\\</string>
+    <string name="error_open">خطأ في الفتح</string>
+    <string name="toast_clicked_play">تشغيل</string>
+    <string name="toast_thanks_for_your_contribution">شكرا لمشاركتك</string>
+    <string name="toast_twitter_login_error">خطأ في تسجيل الخزل</string>
+    <string name="toast_facebook_login_canceled">تسجيل الدخول تم إلغاؤه</string>
+    <string name="toast_facebook_login_error">خطأ في تسجيل الدخول</string>
+    <string name="toast_please_upload_file">من فصلك قم برفع ملف</string>
+    <string name="toast_event_already_added">تم إضافتة مسبقا</string>
+    <string name="toast_main_activity_permisstion_allow">من فضل قم بإعطاء تصريح</string>
+    <string name="no_internet">لا يوجد إتصال</string>
 </resources>
