@@ -3,11 +3,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.programs;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
@@ -18,9 +14,8 @@ import com.a700apps.ummelquwain.models.request.SearchRequestModel;
 import com.a700apps.ummelquwain.models.request.StationsRequestModel;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.models.response.program.ProgramsModel;
-import com.a700apps.ummelquwain.player.ProgramPlayerService;
+import com.a700apps.ummelquwain.player.Player;
 import com.a700apps.ummelquwain.ui.screens.landing.programs.details.ProgramFragment;
-import com.a700apps.ummelquwain.utilities.Constants;
 import com.a700apps.ummelquwain.utilities.Utility;
 
 import io.realm.Case;
@@ -35,6 +30,7 @@ import retrofit2.Response;
  */
 
 public class ProgramsPresenter implements ProgramsContract.UserAction, LifecycleObserver {
+    private final Player mPlayer;
     private Context mContext;
     private ProgramsContract.View mView;
     private FragmentManager mFragmentManager;
@@ -42,27 +38,18 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
     private RealmResults<ProgramResultModel> mModel;
     private Realm mRealm;
 
-    private ProgramPlayerService mPlayerService;
-    private ServiceConnection mServiceConnection;
-    private Intent mServiceIntent;
-
-    private static boolean isServiceStarted = false;
-    private static int mCurrentStationID;
-
     public ProgramsPresenter(Context mContext, ProgramsContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;
         this.mFragmentManager = mFragmentManager;
-        mServiceIntent = new Intent(mContext, ProgramPlayerService.class);
-        mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+        mPlayer = MyApplication.get(mContext).getPlayer();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     @Override
     public void getData() {
         mView.showProgress();
-
         mRealm = Realm.getDefaultInstance();
         RealmResults<ProgramResultModel> query = mRealm.where(ProgramResultModel.class).findAll().sort("programID");
         if (query.isLoaded() && !query.isEmpty()) {
@@ -88,7 +75,6 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
 
             @Override
             public void onFailure(@NonNull Call<ProgramsModel> call, @NonNull Throwable t) {
-
                 t.printStackTrace();
                 mView.hideProgress();
             }
@@ -102,46 +88,9 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         mFragmentManager.executePendingTransactions();
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    public void destroy() {
-        //Invoke it #onDestroy
-        if (isServiceStarted) {
-            mContext.unbindService(mServiceConnection);
-            isServiceStarted = false;
-        }
-    }
-
     @Override
-    public void playStream(ProgramResultModel station) {
-//        MyApplication.get(mContext).startService(station, callback);
-        if (mServiceConnection == null) {
-            mServiceConnection = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                    ProgramPlayerService.ServiceBinder binder = (ProgramPlayerService.ServiceBinder) iBinder;
-                    mPlayerService = binder.getService();
-                    mPlayerService.preparePlayer(station);
-                    isServiceStarted = true;
-                    mCurrentStationID = station.getProgramID();
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName componentName) {
-                    isServiceStarted = false;
-                }
-            };
-        } else {
-            if (mPlayerService != null) {
-                if (mCurrentStationID == station.getProgramID())
-//                    if (!mPlayerService.isPreparing)
-                    mPlayerService.togglePlay(station);
-//                    else
-//                        mPlayerService.preparePlayer(station, callback);
-                else
-                    mPlayerService.preparePlayer(station);
-            }
-        }
-        mContext.bindService(mServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    public void playStream(ProgramResultModel program) {
+        mPlayer.playStream(program);
     }
 
     @Override

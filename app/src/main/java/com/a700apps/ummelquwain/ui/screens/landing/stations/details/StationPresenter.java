@@ -15,8 +15,10 @@ import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.player.Player;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
 import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
+import com.a700apps.ummelquwain.utilities.Utility;
 
 import io.realm.Realm;
 import retrofit2.Call;
@@ -38,6 +40,7 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
     private int mStationID;
     private int favStatus;
     private Call<MessageModel> mFavCall;
+    private Player mPlayer;
 
     public StationPresenter(Context mContext, int mStationID, FragmentManager mFragmentManager
             , StationFragment mView, Lifecycle mLifeCycle) {
@@ -47,10 +50,16 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
         this.mContext = mContext;
         this.mView = mView;
         this.mStationID = mStationID;
+        mPlayer = MyApplication.get(mContext).getPlayer();
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void destroy() {
+        mModel.removeAllChangeListeners();
+    }
+
     @Override
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getData() {
         mView.showProgress();
 
@@ -75,10 +84,10 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
             @Override
             public void onResponse(@NonNull Call<StationModel> call, @NonNull Response<StationModel> response) {
                 try {
-                    mModel = response.body().getResult();
-                    mRealm.beginTransaction();
-                    mRealm.copyToRealmOrUpdate(mModel);
-                    mRealm.commitTransaction();
+                    Utility.addStationToRealm(response.body().getResult(),
+                            () -> mModel.addChangeListener(stationResultModels -> {
+                                mView.updateUI(mModel);
+                            }));
                     if (!mLifeCycle.getCurrentState().isAtLeast(Lifecycle.State.DESTROYED))
                         mView.updateUI(mModel);
                     mView.setupViewPager();
@@ -86,29 +95,33 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 mView.hideProgress();
-
             }
-
             @Override
             public void onFailure(@NonNull Call<StationModel> call, @NonNull Throwable t) {
-
                 t.printStackTrace();
                 mView.hideProgress();
             }
         });
 
         mModel.addChangeListener(stationResultModels -> {
-            if (!mLifeCycle.getCurrentState().isAtLeast(Lifecycle.State.DESTROYED))
+//            if (!mLifeCycle.getCurrentState().isAtLeast(Lifecycle.State.DESTROYED))
                 mView.updateUI(mModel);
         });
     }
+
+
 
     @Override
     public void openLogin() {
         mFragmentManager.beginTransaction().replace(R.id.fragment_container, new LoginFragment(), "login_fragment")
                 .addToBackStack(null).commit();
+    }
+
+    @Override
+    public void playStream() {
+        if (mModel != null)
+            mPlayer.playStream(mModel);
     }
 
     @Override
@@ -136,7 +149,7 @@ public class StationPresenter implements StationContract.UserAction, LifecycleOb
                     MessageResultModel model = response.body().getResult();
                     if (model.getSuccess())
                         callback.favCallback(favStatus == 1 ? 0 : 1);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 mView.hideProgress();

@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/iv_program_logo"
         android:layout_width="@dimen/logo_dimension"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/logo_dimension"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:scaleType="centerCrop"
@@ -84,4 +84,14 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp" />
+
+    <View
+        android:id="@+id/view_list_indicator"
+        android:layout_width="3dp"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

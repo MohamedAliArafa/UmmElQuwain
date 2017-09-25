@@ -2,7 +2,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.programs;
 
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 
-import java.util.List;
+import io.realm.RealmResults;
 
 /**
  * Created by mohamed.arafa on 9/10/2017.
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ProgramsContract {
     interface View {
-        void updateUI(List<ProgramResultModel> models);
+        void updateUI(RealmResults<ProgramResultModel> models);
         void showProgress();
         void hideProgress();
     }

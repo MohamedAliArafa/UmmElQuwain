@@ -20,10 +20,9 @@ import com.a700apps.ummelquwain.adapter.ProgramAdapter;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.utilities.ClickableEditText;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.RealmResults;
 
 
 /**
@@ -118,7 +117,7 @@ public class ProgramsFragment extends Fragment implements ProgramsContract.View,
     }
 
     @Override
-    public void updateUI(List<ProgramResultModel> models) {
+    public void updateUI(RealmResults<ProgramResultModel> models) {
         mAdapter.updateData(models);
     }
 

@@ -21,5 +21,6 @@ public interface ProgramContract {
 
     interface UserAction {
         void getData();
+        void playStream();
     }
 }

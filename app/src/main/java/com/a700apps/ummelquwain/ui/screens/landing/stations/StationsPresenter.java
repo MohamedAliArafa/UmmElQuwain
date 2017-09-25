@@ -3,11 +3,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.stations;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
@@ -21,11 +17,10 @@ import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationsModel;
-import com.a700apps.ummelquwain.player.PlayerService;
+import com.a700apps.ummelquwain.player.Player;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragment;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
 import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
-import com.a700apps.ummelquwain.utilities.Constants;
 import com.a700apps.ummelquwain.utilities.Utility;
 
 import io.realm.Case;
@@ -47,31 +42,14 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     private Call<MessageModel> mFavCall;
     private RealmResults<StationResultModel> mModel;
     private Realm mRealm;
-
-    private PlayerService mPlayerService;
-    private ServiceConnection mServiceConnection;
-    private Intent mServiceIntent;
-
-    private static boolean isServiceStarted = false;
+    private Player mPlayer;
 
     public StationsPresenter(Context mContext, StationsFragment mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;
         this.mFragmentManager = mFragmentManager;
-        mServiceIntent = new Intent(mContext, PlayerService.class);
-        mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    public void pause() {
-        //Invoke it #onDestroy
-        if (isServiceStarted) {
-            mPlayerService.stopForeground(true);
-            mPlayerService.stopSelf();
-            mContext.unbindService(mServiceConnection);
-            isServiceStarted = false;
-        }
+        mPlayer = MyApplication.get(mContext).getPlayer();
     }
 
     @Override
@@ -121,41 +99,9 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
                 .add(R.id.fragment_container, StationFragment.newInstance(stationID)).commit();
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    public void destroy() {
-        //Invoke it #onDestroy
-        if (isServiceStarted) {
-            mContext.unbindService(mServiceConnection);
-            isServiceStarted = false;
-        }
-    }
-
     @Override
     public void playStream(StationResultModel station) {
-        if (mServiceConnection == null) {
-            mServiceConnection = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                    PlayerService.ServiceBinder binder = (PlayerService.ServiceBinder) iBinder;
-                    mPlayerService = binder.getService();
-                    mPlayerService.preparePlayer(station);
-                    isServiceStarted = true;
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName componentName) {
-                    isServiceStarted = false;
-                }
-            };
-        } else {
-            if (mPlayerService != null) {
-                if (station.isPlaying())
-                    mPlayerService.togglePlay(station);
-                else
-                    mPlayerService.preparePlayer(station);
-            }
-        }
-        mContext.bindService(mServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        mPlayer.playStream(station);
     }
 
     @Override

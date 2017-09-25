@@ -23,7 +23,7 @@ import com.a700apps.ummelquwain.models.response.Sponsors.SponsorModel;
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationsModel;
-import com.a700apps.ummelquwain.player.PlayerService;
+import com.a700apps.ummelquwain.player.StationPlayerService;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsContract;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragment;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
@@ -60,7 +60,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
 
     private ServiceConnection mServiceConnection;
     private Intent mServiceIntent;
-    private PlayerService mPlayerService;
+    private StationPlayerService mPlayerService;
 
     private static boolean isServiceStarted = false;
 
@@ -69,7 +69,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         this.mContext = mContext;
         this.mView = mView;
         this.mFragmentManager = mFragmentManager;
-        mServiceIntent = new Intent(mContext, PlayerService.class);
+        mServiceIntent = new Intent(mContext, StationPlayerService.class);
         mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
     }
 
@@ -210,7 +210,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             mServiceConnection = new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                    PlayerService.ServiceBinder binder = (PlayerService.ServiceBinder) iBinder;
+                    StationPlayerService.ServiceBinder binder = (StationPlayerService.ServiceBinder) iBinder;
                     mPlayerService = binder.getService();
                     mPlayerService.preparePlayer(station);
                     isServiceStarted = true;

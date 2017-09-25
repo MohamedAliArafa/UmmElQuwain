@@ -48,7 +48,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <service android:name=".player.PlayerService"/>
+        <service android:name=".player.StationPlayerService"/>
         <service android:name=".player.ProgramPlayerService"/>
     </application>
 

@@ -24,6 +24,8 @@ public interface StationContract {
 
         void openLogin();
 
+        void playStream();
+
         void setFav(int itemID, int isFav, StationContract.adapterCallback callback);
     }
 

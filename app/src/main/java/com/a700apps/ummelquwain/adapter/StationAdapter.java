@@ -51,6 +51,8 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
         @BindView(R.id.iv_like)
         ImageView mLikeImageView;
 
+        @BindView(R.id.view_list_indicator)
+        View mIndicatorView;
 
         MyViewHolder(View view) {
             super(view);
@@ -90,9 +92,10 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
             holder.mLikeImageView.setImageDrawable(mContext.getResources()
                     .getDrawable(model.getIsFavourite() == 1 ?
                             R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
-            holder.mPlayImageView.setImageDrawable(mContext.getResources()
-                    .getDrawable(model.isPlaying() ?
+            holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
                             R.drawable.ic_puss : R.drawable.ic_paly_liste));
+            holder.mIndicatorView.setVisibility(model.isPlaying() ?
+                    View.VISIBLE : View.GONE);
             holder.mLikeImageView.setOnClickListener(view -> {
                 mPresenter.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
                     mRealm.beginTransaction();

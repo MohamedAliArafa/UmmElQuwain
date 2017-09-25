@@ -42,6 +42,10 @@ public class StationFragment extends Fragment implements StationContract.View, L
     ImageView mBackToolbarBtn;
     @BindView(R.id.iv_like)
     ImageView mLikeBtn;
+    @BindView(R.id.iv_play)
+    ImageView mPlayBtn;
+    @BindView(R.id.view_list_indicator)
+    View mIndicatorView;
 
     @BindView(R.id.iv_station_logo)
     ImageView mStationLogoImageView;
@@ -108,6 +112,11 @@ public class StationFragment extends Fragment implements StationContract.View, L
         mPicasso.load(model.getStationImage()).into(mStationBackImageView);
         supplierFragments = Arrays.asList(StationInfoFragment.newInstance(model),
                 StationScheduleFragment.newInstance(model));
+        mPlayBtn.setImageDrawable(getResources().getDrawable(model.isPlaying() ?
+                R.drawable.ic_puss : R.drawable.ic_paly_liste));
+        mPlayBtn.setOnClickListener(view -> mPresenter.playStream());
+        mIndicatorView.setVisibility(model.isPlaying() ?
+                View.VISIBLE : View.GONE);
         try {
             mLikeBtn.setImageDrawable(getContext().getResources()
                     .getDrawable(model.getIsFavourite() == 1 ?
@@ -117,7 +126,6 @@ public class StationFragment extends Fragment implements StationContract.View, L
                     mRealm.beginTransaction();
                     model.setIsFavourite(fav);
                     mRealm.commitTransaction();
-//                    mPresenter.getData();
                     mLikeBtn.setImageDrawable(getContext().getResources()
                             .getDrawable(model.getIsFavourite() == 1 ?
                                     R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));

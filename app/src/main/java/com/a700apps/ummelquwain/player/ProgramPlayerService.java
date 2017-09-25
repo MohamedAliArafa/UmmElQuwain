@@ -13,10 +13,12 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 import com.a700apps.ummelquwain.utilities.Constants;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -29,19 +31,19 @@ import io.realm.Realm;
 public class ProgramPlayerService extends Service {
 
     private final String LOG_TAG = "NotificationService";
-    Notification status;
-    private MediaPlayer player;
+    Notification mNotification;
+    private MediaPlayer mPlayer;
     private IBinder mBinder = new ServiceBinder();
     private ProgramResultModel mModel;
+    private Picasso mPicasso;
 
     public boolean isPreparing = false;
     private Realm mRealm;
 
-
     @Override
     public void onDestroy() {
-        player.reset();
-        player.release();
+        mPlayer.reset();
+        mPlayer.release();
         mRealm.beginTransaction();
         if (mModel != null)
             mModel.setPlaying(false);
@@ -58,10 +60,11 @@ public class ProgramPlayerService extends Service {
     public void onCreate() {
         super.onCreate();
         mRealm = Realm.getDefaultInstance();
-        player = new MediaPlayer();
-        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        player.setOnBufferingUpdateListener((mp, percent) -> Log.i("Persent", String.valueOf(percent)));
-        player.setOnCompletionListener(mp -> {
+        mPlayer = new MediaPlayer();
+        mPicasso = MyApplication.get(this).getPicasso();
+        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mPlayer.setOnBufferingUpdateListener((mp, percent) -> Log.i("Percent", String.valueOf(percent)));
+        mPlayer.setOnCompletionListener(mp -> {
             isPreparing = false;
             mRealm.beginTransaction();
             if (mModel != null)
@@ -69,30 +72,30 @@ public class ProgramPlayerService extends Service {
             mRealm.commitTransaction();
             Log.i("Completed", "true");
 
-            if (views != null)
-                views.setImageViewResource(R.id.status_bar_play,
+            if (mRemoteViews != null)
+                mRemoteViews.setImageViewResource(R.id.status_bar_play,
                         R.drawable.ic_paly_liste);
         });
-        player.setOnErrorListener((mp, what, extra) -> {
+        mPlayer.setOnErrorListener((mp, what, extra) -> {
             isPreparing = false;
             mRealm.beginTransaction();
             if (mModel != null)
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
             Log.i("Error", "true");
-            if (views != null)
-                views.setImageViewResource(R.id.status_bar_play,
+            if (mRemoteViews != null)
+                mRemoteViews.setImageViewResource(R.id.status_bar_play,
                         R.drawable.ic_paly_liste);
             return false;
         });
         // TODO Auto-generated method stub
-        player.setOnPreparedListener(mediaPlayer -> {
+        mPlayer.setOnPreparedListener(mediaPlayer -> {
             isPreparing = false;
             mRealm.beginTransaction();
             if (mModel != null)
                 mModel.setPlaying(true);
             mRealm.commitTransaction();
-//            showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramImage());
+            showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramLogo());
             Log.i("Prepared", "true");
             mediaPlayer.start();
         });
@@ -102,7 +105,8 @@ public class ProgramPlayerService extends Service {
 //        showNotification(model.getStationName(), model.getCurrentProgramName(), model.getStationImage());
         mRealm.beginTransaction();
         if (mModel != null)
-            mModel.setPlaying(false);
+            if (mModel.getProgramID() != model.getProgramID())
+                mModel.setPlaying(false);
         mRealm.commitTransaction();
 
         mModel = model;
@@ -112,38 +116,46 @@ public class ProgramPlayerService extends Service {
             if (mModel != null)
                 mModel.setPlaying(true);
             mRealm.commitTransaction();
-            player.reset();
+            mPlayer.reset();
             try {
-                player.setDataSource(mModel.getAudioProgramLink());
+                mPlayer.setDataSource(mModel.getAudioProgramLink());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            player.prepareAsync();
+            mPlayer.prepareAsync();
             isPreparing = true;
+        } else {
+            mPlayer.pause();
+            mRealm.beginTransaction();
+            if (mModel != null)
+                mModel.setPlaying(false);
+            mRealm.commitTransaction();
+            if (mRemoteViews != null)
+                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
         }
     }
 
     public void togglePlay(ProgramResultModel station) {
         Log.i(LOG_TAG, "Clicked Play");
         mModel = station;
-        if (player.isPlaying()) {
-            player.pause();
+        if (mPlayer.isPlaying()) {
+            mPlayer.pause();
             mRealm.beginTransaction();
             if (mModel != null)
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
-            if (views != null)
-                views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_active);
+            if (mRemoteViews != null)
+                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
         } else {
             try {
-                player.reset();
-                player.setDataSource(station.getAudioProgramLink());
-                player.prepareAsync();
-                if (views != null)
-                    views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
+                mPlayer.reset();
+                mPlayer.setDataSource(station.getAudioProgramLink());
+                mPlayer.prepareAsync();
+                if (mRemoteViews != null)
+                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
             } catch (IOException e) {
-                if (views != null)
-                    views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_active);
+                if (mRemoteViews != null)
+                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
                 e.printStackTrace();
             }
         }
@@ -152,10 +164,9 @@ public class ProgramPlayerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
-            ProgramPlayerService model = intent.getParcelableExtra(Constants.STATION_INTENT_SERVICE_KEY);
             try {
-                player.setDataSource(mModel.getAudioProgramLink());
-                player.prepareAsync();
+                mPlayer.setDataSource(mModel.getAudioProgramLink());
+                mPlayer.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -169,22 +180,26 @@ public class ProgramPlayerService extends Service {
         } else if (intent.getAction().equals(
                 Constants.ACTION.STOPFOREGROUND_ACTION)) {
             Log.i(LOG_TAG, getString(R.string.toast_foreground_recived));
+            mPlayer.reset();
+            mRealm.beginTransaction();
+            if (mModel != null)
+                mModel.setPlaying(false);
+            mRealm.commitTransaction();
             stopForeground(true);
             stopSelf();
         }
         return START_STICKY;
     }
 
-
-    RemoteViews views;
+    RemoteViews mRemoteViews;
 
     private void showNotification(String stationName, String programName, String stationImage) {
         // Using RemoteViews to bind custom layouts into Notification
-        views = new RemoteViews(getPackageName(), R.layout.status_bar);
+        mRemoteViews = new RemoteViews(getPackageName(), R.layout.status_bar);
 
         // showing default album image
-        views.setViewVisibility(R.id.status_bar_icon, View.VISIBLE);
-        views.setViewVisibility(R.id.status_bar_album_art, View.GONE);
+        mRemoteViews.setViewVisibility(R.id.status_bar_icon, View.VISIBLE);
+        mRemoteViews.setViewVisibility(R.id.status_bar_album_art, View.GONE);
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
@@ -193,42 +208,42 @@ public class ProgramPlayerService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
 
-        Intent previousIntent = new Intent(this, PlayerService.class);
+        Intent previousIntent = new Intent(this, ProgramPlayerService.class);
         previousIntent.setAction(Constants.ACTION.PREV_ACTION);
         PendingIntent ppreviousIntent = PendingIntent.getService(this, 0,
                 previousIntent, 0);
 
-        Intent playIntent = new Intent(this, PlayerService.class);
+        Intent playIntent = new Intent(this, ProgramPlayerService.class);
         playIntent.setAction(Constants.ACTION.PLAY_ACTION);
         PendingIntent pplayIntent = PendingIntent.getService(this, 0,
                 playIntent, 0);
 
-        Intent nextIntent = new Intent(this, PlayerService.class);
+        Intent nextIntent = new Intent(this, ProgramPlayerService.class);
         nextIntent.setAction(Constants.ACTION.NEXT_ACTION);
         PendingIntent pnextIntent = PendingIntent.getService(this, 0,
                 nextIntent, 0);
 
-        Intent closeIntent = new Intent(this, PlayerService.class);
+        Intent closeIntent = new Intent(this, ProgramPlayerService.class);
         closeIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
         PendingIntent pcloseIntent = PendingIntent.getService(this, 0,
                 closeIntent, 0);
 
-        views.setOnClickPendingIntent(R.id.status_bar_play, pplayIntent);
-        views.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
-        views.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
-        views.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
+        mRemoteViews.setOnClickPendingIntent(R.id.status_bar_play, pplayIntent);
+        mRemoteViews.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
+        mRemoteViews.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
+        mRemoteViews.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
 
-        views.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
+        mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
+        mRemoteViews.setTextViewText(R.id.status_bar_track_name, stationName);
+        mRemoteViews.setTextViewText(R.id.status_bar_artist_name, programName);
 
-        views.setTextViewText(R.id.status_bar_track_name, stationName);
-        views.setTextViewText(R.id.status_bar_artist_name, programName);
-
-        status = new Notification.Builder(this).build();
-        status.contentView = views;
-        status.flags = Notification.FLAG_ONGOING_EVENT;
-        status.icon = R.drawable.logo;
-        status.contentIntent = pendingIntent;
-        startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, status);
+        mNotification = new Notification.Builder(this).build();
+        mNotification.contentView = mRemoteViews;
+        mNotification.flags = Notification.FLAG_ONGOING_EVENT;
+        mNotification.icon = R.drawable.logo;
+        mNotification.contentIntent = pendingIntent;
+        mPicasso.load(stationImage).into(mRemoteViews, R.id.status_bar_album_art, Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
+        startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
     }
 
     public class ServiceBinder extends Binder {

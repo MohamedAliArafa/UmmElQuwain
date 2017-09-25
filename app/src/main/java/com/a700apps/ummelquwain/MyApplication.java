@@ -2,8 +2,6 @@ package com.a700apps.ummelquwain;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
@@ -14,9 +12,11 @@ import com.a700apps.ummelquwain.dagger.Application.component.DaggerApplicationCo
 import com.a700apps.ummelquwain.dagger.Application.module.ContextModule;
 import com.a700apps.ummelquwain.models.User;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
-import com.a700apps.ummelquwain.player.PlayerService;
+import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
+import com.a700apps.ummelquwain.player.Player;
 import com.a700apps.ummelquwain.service.ApiService;
-import com.a700apps.ummelquwain.utilities.Constants;
+import com.scand.realmbrowser.RealmBrowser;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.Twitter;
 
@@ -42,12 +42,8 @@ public class MyApplication extends Application {
     DisplayMetrics mDisplayMetrics;
     Resources mResources;
     private String mDeviceID;
-    private static boolean isServiceStarted = false;
-    private static int mCurrentStationID;
 
-    private PlayerService mPlayerService;
-    private ServiceConnection mServiceConnection;
-    private Intent mServiceIntent;
+    private Player mPlayer;
 
     public static MyApplication get(Context context) {
         return (MyApplication) context.getApplicationContext();
@@ -77,12 +73,14 @@ public class MyApplication extends Application {
         Realm.setDefaultConfiguration(config);
 
         mRealm = Realm.getDefaultInstance();
-//        new RealmBrowser.Builder(this)
-//        // add class, you want to view
-//                .add(mRealm, StationResultModel.class)
-//                .add(mRealm, ProgramResultModel.class)
-//        // call method showNotification()
-//                .showNotification();
+        new RealmBrowser.Builder(this)
+        // add class, you want to view
+                .add(mRealm, StationResultModel.class)
+                .add(mRealm, ProgramResultModel.class)
+        // call method showNotification()
+                .showNotification();
+
+        mPlayer = MyApplication.get(this).getPlayer();
 
         mLanguageRequestModel = mRealm.where(LanguageRequestModel.class).findFirst();
         if (mLanguageRequestModel == null) {
@@ -97,9 +95,6 @@ public class MyApplication extends Application {
 
         mPicasso = applicationComponent.getPicasso();
         mApiService = applicationComponent.getService();
-
-        mServiceIntent = new Intent(this, PlayerService.class);
-        mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
     }
 
     public void setLocale(int lang) {
@@ -127,6 +122,8 @@ public class MyApplication extends Application {
     public Realm getRealm() {
         return mRealm;
     }
+
+    public Player getPlayer(){return mPlayer;}
 
     public int getLanguage() {
         return mLanguageRequestModel.getLanguage();

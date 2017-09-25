@@ -1,7 +1,6 @@
 package com.a700apps.ummelquwain.adapter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
-import com.a700apps.ummelquwain.player.PlayerCallback;
 import com.a700apps.ummelquwain.ui.screens.landing.programs.ProgramsContract;
 import com.squareup.picasso.Picasso;
 
@@ -21,12 +19,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
 
 /*
  * Created by mohamed.arafa on 8/28/2017.
  */
 
-public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.MyViewHolder> {
+public class ProgramAdapter extends RealmRecyclerViewAdapter<ProgramResultModel, ProgramAdapter.MyViewHolder> {
 
     private final Context mContext;
     private List<ProgramResultModel> mList = new ArrayList<>();
@@ -50,6 +50,8 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.MyViewHo
         @BindView(R.id.iv_program_logo)
         ImageView mThumpImageView;
 
+        @BindView(R.id.view_list_indicator)
+        View mIndicatorView;
 
         MyViewHolder(View view) {
             super(view);
@@ -57,7 +59,8 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.MyViewHo
         }
     }
 
-    public ProgramAdapter(Context context, ArrayList<ProgramResultModel> list, int layout, ProgramsContract.UserAction presenter) {
+    public ProgramAdapter(Context context, RealmResults<ProgramResultModel> list, int layout, ProgramsContract.UserAction presenter) {
+        super(list, true);
         mContext = context;
         mList = list;
         mLayout = layout;
@@ -65,7 +68,7 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.MyViewHo
         mPicasso = ((MyApplication) context.getApplicationContext()).getPicasso();
     }
 
-    public void updateData(List<ProgramResultModel> list) {
+    public void updateData(RealmResults<ProgramResultModel> list) {
         mList = list;
         this.notifyDataSetChanged();
     }
@@ -88,13 +91,8 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramAdapter.MyViewHo
         holder.mPlayImageView.setImageDrawable(mContext.getResources()
                 .getDrawable(model.isPlaying() ?
                         R.drawable.ic_puss : R.drawable.ic_paly_liste));
-        PlayerCallback callback = new PlayerCallback(new Handler());
-        callback.setReceiver((resultCode, resultData) -> {
-            if (resultCode == 0)
-                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
-            else
-                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
-        });
+        holder.mIndicatorView.setVisibility(model.isPlaying() ?
+                View.VISIBLE : View.GONE);
         holder.itemView.setOnClickListener(view ->
                 mPresenter.openDetails(model.getProgramID())
         );

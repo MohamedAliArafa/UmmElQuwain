@@ -10,6 +10,8 @@ import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.models.request.ProgramDetailsRequestModel;
 import com.a700apps.ummelquwain.models.response.program.ProgramModel;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
+import com.a700apps.ummelquwain.player.Player;
+import com.a700apps.ummelquwain.utilities.Utility;
 
 import io.realm.Realm;
 import retrofit2.Call;
@@ -21,6 +23,8 @@ import retrofit2.Response;
  */
 
 public class ProgramPresenter implements ProgramContract.UserAction, LifecycleObserver {
+    private Lifecycle mLifecycle;
+    private Player mPlayer;
     private Context mContext;
     private ProgramContract.View mView;
     private Call<ProgramModel> mProgramCall;
@@ -31,8 +35,15 @@ public class ProgramPresenter implements ProgramContract.UserAction, LifecycleOb
     public ProgramPresenter(Context mContext, int mProgramID, ProgramContract.View mView, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
+        this.mLifecycle = lifecycle;
         this.mView = mView;
         this.mProgramID = mProgramID;
+        mPlayer = MyApplication.get(mContext).getPlayer();
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void destroy() {
+        mModel.removeAllChangeListeners();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -41,7 +52,7 @@ public class ProgramPresenter implements ProgramContract.UserAction, LifecycleOb
         mView.showProgress();
 
         mRealm = Realm.getDefaultInstance();
-        ProgramResultModel query = mRealm.where(ProgramResultModel.class).equalTo("stationID", mProgramID).findFirst();
+        ProgramResultModel query = mRealm.where(ProgramResultModel.class).equalTo("programID", mProgramID).findFirst();
         if (query != null) {
             mModel = query;
             mView.hideProgress();
@@ -57,14 +68,15 @@ public class ProgramPresenter implements ProgramContract.UserAction, LifecycleOb
             @Override
             public void onResponse(@NonNull Call<ProgramModel> call, @NonNull Response<ProgramModel> response) {
                 try {
-                    mModel = response.body().getResult();
-                    mView.updateUI(mModel);
+                    Utility.addProgramToRealm(response.body().getResult(),
+                            () -> mModel.addChangeListener(stationResultModels -> {
+                                mView.updateUI(mModel);
+                            }));
+                    if (!mLifecycle.getCurrentState().isAtLeast(Lifecycle.State.DESTROYED))
+                        mView.updateUI(mModel);
                     mView.setupViewPager();
                     mView.setupTabLayout();
-                    mRealm.beginTransaction();
-                    mRealm.copyToRealmOrUpdate(mModel);
-                    mRealm.commitTransaction();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 mView.hideProgress();
@@ -77,5 +89,15 @@ public class ProgramPresenter implements ProgramContract.UserAction, LifecycleOb
                 mView.hideProgress();
             }
         });
+
+        mModel.addChangeListener(stationResultModels -> {
+//            if (!mLifeCycle.getCurrentState().isAtLeast(Lifecycle.State.DESTROYED))
+            mView.updateUI(mModel);
+        });
+    }
+
+    @Override
+    public void playStream() {
+        mPlayer.playStream(mModel);
     }
 }

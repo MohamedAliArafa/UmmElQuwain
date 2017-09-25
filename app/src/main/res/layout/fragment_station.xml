@@ -137,6 +137,16 @@
                 android:text="@string/mock_station_category_mock"
                 android:textColor="@android:color/white" />
         </LinearLayout>
+
+        <View
+            android:id="@+id/view_list_indicator"
+            android:layout_width="3dp"
+            android:visibility="gone"
+            android:layout_height="@dimen/logo_dimension_small"
+            android:background="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
     <TextView

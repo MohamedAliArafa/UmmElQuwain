@@ -39,7 +39,10 @@ public class ProgramFragment extends Fragment implements ProgramContract.View, L
     RtlViewPager mViewPager;
     @BindView(R.id.iv_toolbar_back)
     ImageView mBackToolbarBtn;
-
+    @BindView(R.id.iv_play)
+    ImageView mPlayBtn;
+    @BindView(R.id.view_list_indicator)
+    View mIndicatorView;
     @BindView(R.id.iv_program_logo)
     ImageView mProgramLogoImageView;
     @BindView(R.id.iv_program_image)
@@ -110,6 +113,11 @@ public class ProgramFragment extends Fragment implements ProgramContract.View, L
         mProgramCategoryTextView.setText(model.getCategorName());
         mProgramAnchorTextView.setText(model.getBroadcasterName());
         mProgramAnchorLiveTextView.setText(model.getIsLiveAudio() ? getString(R.string.header_live) : getString(R.string.header_on));
+        mPlayBtn.setImageDrawable(getResources().getDrawable(model.isPlaying() ?
+                R.drawable.ic_puss : R.drawable.ic_paly_liste));
+        mPlayBtn.setOnClickListener(view -> mPresenter.playStream());
+        mIndicatorView.setVisibility(model.isPlaying() ?
+                View.VISIBLE : View.GONE);
         mPicasso.load(model.getProgramLogo()).into(mProgramLogoImageView);
         mPicasso.load(model.getProgramImage()).into(mProgramBackImageView);
         supplierFragments = Arrays.asList(ProgramCommentsFragment.newInstance(model),
