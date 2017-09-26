@@ -28,7 +28,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StationsFragment extends Fragment implements StationsContract.View,
+public class StationsFragment extends Fragment implements StationsContract.ModelView,
         LifecycleRegistryOwner {
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);

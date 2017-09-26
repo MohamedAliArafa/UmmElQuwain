@@ -17,7 +17,7 @@ import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
  * Created by mohamed.arafa on 9/5/2017.
  */
 
-public class SplashFragment extends Fragment implements SplashContract.View, LifecycleRegistryOwner {
+public class SplashFragment extends Fragment implements SplashContract.ModelView, LifecycleRegistryOwner {
 
     private static final long SPLASH_DISPLAY_LENGTH = 3000;
     SplashPresenter splashPresenter;

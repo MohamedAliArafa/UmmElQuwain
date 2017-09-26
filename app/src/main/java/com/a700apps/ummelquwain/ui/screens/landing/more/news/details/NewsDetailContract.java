@@ -7,7 +7,7 @@ import com.a700apps.ummelquwain.models.response.NewsBar.NewsBarResultModel;
  */
 
 public interface NewsDetailContract {
-    interface View {
+    interface ModelView {
         void updateUI(NewsBarResultModel model);
         void showProgress();
         void hideProgress();

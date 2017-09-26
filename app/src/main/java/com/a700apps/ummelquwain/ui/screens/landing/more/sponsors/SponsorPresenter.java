@@ -26,12 +26,12 @@ import retrofit2.Response;
 
 public class SponsorPresenter implements SponsorsContract.UserAction, LifecycleObserver {
 
-    private SponsorsContract.View mView;
+    private SponsorsContract.ModelView mView;
     private Context mContext;
     private List<SponsorResultModel> mModel;
     private Call<SponsorModel> mGetSponsorCall;
 
-    public SponsorPresenter(Context context, SponsorsContract.View view, Lifecycle lifecycle) {
+    public SponsorPresenter(Context context, SponsorsContract.ModelView view, Lifecycle lifecycle) {
         mContext = context;
         mView = view;
         lifecycle.addObserver(this);

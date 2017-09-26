@@ -9,7 +9,7 @@ import io.realm.RealmResults;
  */
 
 public interface ProgramsContract {
-    interface View {
+    interface ModelView {
         void updateUI(RealmResults<ProgramResultModel> models);
         void showProgress();
         void hideProgress();

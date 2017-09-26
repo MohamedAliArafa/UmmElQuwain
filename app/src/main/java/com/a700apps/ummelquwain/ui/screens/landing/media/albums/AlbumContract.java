@@ -5,7 +5,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.media.albums;
  */
 
 public interface AlbumContract {
-    interface View {
+    interface ModelView {
         void setupViewPager();
 
         void setupTabLayout();

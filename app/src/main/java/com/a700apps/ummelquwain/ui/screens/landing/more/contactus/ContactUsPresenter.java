@@ -27,13 +27,13 @@ import retrofit2.Response;
 
 public class ContactUsPresenter implements ContactUsContract.UserAction, LifecycleObserver {
 
-    private ContactUsContract.View mView;
+    private ContactUsContract.ModelView mView;
     private Context mContext;
     private ContactUsResultModel mModel;
     private Call<ContactUsModel> mGetContactUsCall;
     private Realm mRealm;
 
-    public ContactUsPresenter(Context context, ContactUsContract.View view, Lifecycle lifecycle) {
+    public ContactUsPresenter(Context context, ContactUsContract.ModelView view, Lifecycle lifecycle) {
         mView = view;
         mContext = context;
         lifecycle.addObserver(this);
@@ -122,7 +122,7 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
 
     @Override
     public void showLinkedIn() {
-        if (mModel != null && mModel.getInstagramUrl() != null) {
+        if (mModel != null && mModel.getWebsiteLink() != null) {
             Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getWebsiteLink()));
             mContext.startActivity(in);
         } else {
@@ -133,7 +133,7 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
     @Override
     public void openMap() {
         if (mModel != null) {
-            String uri = "geo:" + mModel.getLatitude() + mModel.getLatitude();
+            String uri = "geo:" + mModel.getLatitude() + "," + mModel.getLongtiude();
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             mContext.startActivity(intent);
         }

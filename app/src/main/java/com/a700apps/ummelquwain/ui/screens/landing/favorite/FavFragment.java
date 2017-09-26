@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.adapter.FavStationAdapter;
 import com.a700apps.ummelquwain.adapter.SponsorAdapter;
-import com.a700apps.ummelquwain.adapter.StationAdapter;
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 
@@ -24,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.RealmResults;
 
-public class FavFragment extends Fragment implements FavContract.View, LifecycleRegistryOwner{
+public class FavFragment extends Fragment implements FavContract.ModelView, LifecycleRegistryOwner{
 
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;

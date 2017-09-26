@@ -5,7 +5,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.videos.de
  */
 
 public interface VideosDetailContract {
-    interface View {
+    interface ModelView {
         void playVideo(String url);
     }
 

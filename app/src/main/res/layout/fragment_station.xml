@@ -198,7 +198,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_station_desc"
-        app:tabGravity="fill"
+        app:tabGravity="center"
+        app:tabMinWidth="100dp"
         app:tabMode="fixed" />
 
     <com.booking.rtlviewpager.RtlViewPager

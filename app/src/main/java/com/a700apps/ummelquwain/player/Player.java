@@ -21,6 +21,8 @@ public class Player {
     private StationPlayerService mStationPlayerService;
     private ProgramPlayerService mProgramPlayerService;
     private boolean isServiceStarted;
+    private boolean isProgramServiceStarted;
+    private boolean isStationServiceStarted;
     private Intent mStationServiceIntent, mProgramServiceIntent;
 
     public Player(Context mContext) {
@@ -36,6 +38,12 @@ public class Player {
         mProgramServiceIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
         mContext.startService(mProgramServiceIntent);
 
+        if (isProgramServiceStarted){
+            mContext.unbindService(mServiceConnection);
+            mServiceConnection = null;
+            isProgramServiceStarted = false;
+        }
+
         if (mServiceConnection == null) {
             mServiceConnection = new ServiceConnection() {
                 @Override
@@ -44,11 +52,13 @@ public class Player {
                     mStationPlayerService = binder.getService();
                     mStationPlayerService.preparePlayer(station);
                     isServiceStarted = true;
+                    isStationServiceStarted = true;
                 }
 
                 @Override
                 public void onServiceDisconnected(ComponentName componentName) {
                     isServiceStarted = false;
+                    isStationServiceStarted = false;
                 }
             };
         } else {
@@ -66,6 +76,12 @@ public class Player {
         mStationServiceIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
         mContext.startService(mStationServiceIntent);
 
+        if (isStationServiceStarted){
+            mContext.unbindService(mServiceConnection);
+            mServiceConnection = null;
+            isStationServiceStarted = false;
+        }
+
         if (mServiceConnection == null) {
             mServiceConnection = new ServiceConnection() {
                 @Override
@@ -74,11 +90,13 @@ public class Player {
                     mProgramPlayerService = binder.getService();
                     mProgramPlayerService.preparePlayer(station);
                     isServiceStarted = true;
+                    isProgramServiceStarted = true;
                 }
 
                 @Override
                 public void onServiceDisconnected(ComponentName componentName) {
                     isServiceStarted = false;
+                    isProgramServiceStarted = false;
                 }
             };
         } else {

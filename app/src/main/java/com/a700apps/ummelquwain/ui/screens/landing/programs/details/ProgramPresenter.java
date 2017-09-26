@@ -26,13 +26,13 @@ public class ProgramPresenter implements ProgramContract.UserAction, LifecycleOb
     private Lifecycle mLifecycle;
     private Player mPlayer;
     private Context mContext;
-    private ProgramContract.View mView;
+    private ProgramContract.ModelView mView;
     private Call<ProgramModel> mProgramCall;
     private ProgramResultModel mModel;
     private Realm mRealm;
     private int mProgramID;
 
-    public ProgramPresenter(Context mContext, int mProgramID, ProgramContract.View mView, Lifecycle lifecycle) {
+    public ProgramPresenter(Context mContext, int mProgramID, ProgramContract.ModelView mView, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mLifecycle = lifecycle;

@@ -32,13 +32,13 @@ import retrofit2.Response;
 public class ProgramsPresenter implements ProgramsContract.UserAction, LifecycleObserver {
     private final Player mPlayer;
     private Context mContext;
-    private ProgramsContract.View mView;
+    private ProgramsContract.ModelView mView;
     private FragmentManager mFragmentManager;
     private Call<ProgramsModel> mStationsCall;
     private RealmResults<ProgramResultModel> mModel;
     private Realm mRealm;
 
-    public ProgramsPresenter(Context mContext, ProgramsContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
+    public ProgramsPresenter(Context mContext, ProgramsContract.ModelView mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;

@@ -4,12 +4,18 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by mohamed.arafa on 9/10/2017.
  */
 
 public class ProgramScheduleResultModel extends RealmObject{
+
+    @PrimaryKey
+    @SerializedName("ScheduleID")
+    @Expose
+    private Integer scheduleID;
     @SerializedName("StationID")
     @Expose
     private Integer stationID;
@@ -37,6 +43,14 @@ public class ProgramScheduleResultModel extends RealmObject{
     @SerializedName("language")
     @Expose
     private Integer language;
+
+    public Integer getScheduleID() {
+        return scheduleID;
+    }
+
+    public void setScheduleID(Integer scheduleID) {
+        this.scheduleID = scheduleID;
+    }
 
     public Integer getStationID() {
         return stationID;

@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewsDetailsFragment extends Fragment implements NewsDetailContract.View, LifecycleRegistryOwner, View.OnClickListener {
+public class NewsDetailsFragment extends Fragment implements NewsDetailContract.ModelView, LifecycleRegistryOwner, View.OnClickListener {
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 

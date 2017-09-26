@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProgramFragment extends Fragment implements ProgramContract.View, LifecycleRegistryOwner, View.OnClickListener{
+public class ProgramFragment extends Fragment implements ProgramContract.ModelView, LifecycleRegistryOwner, View.OnClickListener {
 
     @BindView(R.id.tl_details)
     TabLayout mTabLayout;
@@ -75,7 +75,7 @@ public class ProgramFragment extends Fragment implements ProgramContract.View, L
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPicasso = MyApplication.get(getContext()).getPicasso();
-        mPresenter = new ProgramPresenter(getContext(), mProgramID,this, getLifecycle());
+        mPresenter = new ProgramPresenter(getContext(), mProgramID, this, getLifecycle());
     }
 
     @Override
@@ -112,7 +112,8 @@ public class ProgramFragment extends Fragment implements ProgramContract.View, L
         mProgramNameTextView.setText(model.getProgramName());
         mProgramCategoryTextView.setText(model.getCategorName());
         mProgramAnchorTextView.setText(model.getBroadcasterName());
-        mProgramAnchorLiveTextView.setText(model.getIsLiveAudio() ? getString(R.string.header_live) : getString(R.string.header_on));
+        if (model.getIsLiveAudio() != null)
+            mProgramAnchorLiveTextView.setText(model.getIsLiveAudio() ? getString(R.string.header_live) : getString(R.string.header_on));
         mPlayBtn.setImageDrawable(getResources().getDrawable(model.isPlaying() ?
                 R.drawable.ic_puss : R.drawable.ic_paly_liste));
         mPlayBtn.setOnClickListener(view -> mPresenter.playStream());

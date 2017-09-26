@@ -36,7 +36,7 @@ import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_CALENDER
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventDetailsFragment extends Fragment implements EventDetailContract.View, View.OnClickListener, LifecycleOwner, EventsContract.View {
+public class EventDetailsFragment extends Fragment implements EventDetailContract.ModelView, View.OnClickListener, LifecycleOwner, EventsContract.ModelView {
 
     private static EventResultModel mModel;
 

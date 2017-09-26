@@ -29,7 +29,7 @@ import retrofit2.Response;
 
 public class VideosPresenter implements MediaContract.UserAction, LifecycleObserver {
     private Context mContext;
-    private MediaContract.View mView;
+    private MediaContract.ModelView mView;
     private FragmentManager mFragmentManager;
     private Call<AlbumModel> mAlbumsCall;
     private List<MediaResultModel> mModel;
@@ -37,7 +37,7 @@ public class VideosPresenter implements MediaContract.UserAction, LifecycleObser
     private Integer mediaType;
     private Realm mRealm;
 
-    public VideosPresenter(Context mContext, MediaContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle, int albumID, int mediaType) {
+    public VideosPresenter(Context mContext, MediaContract.ModelView mView, FragmentManager mFragmentManager, Lifecycle lifecycle, int albumID, int mediaType) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;

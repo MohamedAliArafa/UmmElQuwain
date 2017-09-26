@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by mohamed.arafa on 9/10/2017.
@@ -12,6 +13,7 @@ import io.realm.RealmObject;
 
 public class ScheduleModel extends RealmObject {
 
+    @PrimaryKey
     @SerializedName("ID")
     @Expose
     private Integer iD;

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import com.a700apps.ummelquwain.dagger.Application.component.ApplicationComponent;
 import com.a700apps.ummelquwain.dagger.Application.component.DaggerApplicationComponent;
@@ -32,15 +31,15 @@ import timber.log.Timber;
 
 public class MyApplication extends Application {
 
-    private ApiService mApiService;
-    private Picasso mPicasso;
-    private Realm mRealm;
     LanguageRequestModel mLanguageRequestModel;
     Locale mEnLocale;
     Locale mArLocale;
     Configuration mConfiguration;
     DisplayMetrics mDisplayMetrics;
     Resources mResources;
+    private ApiService mApiService;
+    private Picasso mPicasso;
+    private Realm mRealm;
     private String mDeviceID;
 
     private Player mPlayer;
@@ -74,10 +73,10 @@ public class MyApplication extends Application {
 
         mRealm = Realm.getDefaultInstance();
         new RealmBrowser.Builder(this)
-        // add class, you want to view
+                // add class, you want to view
                 .add(mRealm, StationResultModel.class)
                 .add(mRealm, ProgramResultModel.class)
-        // call method showNotification()
+                // call method showNotification()
                 .showNotification();
 
         mPlayer = MyApplication.get(this).getPlayer();
@@ -123,7 +122,12 @@ public class MyApplication extends Application {
         return mRealm;
     }
 
-    public Player getPlayer(){return mPlayer;}
+    public Player getPlayer() {
+        if (mPlayer == null)
+            return new Player(this);
+        else
+            return mPlayer;
+    }
 
     public int getLanguage() {
         return mLanguageRequestModel.getLanguage();
@@ -139,7 +143,6 @@ public class MyApplication extends Application {
     }
 
     public void setDeviceId(String deviceId) {
-        Log.d("LoginID:", deviceId);
         mDeviceID = deviceId;
     }
 

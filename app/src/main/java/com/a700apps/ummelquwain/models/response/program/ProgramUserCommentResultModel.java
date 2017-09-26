@@ -11,6 +11,7 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class ProgramUserCommentResultModel extends RealmObject{
+
     @PrimaryKey
     @SerializedName("CommentID")
     @Expose

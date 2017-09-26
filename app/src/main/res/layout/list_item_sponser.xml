@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dp"
     android:layout_marginTop="8dp"
-    android:background="@color/trans_white_50"
+    android:background="@color/trans_white_70"
     android:orientation="vertical">
 
     <ImageView

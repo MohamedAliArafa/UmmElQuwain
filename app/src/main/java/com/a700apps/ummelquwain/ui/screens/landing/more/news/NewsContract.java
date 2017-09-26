@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface NewsContract {
 
-    interface View {
+    interface ModelView {
 
         void updateUI(List<NewsBarResultModel> model);
 

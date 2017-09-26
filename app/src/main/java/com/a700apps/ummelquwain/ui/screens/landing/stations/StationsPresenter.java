@@ -142,10 +142,14 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
 //                mModel = response.body().getResult();
                 mView.hideProgress();
                 try {
-                    mRealm.beginTransaction();
-                    mRealm.copyToRealmOrUpdate(response.body().getResult());
-                    mRealm.commitTransaction();
-                    mView.updateUI(mModel);
+                    try {
+                        Utility.addStationsToRealm(response.body().getResult(),
+                                () -> mModel.addChangeListener(stationResultModels -> {
+                                    mView.updateUI(mModel);
+                                }));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

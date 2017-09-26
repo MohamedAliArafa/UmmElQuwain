@@ -7,7 +7,7 @@ import com.a700apps.ummelquwain.models.response.Events.EventResultModel;
  */
 
 public interface EventDetailContract {
-    interface View {
+    interface ModelView {
         void updateUI(EventResultModel models);
         void showProgress();
         void hideProgress();

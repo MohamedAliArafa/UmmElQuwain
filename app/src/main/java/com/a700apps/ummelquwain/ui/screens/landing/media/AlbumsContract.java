@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public interface AlbumsContract {
-    interface View {
+    interface ModelView {
         void updateUI(List<AlbumResultModel> models);
         void showProgress();
         void hideProgress();

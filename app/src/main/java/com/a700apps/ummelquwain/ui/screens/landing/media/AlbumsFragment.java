@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AlbumsFragment extends Fragment implements AlbumsContract.View, LifecycleRegistryOwner, View.OnClickListener {
+public class AlbumsFragment extends Fragment implements AlbumsContract.ModelView, LifecycleRegistryOwner, View.OnClickListener {
 
     LandingFragment mLandingFragment;
 

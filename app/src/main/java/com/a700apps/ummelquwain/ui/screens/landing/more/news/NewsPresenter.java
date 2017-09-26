@@ -28,12 +28,12 @@ import retrofit2.Response;
 public class NewsPresenter implements NewsContract.UserAction, LifecycleObserver {
 
     private Context mContext;
-    private NewsContract.View mView;
+    private NewsContract.ModelView mView;
     private FragmentManager mFragmentManager;
     private Call<NewsBarModel> mNewsCall;
     private List<NewsBarResultModel> mModel;
 
-    public NewsPresenter(Context context, NewsContract.View view, FragmentManager fragmentManager, Lifecycle lifecycle) {
+    public NewsPresenter(Context context, NewsContract.ModelView view, FragmentManager fragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         mContext = context;
         mView = view;

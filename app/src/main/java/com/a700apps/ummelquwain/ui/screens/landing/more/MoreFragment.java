@@ -123,27 +123,31 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 landingFragment.startFragmentFromChild(new ContactUsFragment());
                 break;
             case R.id.ll_logout:
-                String user = MyApplication.get(getContext()).getUser();
-                if (!user.equals("-1")) {
-                    mRealm.beginTransaction();
-                    mRealm.where(User.class).findAll().deleteAllFromRealm();
-                    mRealm.commitTransaction();
-                    getParentFragment().getFragmentManager()
-                            .beginTransaction().replace(R.id.fragment_container,
-                            new LoginFragment(), "login_fragment")
-                            .addToBackStack(null).commit();
-                    logoutTextView.setText(getString(R.string.title_log_out));
-                    LoginManager.getInstance().logOut();
-                }
-                else {
-                    getParentFragment().getFragmentManager()
-                            .beginTransaction().replace(R.id.fragment_container,
-                            new LoginFragment(), "login_fragment")
-                            .addToBackStack(null).commit();
-                    logoutTextView.setText(getString(R.string.title_log_in));
-                    LoginManager.getInstance().logOut();
-                }
+                logout();
                 break;
+        }
+    }
+
+    private void logout() {
+        String user = MyApplication.get(getContext()).getUser();
+        if (!user.equals("-1")) {
+            mRealm.beginTransaction();
+            mRealm.where(User.class).findAll().deleteAllFromRealm();
+            mRealm.commitTransaction();
+            getParentFragment().getFragmentManager()
+                    .beginTransaction().replace(R.id.fragment_container,
+                    new LoginFragment(), "login_fragment")
+                    .addToBackStack(null).commit();
+            logoutTextView.setText(getString(R.string.title_log_out));
+            LoginManager.getInstance().logOut();
+        }
+        else {
+            getParentFragment().getFragmentManager()
+                    .beginTransaction().replace(R.id.fragment_container,
+                    new LoginFragment(), "login_fragment")
+                    .addToBackStack(null).commit();
+            logoutTextView.setText(getString(R.string.title_log_in));
+            LoginManager.getInstance().logOut();
         }
     }
 }

@@ -27,7 +27,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VideoPagerFragment extends Fragment implements VideosDetailContract.View {
+public class VideoPagerFragment extends Fragment implements VideosDetailContract.ModelView {
 
     private MediaResultModel mMedia;
     @BindView(R.id.tv_media_desc)

@@ -9,7 +9,7 @@ import com.a700apps.ummelquwain.models.request.JoinUsRequestModel;
  */
 
 public interface JoinUsContract {
-    interface View {
+    interface ModelView {
 
         void showProgress();
 

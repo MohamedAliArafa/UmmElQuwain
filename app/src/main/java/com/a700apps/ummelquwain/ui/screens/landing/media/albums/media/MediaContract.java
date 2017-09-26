@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public interface MediaContract {
-    interface View {
+    interface ModelView {
         void updateUI(List<MediaResultModel> models);
         void showProgress();
         void hideProgress();

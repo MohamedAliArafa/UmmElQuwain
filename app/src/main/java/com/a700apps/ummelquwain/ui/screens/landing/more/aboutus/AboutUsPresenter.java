@@ -25,13 +25,13 @@ import retrofit2.Response;
 
 public class AboutUsPresenter implements AboutUsContract.UserAction, LifecycleObserver {
 
-    private AboutUsContract.View mView;
+    private AboutUsContract.ModelView mView;
     private AboutUsResultModel mModel;
     private Context mContext;
     Call<AboutUsModel> mGetContactUsCall;
     private Realm mRealm;
 
-    public AboutUsPresenter(AboutUsContract.View view, Context context, Lifecycle lifecycle) {
+    public AboutUsPresenter(AboutUsContract.ModelView view, Context context, Lifecycle lifecycle) {
         mView = view;
         mContext = context;
         lifecycle.addObserver(this);

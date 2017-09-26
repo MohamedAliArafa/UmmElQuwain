@@ -7,7 +7,7 @@ import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
  */
 
 public interface StationContract {
-    interface View {
+    interface ModelView {
         void updateUI(StationResultModel model);
 
         void showProgress();

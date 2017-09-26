@@ -36,7 +36,7 @@ import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_CALENDER
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventsFragment extends Fragment implements View.OnClickListener, EventsContract.View, LifecycleRegistryOwner{
+public class EventsFragment extends Fragment implements View.OnClickListener, EventsContract.ModelView, LifecycleRegistryOwner{
 
 
     @BindView(R.id.progressBar)

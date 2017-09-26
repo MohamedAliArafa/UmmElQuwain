@@ -5,6 +5,7 @@
     <color name="colorAccent">#fdbf02</color>
     <color name="trans_white_10">#19ffffff</color>
     <color name="trans_white_50">#81ffffff</color>
+    <color name="trans_white_70">#bfffffff</color>
     <color name="trans_black_50">#81000000</color>
     <color name="trans_black_10">#19000000</color>
     <color name="trans">#00000000</color>

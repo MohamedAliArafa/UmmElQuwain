@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SponsorsFragment extends Fragment implements View.OnClickListener, SponsorsContract.View, LifecycleRegistryOwner {
+public class SponsorsFragment extends Fragment implements View.OnClickListener, SponsorsContract.ModelView, LifecycleRegistryOwner {
 
     @BindView(R.id.iv_toolbar_back)
     ImageView mBackToolbarBtn;

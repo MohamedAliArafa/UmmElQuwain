@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AlbumFragment extends Fragment implements AlbumContract.View, LifecycleRegistryOwner, View.OnClickListener {
+public class AlbumFragment extends Fragment implements AlbumContract.ModelView, LifecycleRegistryOwner, View.OnClickListener {
 
     @BindView(R.id.tl_albums)
     TabLayout mTabLayout;

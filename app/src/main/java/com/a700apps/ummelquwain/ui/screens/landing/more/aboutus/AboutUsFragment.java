@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class AboutUsFragment extends Fragment implements
-        View.OnClickListener, AboutUsContract.View, LifecycleRegistryOwner {
+        View.OnClickListener, AboutUsContract.ModelView, LifecycleRegistryOwner {
 
     @BindView(R.id.iv_toolbar_back)
     ImageView mBackToolbarBtn;

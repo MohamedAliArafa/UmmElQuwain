@@ -2,6 +2,7 @@ package com.a700apps.ummelquwain.service;
 
 import com.a700apps.ummelquwain.models.User;
 import com.a700apps.ummelquwain.models.request.AlbumContentRequestModel;
+import com.a700apps.ummelquwain.models.request.CommentRequestModel;
 import com.a700apps.ummelquwain.models.request.EventRequestModel;
 import com.a700apps.ummelquwain.models.request.FavouriteRequestModel;
 import com.a700apps.ummelquwain.models.request.JoinUsRequestModel;
@@ -93,6 +94,9 @@ public interface ApiService {
 
     @POST("Programs/Search")
     Call<ProgramsModel> searchPrograms(@Body SearchRequestModel model);
+
+    @POST("Programs/AddComment")
+    Call<MessageModel> searchPrograms(@Body CommentRequestModel model);
 
     //JoinUs
     @Multipart

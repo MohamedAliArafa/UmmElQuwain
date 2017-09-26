@@ -13,7 +13,7 @@ import io.realm.RealmResults;
  */
 
 public interface FavContract {
-    interface View {
+    interface ModelView {
         void updateSponsorUI(List<SponsorResultModel> models);
         void updateFavUI(RealmResults<StationResultModel> models);
         void showProgress();

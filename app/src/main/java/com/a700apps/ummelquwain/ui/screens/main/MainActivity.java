@@ -30,10 +30,12 @@ import java.util.UUID;
 
 import io.fabric.sdk.android.Fabric;
 
+import static com.a700apps.ummelquwain.utilities.Constants.LANDING_FRAGMENT_KEY;
+import static com.a700apps.ummelquwain.utilities.Constants.LOGIN_FRAGMENT_KEY;
 import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_CALENDER_PERMISSION;
 import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_PHONE_PERMISSION;
 
-public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+public class MainActivity extends AppCompatActivity implements MainActivityContract.ModelView {
 
     private LandingFragment mContent;
 //    private static final int REQUEST_READ_PERMISSION = 123;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                     android.R.anim.slide_out_right);
             fragmentTransaction.commit();
         } else {
-            mContent = (LandingFragment) getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
+            mContent = (LandingFragment) getSupportFragmentManager().getFragment(savedInstanceState, LANDING_FRAGMENT_KEY);
         }
         requestReadPermission();
     }
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null)
-            mContent = (LandingFragment) getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
+            mContent = (LandingFragment) getSupportFragmentManager().getFragment(savedInstanceState, LANDING_FRAGMENT_KEY);
     }
 
     @Override
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         super.onSaveInstanceState(outState);
         //Save the fragment's instance
         try {
-            getSupportFragmentManager().putFragment(outState, "myFragmentName", mContent);
+            getSupportFragmentManager().putFragment(outState, LANDING_FRAGMENT_KEY, mContent);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag("landing");
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
             if (fragment instanceof LandingFragment) {
-                if (((LandingFragment) getSupportFragmentManager().findFragmentByTag("landing")).moveToHome()) {
+                if (((LandingFragment) getSupportFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY)).moveToHome()) {
                     super.onBackPressed();
                 }
             } else
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mContent = new LandingFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, mContent, "landing");
+        fragmentTransaction.replace(R.id.fragment_container, mContent, LANDING_FRAGMENT_KEY);
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right, android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right);
@@ -109,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mContent = new LandingFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, mContent, "landing");
-        fragmentTransaction.add(R.id.fragment_container, new LoginFragment(), "login_fragment");
+        fragmentTransaction.replace(R.id.fragment_container, mContent, LANDING_FRAGMENT_KEY);
+        fragmentTransaction.add(R.id.fragment_container, new LoginFragment(), LOGIN_FRAGMENT_KEY);
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right, android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right);

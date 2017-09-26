@@ -9,10 +9,10 @@ import android.arch.lifecycle.OnLifecycleEvent;
  */
 
 public class AlbumPresenter implements AlbumContract.UserActions, LifecycleObserver {
-    AlbumContract.View mView;
+    AlbumContract.ModelView mView;
     Lifecycle mLifeCycle;
 
-    public AlbumPresenter(AlbumContract.View view, Lifecycle lifecycle) {
+    public AlbumPresenter(AlbumContract.ModelView view, Lifecycle lifecycle) {
         mView = view;
         mLifeCycle = lifecycle;
         lifecycle.addObserver(this);

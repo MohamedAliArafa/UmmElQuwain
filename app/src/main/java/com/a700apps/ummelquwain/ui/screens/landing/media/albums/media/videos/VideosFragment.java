@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VideosFragment extends Fragment implements LifecycleRegistryOwner, MediaContract.View {
+public class VideosFragment extends Fragment implements LifecycleRegistryOwner, MediaContract.ModelView {
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     MediaContract.UserAction mPresenter;

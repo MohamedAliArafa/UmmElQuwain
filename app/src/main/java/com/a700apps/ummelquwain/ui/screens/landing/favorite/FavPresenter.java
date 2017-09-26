@@ -3,11 +3,9 @@ package com.a700apps.ummelquwain.ui.screens.landing.favorite;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
@@ -23,6 +21,7 @@ import com.a700apps.ummelquwain.models.response.Sponsors.SponsorModel;
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationsModel;
+import com.a700apps.ummelquwain.player.Player;
 import com.a700apps.ummelquwain.player.StationPlayerService;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsContract;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragment;
@@ -63,6 +62,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
     private StationPlayerService mPlayerService;
 
     private static boolean isServiceStarted = false;
+    private Player mPlayer;
 
     public FavPresenter(Context mContext, FavFragment mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
@@ -71,6 +71,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         this.mFragmentManager = mFragmentManager;
         mServiceIntent = new Intent(mContext, StationPlayerService.class);
         mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+        mPlayer = new Player(mContext);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -206,30 +207,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
 
     @Override
     public void playStream(StationResultModel station) {
-        if (mServiceConnection == null) {
-            mServiceConnection = new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                    StationPlayerService.ServiceBinder binder = (StationPlayerService.ServiceBinder) iBinder;
-                    mPlayerService = binder.getService();
-                    mPlayerService.preparePlayer(station);
-                    isServiceStarted = true;
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName componentName) {
-                    isServiceStarted = false;
-                }
-            };
-        } else {
-            if (mPlayerService != null) {
-                if (station.isPlaying())
-                    mPlayerService.togglePlay(station);
-                else
-                    mPlayerService.preparePlayer(station);
-            }
-        }
-        mContext.bindService(mServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        mPlayer.playStream(station);
     }
 
     @Override

@@ -13,8 +13,11 @@ import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 
+import com.a700apps.ummelquwain.models.response.Station.Schedule.ScheduleModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
+import com.a700apps.ummelquwain.models.response.program.ProgramScheduleResultModel;
+import com.a700apps.ummelquwain.models.response.program.ProgramUserCommentResultModel;
 import com.a700apps.ummelquwain.player.StationPlayerService;
 
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 /**
  * Created by mohamed.arafa on 8/23/2017.
@@ -129,8 +133,34 @@ public class Utility {
                 station.setLanguage(mStation.getLanguage());
                 station.setUserID(mStation.getUserID());
                 station.setKeyword(mStation.getKeyword());
-                station.setPrograms(mStation.getPrograms());
-                station.setSchedule(mStation.getSchedule());
+                RealmList<ProgramResultModel> listPrograms = mStation.getPrograms();
+                if (listPrograms != null)
+                    if (!listPrograms.isManaged()) { // if the 'list' is managed, all items in it is also managed
+                        RealmList<ProgramResultModel> managedImageList = new RealmList<>();
+                        for (ProgramResultModel item : listPrograms) {
+                            if (item.isManaged()) {
+                                managedImageList.add(item);
+                            } else {
+                                managedImageList.add(realm.copyToRealmOrUpdate(item));
+                            }
+                        }
+                        listPrograms = managedImageList;
+                    }
+                station.setPrograms(listPrograms);
+                RealmList<ScheduleModel> listSchedule = mStation.getSchedule();
+                if (listSchedule != null)
+                    if (!listSchedule.isManaged()) { // if the 'list' is managed, all items in it is also managed
+                        RealmList<ScheduleModel> managedImageList = new RealmList<>();
+                        for (ScheduleModel item : listSchedule) {
+                            if (item.isManaged()) {
+                                managedImageList.add(item);
+                            } else {
+                                managedImageList.add(realm.copyToRealmOrUpdate(item));
+                            }
+                        }
+                        listSchedule = managedImageList;
+                    }
+                station.setSchedule(listSchedule);
 
                 realm1.copyToRealmOrUpdate(station);
             });
@@ -169,18 +199,43 @@ public class Utility {
             station.setLanguage(mStation.getLanguage());
             station.setUserID(mStation.getUserID());
             station.setKeyword(mStation.getKeyword());
-            station.setPrograms(mStation.getPrograms());
-            station.setSchedule(mStation.getSchedule());
-
+            RealmList<ProgramResultModel> listComments = mStation.getPrograms();
+            if (listComments != null)
+                if (!listComments.isManaged()) { // if the 'list' is managed, all items in it is also managed
+                    RealmList<ProgramResultModel> managedImageList = new RealmList<>();
+                    for (ProgramResultModel item : listComments) {
+                        if (item.isManaged()) {
+                            managedImageList.add(item);
+                        } else {
+                            managedImageList.add(realm.copyToRealmOrUpdate(item));
+                        }
+                    }
+                    listComments = managedImageList;
+                }
+            station.setPrograms(listComments);
+            RealmList<ScheduleModel> listSchedule = mStation.getSchedule();
+            if (listSchedule != null)
+                if (!listSchedule.isManaged()) { // if the 'list' is managed, all items in it is also managed
+                    RealmList<ScheduleModel> managedImageList = new RealmList<>();
+                    for (ScheduleModel item : listSchedule) {
+                        if (item.isManaged()) {
+                            managedImageList.add(item);
+                        } else {
+                            managedImageList.add(realm.copyToRealmOrUpdate(item));
+                        }
+                    }
+                    listSchedule = managedImageList;
+                }
+            station.setSchedule(listSchedule);
             realm1.copyToRealmOrUpdate(station);
         });
         realm.close();
         callback.finished();
     }
 
-    public static void addProgramsToRealm(List<ProgramResultModel> mStations, addStationCallback callback) {
+    public static void addProgramsToRealm(List<ProgramResultModel> program, addStationCallback callback) {
         Realm realm = Realm.getDefaultInstance();
-        for (ProgramResultModel mProgram : mStations) {
+        for (ProgramResultModel mProgram : program) {
             realm.executeTransaction(realm1 -> {
                 ProgramResultModel Program = realm1.where(ProgramResultModel.class)
                         .equalTo("programID", mProgram.getProgramID()).findFirst();
@@ -205,8 +260,34 @@ public class Utility {
                 Program.setUserID(mProgram.getUserID());
                 Program.setKeyword(mProgram.getKeyword());
                 Program.setLanguage(mProgram.getLanguage());
-                Program.setUserComments(mProgram.getUserComments());
-                Program.setSchedule(mProgram.getSchedule());
+                RealmList<ProgramUserCommentResultModel> listComments = mProgram.getUserComments();
+                if (listComments != null)
+                    if (!listComments.isManaged()) { // if the 'list' is managed, all items in it is also managed
+                        RealmList<ProgramUserCommentResultModel> managedImageList = new RealmList<>();
+                        for (ProgramUserCommentResultModel item : listComments) {
+                            if (item.isManaged()) {
+                                managedImageList.add(item);
+                            } else {
+                                managedImageList.add(realm.copyToRealmOrUpdate(item));
+                            }
+                        }
+                        listComments = managedImageList;
+                    }
+                Program.setUserComments(listComments);
+                RealmList<ProgramScheduleResultModel> listSchedule = mProgram.getSchedule();
+                if (listSchedule != null)
+                    if (!listSchedule.isManaged()) { // if the 'list' is managed, all items in it is also managed
+                        RealmList<ProgramScheduleResultModel> managedImageList = new RealmList<>();
+                        for (ProgramScheduleResultModel item : listSchedule) {
+                            if (item.isManaged()) {
+                                managedImageList.add(item);
+                            } else {
+                                managedImageList.add(realm.copyToRealmOrUpdate(item));
+                            }
+                        }
+                        listSchedule = managedImageList;
+                    }
+                Program.setSchedule(listSchedule);
 
                 realm1.copyToRealmOrUpdate(Program);
             });
@@ -241,8 +322,34 @@ public class Utility {
             Program.setUserID(mProgram.getUserID());
             Program.setKeyword(mProgram.getKeyword());
             Program.setLanguage(mProgram.getLanguage());
-            Program.setUserComments(mProgram.getUserComments());
-            Program.setSchedule(mProgram.getSchedule());
+            RealmList<ProgramUserCommentResultModel> listComments = mProgram.getUserComments();
+            if (listComments != null)
+                if (!listComments.isManaged()) { // if the 'list' is managed, all items in it is also managed
+                    RealmList<ProgramUserCommentResultModel> managedImageList = new RealmList<>();
+                    for (ProgramUserCommentResultModel item : listComments) {
+                        if (item.isManaged()) {
+                            managedImageList.add(item);
+                        } else {
+                            managedImageList.add(realm.copyToRealmOrUpdate(item));
+                        }
+                    }
+                    listComments = managedImageList;
+                }
+            Program.setUserComments(listComments);
+            RealmList<ProgramScheduleResultModel> listSchedule = mProgram.getSchedule();
+            if (listSchedule != null)
+                if (!listSchedule.isManaged()) { // if the 'list' is managed, all items in it is also managed
+                    RealmList<ProgramScheduleResultModel> managedImageList = new RealmList<>();
+                    for (ProgramScheduleResultModel item : listSchedule) {
+                        if (item.isManaged()) {
+                            managedImageList.add(item);
+                        } else {
+                            managedImageList.add(realm.copyToRealmOrUpdate(item));
+                        }
+                    }
+                    listSchedule = managedImageList;
+                }
+            Program.setSchedule(listSchedule);
 
             realm1.copyToRealmOrUpdate(Program);
         });

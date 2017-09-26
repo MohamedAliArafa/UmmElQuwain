@@ -3,7 +3,9 @@ package com.a700apps.ummelquwain.ui.screens.landing.more.contactus;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
+import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.GestureDetector;
@@ -26,7 +28,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactUsFragment extends Fragment implements ContactUsContract.View, LifecycleRegistryOwner {
+public class ContactUsFragment extends Fragment implements ContactUsContract.ModelView, LifecycleRegistryOwner {
 
 
     public ContactUsFragment() {
@@ -128,9 +130,33 @@ public class ContactUsFragment extends Fragment implements ContactUsContract.Vie
     @Override
     public void updateUI(ContactUsResultModel mModel) {
         mPhoneTextView.setText(mModel.getPhoneNumber());
+        mPhoneTextView.setOnClickListener(view -> {
+            if (mModel.getPhoneNumber() != null) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + (mModel.getPhoneNumber())));
+                startActivity(intent);
+            }
+        });
         mFaxTextView.setText(mModel.getFax());
+        mFaxTextView.setOnClickListener(view -> {
+            if (mModel.getFax() != null) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + (mModel.getFax())));
+                startActivity(intent);
+            }
+        });
         mWebsiteTextView.setText(mModel.getWebsiteLink());
+        mFaxTextView.setOnClickListener(view -> {
+            if (mModel.getWebsiteLink() != null) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getWebsiteLink()));
+                startActivity(intent);
+            }
+        });
         mMailTextView.setText(mModel.getEMail());
+        mMailTextView.setOnClickListener(view -> {
+            if (mModel.getEMail() != null) {
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + mModel.getEMail()));
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

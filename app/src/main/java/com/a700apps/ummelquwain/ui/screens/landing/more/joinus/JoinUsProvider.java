@@ -27,14 +27,14 @@ import retrofit2.Response;
 
 public class JoinUsProvider implements JoinUsContract.UserAction, ProgressRequestBody.UploadCallbacks{
 
-    private final JoinUsContract.View mView;
+    private final JoinUsContract.ModelView mView;
     private final FragmentManager mFragmentManager;
     private Context mContext;
     private Call<MessageModel> mJoinUsCall;
     private MessageModel mModel;
     String mResponse;
 
-    public JoinUsProvider(Context mContext, JoinUsContract.View mView, FragmentManager mFragmentManager) {
+    public JoinUsProvider(Context mContext, JoinUsContract.ModelView mView, FragmentManager mFragmentManager) {
         this.mFragmentManager = mFragmentManager;
         this.mView = mView;
         this.mContext = mContext;

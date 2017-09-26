@@ -7,7 +7,7 @@ import com.a700apps.ummelquwain.models.response.ContactUs.ContactUsResultModel;
  */
 
 public interface ContactUsContract {
-    interface View {
+    interface ModelView {
         void showProgress();
         void hideProgress();
         void updateUI(ContactUsResultModel mModel);

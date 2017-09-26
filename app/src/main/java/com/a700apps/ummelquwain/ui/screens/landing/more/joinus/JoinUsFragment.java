@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JoinUsFragment extends Fragment implements View.OnClickListener, JoinUsContract.View {
+public class JoinUsFragment extends Fragment implements View.OnClickListener, JoinUsContract.ModelView {
 
     @BindView(R.id.iv_toolbar_back)
     ImageView mBackToolbarBtn;

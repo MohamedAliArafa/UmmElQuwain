@@ -31,13 +31,13 @@ import retrofit2.Response;
 public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObserver {
 
     private Context mContext;
-    private AlbumsContract.View mView;
+    private AlbumsContract.ModelView mView;
     private FragmentManager mFragmentManager;
     private Call<AlbumsModel> mAlbumsCall;
     private List<AlbumResultModel> mModel;
     private Realm mRealm;
 
-    public AlbumsPresenter(Context mContext, AlbumsContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
+    public AlbumsPresenter(Context mContext, AlbumsContract.ModelView mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;

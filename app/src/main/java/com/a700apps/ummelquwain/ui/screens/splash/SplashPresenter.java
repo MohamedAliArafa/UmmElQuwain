@@ -10,9 +10,9 @@ import android.arch.lifecycle.OnLifecycleEvent;
 
 class SplashPresenter implements LifecycleObserver {
 
-    private SplashContract.View view;
+    private SplashContract.ModelView view;
 
-    SplashPresenter(SplashContract.View view, Lifecycle lifecycle) {
+    SplashPresenter(SplashContract.ModelView view, Lifecycle lifecycle) {
         this.view = view;
         lifecycle.addObserver(this);
     }

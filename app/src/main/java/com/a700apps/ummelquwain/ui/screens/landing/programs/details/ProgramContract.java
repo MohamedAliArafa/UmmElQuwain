@@ -7,7 +7,7 @@ import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
  */
 
 public interface ProgramContract {
-    interface View {
+    interface ModelView {
         void updateUI(ProgramResultModel model);
 
         void showProgress();

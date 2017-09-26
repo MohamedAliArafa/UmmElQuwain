@@ -32,7 +32,7 @@ import io.realm.Realm;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StationFragment extends Fragment implements StationContract.View, LifecycleRegistryOwner, View.OnClickListener {
+public class StationFragment extends Fragment implements StationContract.ModelView, LifecycleRegistryOwner, View.OnClickListener {
 
     @BindView(R.id.tl_details)
     TabLayout mTabLayout;

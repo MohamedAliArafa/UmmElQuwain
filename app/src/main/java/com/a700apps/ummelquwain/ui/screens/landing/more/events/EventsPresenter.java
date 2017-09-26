@@ -38,12 +38,12 @@ import retrofit2.Response;
 public class EventsPresenter implements EventsContract.UserAction, LifecycleObserver {
 
     private Context mContext;
-    private EventsContract.View mView;
+    private EventsContract.ModelView mView;
     private FragmentManager mFragmentManager;
     private Call<EventsModel> mEventsCall;
     private List<EventResultModel> mModel;
 
-    public EventsPresenter(Context mContext, EventsContract.View mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
+    public EventsPresenter(Context mContext, EventsContract.ModelView mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;

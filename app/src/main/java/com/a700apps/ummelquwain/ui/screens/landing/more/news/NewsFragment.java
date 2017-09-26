@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewsFragment extends Fragment implements NewsContract.View, LifecycleRegistryOwner, View.OnClickListener {
+public class NewsFragment extends Fragment implements NewsContract.ModelView, LifecycleRegistryOwner, View.OnClickListener {
 
     @BindView(R.id.news_recycler)
     RecyclerView mRecycler;

@@ -5,7 +5,7 @@ package com.a700apps.ummelquwain.ui.screens.splash;
  */
 
 interface SplashContract {
-    interface View {
+    interface ModelView {
         void startTimer();
 
         void killTimer();

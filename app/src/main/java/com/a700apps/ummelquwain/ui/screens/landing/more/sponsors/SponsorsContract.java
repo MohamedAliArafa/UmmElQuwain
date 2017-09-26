@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public interface SponsorsContract {
-    interface View {
+    interface ModelView {
         void showProgress();
         void hideProgress();
         void updateUI(List<SponsorResultModel> mModel);

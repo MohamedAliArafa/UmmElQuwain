@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public interface EventsContract {
-    interface View {
+    interface ModelView {
         void updateUI(List<EventResultModel> models);
         void showProgress();
         void hideProgress();

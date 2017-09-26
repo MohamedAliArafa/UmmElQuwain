@@ -22,12 +22,12 @@ import retrofit2.Response;
 public class EventDetailPresenter implements EventDetailContract.UserAction, LifecycleObserver {
 
     private Context mContext;
-    private EventDetailContract.View mView;
+    private EventDetailContract.ModelView mView;
     private Call<EventModel> mEventCall;
     private EventResultModel mModel;
     private int mEventID;
 
-    public EventDetailPresenter(Context mContext, EventDetailContract.View mView, Lifecycle lifecycle, int mEventID) {
+    public EventDetailPresenter(Context mContext, EventDetailContract.ModelView mView, Lifecycle lifecycle, int mEventID) {
         lifecycle.addObserver(this);
         this.mContext = mContext;
         this.mView = mView;

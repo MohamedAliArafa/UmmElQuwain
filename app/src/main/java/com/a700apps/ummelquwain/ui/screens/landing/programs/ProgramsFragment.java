@@ -28,7 +28,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProgramsFragment extends Fragment implements ProgramsContract.View, LifecycleRegistryOwner{
+public class ProgramsFragment extends Fragment implements ProgramsContract.ModelView, LifecycleRegistryOwner{
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     @BindView(R.id.recycler_programs)
