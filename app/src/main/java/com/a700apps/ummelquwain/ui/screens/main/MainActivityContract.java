@@ -7,7 +7,9 @@ interface MainActivityContract {
 
     interface ModelView {
         void launchLanding();
+
         void launchLogin();
+
         void requestReadPermission();
     }
 

@@ -14,6 +14,8 @@ public interface JoinUsContract {
         void showProgress();
 
         void hideProgress();
+
+        void setProgress(int percentage);
     }
 
     interface fileCallback {
@@ -22,6 +24,7 @@ public interface JoinUsContract {
 
     interface UserAction {
         void uploadFile(Intent data, JoinUsContract.fileCallback callback);
+
         void join(JoinUsRequestModel data);
     }
 }

@@ -1,17 +1,22 @@
 package com.a700apps.ummelquwain.utilities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 
 import com.a700apps.ummelquwain.models.response.Station.Schedule.ScheduleModel;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
@@ -39,6 +44,13 @@ public class Utility {
         return (int) (dpWidth / itemWidth);
     }
 
+    public static int dpToPixle(Context context, int dp) {
+        Resources r = context.getResources();
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()
+        );
+    }
+
     public static boolean isRTL() {
         return isRTL(Locale.getDefault());
     }
@@ -56,6 +68,27 @@ public class Utility {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
+    }
+
+    public static String getRealPathFromURIPath(Uri contentURI, Activity activity) {
+        Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            return contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        }
+    }
+
+    public static void RequestPermission(Activity thisActivity, String Permission, int Code) {
+        if (ContextCompat.checkSelfPermission(thisActivity, Permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(thisActivity, new String[]{Permission}, Code);
+        }
+    }
+
+    public static boolean CheckPermission(Context context, String Permission) {
+        return ContextCompat.checkSelfPermission(context, Permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     public static boolean isEventInCal(Context context, String meetingName) {

@@ -4,9 +4,11 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.a700apps.ummelquwain.MyApplication;
+import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.FavouriteRequestModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageResultModel;
@@ -123,5 +125,27 @@ public class LandingProvider implements LifecycleObserver, LandingContract.UserA
             }
         });
 
+    }
+
+    @Override
+    public void shareFromPlayer(StationResultModel model) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, model.getStationName()
+                + "\n" + model.getStationFrequency() + " - " +model.getStationLanguage()
+                + "\n" + model.getStationWebsite());
+        sendIntent.setType("text/plain");
+        mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.share_with)));
+    }
+
+    @Override
+    public void shareFromPlayer(ProgramResultModel model) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, model.getProgramName()
+                + "\n" + model.getBroadcasterName()
+                + "\n" + model.getProgramDescription());
+        sendIntent.setType("text/plain");
+        mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.share_with)));
     }
 }

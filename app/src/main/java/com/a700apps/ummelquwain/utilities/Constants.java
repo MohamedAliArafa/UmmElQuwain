@@ -15,9 +15,13 @@ public class Constants {
     public static String CALLBACK_INTENT_SERVICE_KEY = "callback_intent_extra";
     public final static int REQUEST_READ_PHONE_PERMISSION = 1310;
     public final static int REQUEST_READ_CALENDER_PERMISSION = 1311;
+    public static final int REQUEST_READ_STORAGE_PERMISSION = 1312;
+
     public final static String POSITION_KEY = "position_list";
     public final static String LOGIN_FRAGMENT_KEY = "login_fragment_key";
     public final static String LANDING_FRAGMENT_KEY = "landing_fragment_key";
+    public final static String STATION_FRAGMENT_KEY = "station_fragment_key";
+    public final static String PROGRAM_FRAGMENT_KEY = "program_fragment_key";
 
 
     public interface ACTION {

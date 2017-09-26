@@ -3,6 +3,8 @@ package com.a700apps.ummelquwain.ui.screens.landing;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.a700apps.ummelquwain.MyApplication;
@@ -53,6 +56,8 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
     ImageView mLikeImageView;
     @BindView(R.id.iv_comment)
     ImageView mCommentImageView;
+    @BindView(R.id.iv_share)
+    ImageView mShareImageView;
     @BindView(R.id.tv_station_name)
     TextView mStationNameTextView;
     @BindView(R.id.tv_program_name)
@@ -168,6 +173,14 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
                 tab.setCompoundDrawablesWithIntrinsicBounds(0, supplierIcons.get(i), 0, 0);
             mTabLayout.getTabAt(i).setCustomView(tab);
         }
+
+        LinearLayout linearLayout = (LinearLayout) mTabLayout.getChildAt(0);
+        linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(Color.GRAY);
+        drawable.setSize(1, 1);
+        linearLayout.setDividerPadding(10);
+        linearLayout.setDividerDrawable(drawable);
     }
 
     @Override
@@ -191,7 +204,7 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
                         R.drawable.ic_puss : R.drawable.ic_paly_liste));
                 mLikeImageView.setImageDrawable(mContext.getResources()
                         .getDrawable(mStationModel.getIsFavourite() == 1 ?
-                                R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+                                R.drawable.ic_favorite_active : R.drawable.ic_favorite));
                 changed = true;
             });
         mCommentImageView.setAlpha(0.3f);
@@ -204,6 +217,9 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
                 model.setIsFavourite(fav);
                 mRealm.commitTransaction();
             });
+        });
+        mShareImageView.setOnClickListener(view -> {
+            mProvider.shareFromPlayer(model);
         });
         mPlayImageView.setOnClickListener(view -> {
                     mProvider.playStream(model);
@@ -243,6 +259,9 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
                 model.setIsFavourite(fav);
                 mRealm.commitTransaction();
             });
+        });
+        mShareImageView.setOnClickListener(view -> {
+            mProvider.shareFromPlayer(model);
         });
         mPlayImageView.setOnClickListener(view -> {
                     mProvider.playStream(model);

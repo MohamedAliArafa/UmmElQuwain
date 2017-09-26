@@ -6,6 +6,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
@@ -24,6 +25,8 @@ import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.a700apps.ummelquwain.utilities.Constants.PROGRAM_FRAGMENT_KEY;
 
 /**
  * Created by mohamed.arafa on 9/10/2017.
@@ -83,9 +86,18 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
 
     @Override
     public void openDetails(int programID) {
-        mFragmentManager.beginTransaction().addToBackStack(null)
-                .add(R.id.fragment_container, ProgramFragment.newInstance(programID)).commit();
-        mFragmentManager.executePendingTransactions();
+        boolean fragmentPopped = mFragmentManager.popBackStackImmediate(
+                PROGRAM_FRAGMENT_KEY + String.valueOf(programID), 0);
+
+        if (!fragmentPopped) { //fragment not in back stack, create it.
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
+            ft.replace(R.id.fragment_container, ProgramFragment.newInstance(programID));
+            ft.addToBackStack(PROGRAM_FRAGMENT_KEY + String.valueOf(programID));
+            ft.commit();
+        }
+//        mFragmentManager.beginTransaction().addToBackStack(null)
+//                .add(R.id.fragment_container, ProgramFragment.newInstance(programID)).commit();
+//        mFragmentManager.executePendingTransactions();
     }
 
     @Override

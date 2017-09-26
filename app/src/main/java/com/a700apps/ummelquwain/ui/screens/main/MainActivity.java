@@ -1,26 +1,30 @@
 package com.a700apps.ummelquwain.ui.screens.main;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.ui.screens.landing.LandingFragment;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
 import com.a700apps.ummelquwain.ui.screens.splash.SplashFragment;
@@ -28,18 +32,30 @@ import com.crashlytics.android.Crashlytics;
 
 import java.util.UUID;
 
+import butterknife.BindView;
 import io.fabric.sdk.android.Fabric;
 
 import static com.a700apps.ummelquwain.utilities.Constants.LANDING_FRAGMENT_KEY;
 import static com.a700apps.ummelquwain.utilities.Constants.LOGIN_FRAGMENT_KEY;
 import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_CALENDER_PERMISSION;
 import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_PHONE_PERMISSION;
+import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_STORAGE_PERMISSION;
+import static com.a700apps.ummelquwain.utilities.Utility.CheckPermission;
+import static com.a700apps.ummelquwain.utilities.Utility.RequestPermission;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.ModelView {
 
     private LandingFragment mContent;
-//    private static final int REQUEST_READ_PERMISSION = 123;
     private GestureDetector mGesture;
+    private boolean changed = false;
+    private StationResultModel mStationModel;
+    private ProgramResultModel mProgramModel;
+
+    @BindView(R.id.cl_container)
+    ConstraintLayout mConstrainContainer;
+    @BindView(R.id.iv_player_bg)
+    ImageView mPlayerImageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         } else {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
             if (fragment instanceof LandingFragment) {
+
                 if (((LandingFragment) getSupportFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY)).moveToHome()) {
                     super.onBackPressed();
                 }
@@ -103,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 android.R.anim.slide_out_right, android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right);
         fragmentTransaction.commit();
-
     }
 
     @Override
@@ -126,6 +142,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         } else {
             RequestPermission(this, Manifest.permission.READ_PHONE_STATE, REQUEST_READ_PHONE_PERMISSION);
         }
+
+        if (CheckPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            registerDeviceID();
+        } else {
+            RequestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_READ_STORAGE_PERMISSION);
+        }
     }
 
     private void registerDeviceID() {
@@ -144,16 +166,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         MyApplication.get(this).setDeviceId(deviceUuid.toString());
     }
 
-    public void RequestPermission(Activity thisActivity, String Permission, int Code) {
-        if (ContextCompat.checkSelfPermission(thisActivity, Permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(thisActivity, new String[]{Permission}, Code);
-        }
-    }
-
-    public boolean CheckPermission(Context context, String Permission) {
-        return ContextCompat.checkSelfPermission(context, Permission) == PackageManager.PERMISSION_GRANTED;
-    }
-
     @Override
     public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults) {
         switch (permsRequestCode) {
@@ -169,7 +181,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
             case REQUEST_READ_CALENDER_PERMISSION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    registerDeviceID();
+
+                } else {
+                    Toast.makeText(this, R.string.toast_main_activity_permisstion_allow, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            case REQUEST_READ_STORAGE_PERMISSION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
                     Toast.makeText(this, R.string.toast_main_activity_permisstion_allow, Toast.LENGTH_SHORT).show();
                 }

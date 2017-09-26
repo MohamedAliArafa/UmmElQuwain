@@ -31,5 +31,9 @@ public interface LandingContract {
         void playStream(ProgramResultModel model);
 
         void setFav(int itemID, int isFav, StationContract.adapterCallback callback);
+
+        void shareFromPlayer(StationResultModel model);
+
+        void shareFromPlayer(ProgramResultModel model);
     }
 }

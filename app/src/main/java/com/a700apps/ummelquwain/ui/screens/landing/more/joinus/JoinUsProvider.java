@@ -13,6 +13,7 @@ import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.JoinUsRequestModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 import com.a700apps.ummelquwain.service.ProgressRequestBody;
+import com.a700apps.ummelquwain.utilities.Utility;
 
 import java.io.File;
 
@@ -25,16 +26,16 @@ import retrofit2.Response;
  * Created by mohamed.arafa on 8/30/2017.
  */
 
-public class JoinUsProvider implements JoinUsContract.UserAction, ProgressRequestBody.UploadCallbacks{
+public class JoinUsProvider implements JoinUsContract.UserAction, ProgressRequestBody.UploadCallbacks {
 
-    private final JoinUsContract.ModelView mView;
+    private final JoinUsFragment mView;
     private final FragmentManager mFragmentManager;
     private Context mContext;
     private Call<MessageModel> mJoinUsCall;
     private MessageModel mModel;
-    String mResponse;
+    private String mResponse;
 
-    public JoinUsProvider(Context mContext, JoinUsContract.ModelView mView, FragmentManager mFragmentManager) {
+    public JoinUsProvider(Context mContext, JoinUsFragment mView, FragmentManager mFragmentManager) {
         this.mFragmentManager = mFragmentManager;
         this.mView = mView;
         this.mContext = mContext;
@@ -42,10 +43,10 @@ public class JoinUsProvider implements JoinUsContract.UserAction, ProgressReques
 
     @Override
     public void uploadFile(Intent data, JoinUsContract.fileCallback callback) {
+        mView.showProgress();
         Uri selectedFile = data.getData();
-        String path = selectedFile.toString();
-        File file = new File(path);
-//        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        String filePath = Utility.getRealPathFromURIPath(selectedFile, mView.getActivity());
+        File file = new File(filePath);
         ProgressRequestBody requestFile = new ProgressRequestBody(file, this);
         MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         Call<MessageModel> responseBodyCall = MyApplication
@@ -57,10 +58,11 @@ public class JoinUsProvider implements JoinUsContract.UserAction, ProgressReques
                     Log.d("Success", "success " + response.code());
                     Log.d("Success", "success " + response.message());
                     try {
+                        mView.hideProgress();
                         Log.d("Success", "body " + response.body().getResult().getMessage());
                         mResponse = response.body().getResult().getMessage();
                         callback.onFileUploaded(mResponse);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } catch (Exception e) {
@@ -101,16 +103,18 @@ public class JoinUsProvider implements JoinUsContract.UserAction, ProgressReques
 
     @Override
     public void onProgressUpdate(int percentage) {
-        Toast.makeText(mContext, "Uploaded:" + String.valueOf(percentage), Toast.LENGTH_SHORT).show();
+        mView.setProgress(percentage);
     }
 
     @Override
     public void onError() {
+        mView.hideProgress();
         Toast.makeText(mContext, "Upload Error", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFinish() {
+        mView.hideProgress();
         Toast.makeText(mContext, "Upload Finished", Toast.LENGTH_SHORT).show();
     }
 }

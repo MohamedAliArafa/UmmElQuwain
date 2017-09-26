@@ -36,6 +36,7 @@ public class StationInfoFragment extends Fragment {
     RecyclerView mRecycler;
 
     private StationProgramsAdapter mAdapter;
+    private StationInfoPresenter mPresenter;
 
     public StationInfoFragment() {
         // Required empty public constructor
@@ -48,6 +49,7 @@ public class StationInfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_station_info, container, false);
         ButterKnife.bind(this, view);
+        mPresenter = new StationInfoPresenter(getContext(), getParentFragment().getFragmentManager());
         updateUI();
         return view;
     }
@@ -62,8 +64,11 @@ public class StationInfoFragment extends Fragment {
         mInfoFreqTextView.setText(mModel.getStationFrequency());
         mInfoLanguageTextView.setText(mModel.getStationLanguage());
         mInfoSiteTextView.setText(mModel.getStationWebsite());
+        mInfoSiteTextView.setOnClickListener(view -> {
+            mPresenter.openSite(mModel.getStationWebsite());
+        });
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new StationProgramsAdapter(mModel.getPrograms(), R.layout.list_item_days_schedule);
+        mAdapter = new StationProgramsAdapter(mModel.getPrograms(), R.layout.list_item_days_schedule, mPresenter);
         mRecycler.setAdapter(mAdapter);
     }
 }

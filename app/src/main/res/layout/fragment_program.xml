@@ -16,7 +16,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="250dp"
-        android:layout_marginTop="0dp"
+        android:background="@android:color/white"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,7 +90,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/iv_program_logo"
@@ -120,8 +119,6 @@
                 android:id="@+id/tv_program_anchor_live"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:paddingBottom="8dp"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -130,8 +127,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:paddingBottom="8dp"
                 android:textColor="@color/colorAccent" />
 
         </LinearLayout>

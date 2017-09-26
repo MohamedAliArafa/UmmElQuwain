@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.adapter.ProgramScheduleAdapter;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
+import com.a700apps.ummelquwain.utilities.Utility;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +47,8 @@ public class ProgramInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_program_info, container, false);
         ButterKnife.bind(this, view);
         mScheduleRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new ProgramScheduleAdapter(getContext(), null, R.layout.list_item_program_schedule);
+        mScheduleRecycler.setHasFixedSize(true);
+        mAdapter = new ProgramScheduleAdapter(getContext(), null, R.layout.list_item_program_schedule, getParentFragment().getFragmentManager());
         mScheduleRecycler.setAdapter(mAdapter);
         updateView();
         return view;
@@ -55,6 +57,7 @@ public class ProgramInfoFragment extends Fragment {
     private void updateView() {
         mProgramInfoTextView.setText(mModel.getProgramInfo());
         mProgramInfoTypeTextView.setText(String.format("%s %s", getString(R.string.title_schedule), mModel.getProgramTypeName()));
+        mScheduleRecycler.getLayoutParams().height = Utility.dpToPixle(getContext(), 44 * mModel.getSchedule().size());
         mAdapter.updateData(mModel.getSchedule());
     }
 

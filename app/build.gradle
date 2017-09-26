@@ -115,4 +115,8 @@ dependencies {
 
     //Animation
     compile "com.android.support:support-dynamic-animation:26.1.0"
+
+
+    //Fancy Dialog
+    compile 'com.daimajia.numberprogressbar:library:1.4@aar'
 }

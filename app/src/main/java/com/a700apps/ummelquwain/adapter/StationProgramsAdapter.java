@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
+import com.a700apps.ummelquwain.ui.screens.landing.stations.details.info.StationInfoPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 
 public class StationProgramsAdapter extends RecyclerView.Adapter<StationProgramsAdapter.MyViewHolder> {
 
+    private final StationInfoPresenter mPresenter;
     private List<ProgramResultModel> mList = new ArrayList<>();
     private int mLayout;
 
@@ -38,9 +40,10 @@ public class StationProgramsAdapter extends RecyclerView.Adapter<StationPrograms
         }
     }
 
-    public StationProgramsAdapter(List<ProgramResultModel> list, int layout) {
+    public StationProgramsAdapter(List<ProgramResultModel> list, int layout, StationInfoPresenter presenter) {
         mList = list;
         mLayout = layout;
+        mPresenter = presenter;
     }
 
     public void updateData(List<ProgramResultModel> list) {
@@ -60,6 +63,7 @@ public class StationProgramsAdapter extends RecyclerView.Adapter<StationPrograms
         ProgramResultModel model = mList.get(position);
         holder.mNameTextView.setText(model.getProgramName());
         holder.mCategoryTextView.setText(model.getProgramImage());
+        holder.itemView.setOnClickListener(view -> mPresenter.openProgram(model));
     }
 
     @Override

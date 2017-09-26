@@ -3,6 +3,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.stations.details;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -62,7 +63,9 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
     @BindView(R.id.tv_station_desc)
     TextView mStationDescTextView;
 
-    Picasso mPicasso;
+    private Picasso mPicasso;
+
+    private Context mContext;
 
     StationPresenter mPresenter;
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
@@ -76,6 +79,12 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
 
     public StationFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
     }
 
     public static StationFragment newInstance(int stationID) {
@@ -105,20 +114,20 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
     public void updateUI(StationResultModel model) {
         mStationNameTextView.setText(model.getStationName());
         mStationCategoryTextView.setText(model.getCategoryName());
-        mStationCurrentProgramIsLiveTextView.setText(model.getIsLive() ? getString(R.string.header_live) : getString(R.string.header_on));
+        mStationCurrentProgramIsLiveTextView.setText(model.getIsLive() ? mContext.getString(R.string.header_live) : mContext.getString(R.string.header_on));
         mStationCurrentProgramTextView.setText(model.getCurrentProgramName());
         mStationDescTextView.setText(model.getStationInfo());
         mPicasso.load(model.getStationLogo()).into(mStationLogoImageView);
         mPicasso.load(model.getStationImage()).into(mStationBackImageView);
         supplierFragments = Arrays.asList(StationInfoFragment.newInstance(model),
                 StationScheduleFragment.newInstance(model));
-        mPlayBtn.setImageDrawable(getResources().getDrawable(model.isPlaying() ?
+        mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
                 R.drawable.ic_puss : R.drawable.ic_paly_liste));
         mPlayBtn.setOnClickListener(view -> mPresenter.playStream());
         mIndicatorView.setVisibility(model.isPlaying() ?
                 View.VISIBLE : View.GONE);
         try {
-            mLikeBtn.setImageDrawable(getContext().getResources()
+            mLikeBtn.setImageDrawable(mContext.getResources()
                     .getDrawable(model.getIsFavourite() == 1 ?
                             R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
             mLikeBtn.setOnClickListener((View view) -> {
@@ -126,7 +135,7 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
                     mRealm.beginTransaction();
                     model.setIsFavourite(fav);
                     mRealm.commitTransaction();
-                    mLikeBtn.setImageDrawable(getContext().getResources()
+                    mLikeBtn.setImageDrawable(mContext.getResources()
                             .getDrawable(model.getIsFavourite() == 1 ?
                                     R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
                 });

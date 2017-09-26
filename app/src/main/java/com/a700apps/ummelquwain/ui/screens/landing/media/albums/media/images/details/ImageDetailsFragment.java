@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.Albums.MediaResultModel;
 import com.a700apps.ummelquwain.utilities.ViewPagerAdapter;
-import com.rd.PageIndicatorView;
-import com.rd.animation.type.AnimationType;
 
 import java.util.List;
 
@@ -29,8 +27,8 @@ public class ImageDetailsFragment extends Fragment implements View.OnClickListen
     ViewPager mViewPager;
     @BindView(R.id.iv_toolbar_back)
     ImageView mBackToolbarBtn;
-    @BindView(R.id.pageIndicatorView)
-    PageIndicatorView mPageIndicatorView;
+//    @BindView(R.id.pageIndicatorView)
+//    PageIndicatorView mPageIndicatorView;
 
     private static int mInitPosition;
     private static List<MediaResultModel> mMedia;
@@ -60,9 +58,10 @@ public class ImageDetailsFragment extends Fragment implements View.OnClickListen
             fragment.setArguments(b);
             adapter.addFragment(fragment, "Fragment" + i);
         }
-        mPageIndicatorView.setViewPager(mViewPager);
-        mPageIndicatorView.setInteractiveAnimation(true);
-        mPageIndicatorView.setAnimationType(AnimationType.FILL);
+//        mPageIndicatorView.setViewPager(mViewPager);
+//        mPageIndicatorView.setInteractiveAnimation(true);
+//        mPageIndicatorView.setAnimationType(AnimationType.WORM);
+//        mPageIndicatorView.setStrokeWidth(0.5f);
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(mInitPosition, true);
     }
@@ -76,7 +75,7 @@ public class ImageDetailsFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View view) {
         int viewId = view.getId();
-        switch (viewId){
+        switch (viewId) {
             case R.id.iv_toolbar_back:
                 getFragmentManager().popBackStack();
         }

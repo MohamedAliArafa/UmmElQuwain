@@ -1,6 +1,7 @@
 package com.a700apps.ummelquwain.ui.screens.landing.more.joinus;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,11 +21,16 @@ import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.JoinUsRequestModel;
 import com.a700apps.ummelquwain.utilities.SwipeToDismissHelper;
 import com.a700apps.ummelquwain.utilities.Utility;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_STORAGE_PERMISSION;
+import static com.a700apps.ummelquwain.utilities.Utility.CheckPermission;
+import static com.a700apps.ummelquwain.utilities.Utility.RequestPermission;
 
 
 /**
@@ -52,6 +58,9 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
 
     @BindView(R.id.et_address)
     EditText mAddressEditText;
+
+    @BindView(R.id.number_progress_bar)
+    NumberProgressBar mUploadProgress;
 
     JoinUsRequestModel requestModel = new JoinUsRequestModel();
 
@@ -91,6 +100,10 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
                 break;
             case R.id.et_upload:
                 mFile = null;
+                if (!CheckPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    RequestPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_READ_STORAGE_PERMISSION);
+                    break;
+                }
                 mAttachBtn.setText(getString(R.string.btn_upload_mp3_or_video));
                 Intent intent = new Intent();
                 intent.setType("audio/* video/*");
@@ -163,7 +176,6 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
                 Uri uri = data.getData();
                 String uriString = uri.toString();
                 File myFile = new File(uriString);
-                String path = myFile.getAbsolutePath();
                 String displayName = null;
 
                 if (uriString.startsWith("content://")) {
@@ -190,11 +202,16 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
 
     @Override
     public void showProgress() {
-
+        mUploadProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
+        mUploadProgress.setVisibility(View.GONE);
+    }
 
+    @Override
+    public void setProgress(int percentage) {
+        mUploadProgress.setProgress(percentage);
     }
 }
