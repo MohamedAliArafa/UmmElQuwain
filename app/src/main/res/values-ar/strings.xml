@@ -64,6 +64,6 @@
     <string name="toast_facebook_login_error">خطأ في تسجيل الدخول</string>
     <string name="toast_please_upload_file">من فضلك قم برفع ملف</string>
     <string name="toast_event_already_added">تم إضافتة مسبقا</string>
-    <string name="toast_main_activity_permisstion_allow">من فضل قم بإعطاء تصريح</string>
+    <string name="toast_main_activity_permission_allow">من فضل قم بإعطاء تصريح</string>
     <string name="no_internet">لا يوجد إتصال</string>
 </resources>

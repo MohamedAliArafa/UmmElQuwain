@@ -96,7 +96,7 @@ public interface ApiService {
     Call<ProgramsModel> searchPrograms(@Body SearchRequestModel model);
 
     @POST("Programs/AddComment")
-    Call<MessageModel> searchPrograms(@Body CommentRequestModel model);
+    Call<MessageModel> addComment(@Body CommentRequestModel model);
 
     //JoinUs
     @Multipart

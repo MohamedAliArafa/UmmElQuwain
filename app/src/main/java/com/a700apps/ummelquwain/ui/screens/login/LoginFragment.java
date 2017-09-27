@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.User;
+import com.a700apps.ummelquwain.ui.screens.landing.LandingFragment;
 import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -35,6 +37,8 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.a700apps.ummelquwain.utilities.Constants.LANDING_FRAGMENT_KEY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,8 +102,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         mPresenter.socialLogin(user);
                         if (getFragmentManager().getBackStackEntryCount() == 0)
                             ((MainActivity) getActivity()).launchLanding();
-                        else
-                            getFragmentManager().popBackStack();
+                        else {
+                            LandingFragment fragment = (LandingFragment) getFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
+                            if (fragment == null) { //fragment not in back stack, create it.
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.replace(R.id.fragment_container, LandingFragment.newInstance());
+                                ft.addToBackStack(LANDING_FRAGMENT_KEY);
+                                ft.commit();
+                            }else {
+                                getFragmentManager().popBackStack();
+                                fragment.moveToHome();
+                            }
+                        }
                     }
 
                     @Override
@@ -149,8 +163,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         request.executeAsync();
                         if (getFragmentManager().getBackStackEntryCount() == 0)
                             ((MainActivity) getActivity()).launchLanding();
-                        else
-                            getFragmentManager().popBackStack();
+                        else {
+                            LandingFragment fragment = (LandingFragment) getFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
+                            if (fragment == null) { //fragment not in back stack, create it.
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.replace(R.id.fragment_container, LandingFragment.newInstance());
+                                ft.addToBackStack(LANDING_FRAGMENT_KEY);
+                                ft.commit();
+                            }else {
+                                getFragmentManager().popBackStack();
+                                fragment.moveToHome();
+                            }
+                        }
                     }
 
                     @Override
@@ -182,8 +206,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             case R.id.tv_skip:
                 if (getFragmentManager().getBackStackEntryCount() == 0)
                     ((MainActivity) getActivity()).launchLanding();
-                else
-                    getFragmentManager().popBackStack();
+                else {
+                    LandingFragment fragment = (LandingFragment) getFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
+                    if (fragment == null) { //fragment not in back stack, create it.
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.fragment_container, LandingFragment.newInstance());
+                        ft.addToBackStack(LANDING_FRAGMENT_KEY);
+                        ft.commit();
+                    }else {
+                        getFragmentManager().popBackStack();
+                        fragment.moveToHome();
+                    }
+                }
                 break;
         }
     }

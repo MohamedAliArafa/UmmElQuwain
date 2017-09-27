@@ -95,9 +95,6 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
             ft.addToBackStack(PROGRAM_FRAGMENT_KEY + String.valueOf(programID));
             ft.commit();
         }
-//        mFragmentManager.beginTransaction().addToBackStack(null)
-//                .add(R.id.fragment_container, ProgramFragment.newInstance(programID)).commit();
-//        mFragmentManager.executePendingTransactions();
     }
 
     @Override

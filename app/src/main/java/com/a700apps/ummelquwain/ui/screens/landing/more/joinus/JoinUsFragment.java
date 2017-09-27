@@ -108,7 +108,7 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
                 Intent intent = new Intent();
                 intent.setType("audio/* video/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Audio"), SELECT_AUDIO);
+                startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_AUDIO);
                 break;
             case R.id.btn_submit:
                 if (mNameEditText.getText().toString().isEmpty()) {

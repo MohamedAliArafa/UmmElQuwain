@@ -119,4 +119,6 @@ dependencies {
 
     //Fancy Dialog
     compile 'com.daimajia.numberprogressbar:library:1.4@aar'
+    compile 'com.yarolegovich:lovely-dialog:1.0.7'
+
 }

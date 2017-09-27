@@ -3,22 +3,44 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="_hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
-    <string name="facebook_app_id" translatable="false">183600388851301</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb183600388851301</string>
-
-    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">cdktyqVl9t2FCinHrDzkL1Bdt </string>
-    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">i8pm84dZPoTHzdJhS6xIc2gaZBxKLu26p5PejcChC3OHAy89uY</string>
-
     <string name="app_name">UBN</string>
 
     <string name="btn_mark_my_calender">Mark my calender</string>
     <string name="btn_upload_mp3_or_video">Upload (mp3 or video)</string>
+
+    <string name="cd_next" translatable="false">Skip forwards</string>
+    <string name="cd_play" translatable="false">Play and pause</string>
+    <string name="cd_previous" translatable="false">Skip backwards</string>
+    <string name="cd_repeat" translatable="false">Repeat one or all</string>
+
+    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">cdktyqVl9t2FCinHrDzkL1Bdt </string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">i8pm84dZPoTHzdJhS6xIc2gaZBxKLu26p5PejcChC3OHAy89uY</string>
 
     <string name="desc_contact_us_on_the_following_channels">Contact us on the following channels:</string>
     <string name="desc_on_start">ON:</string>
     <string name="desc_powered_by">Powered by:</string>
     <string name="desc_search_a_program">Search a program</string>
     <string name="desc_search_a_program_or_station">Search a program or station</string>
+
+    <string name="error_network_connectivity">Please Check your Internet Connection</string>
+    <string name="error_open">Can\'t Open</string>
+
+    <string name="facebook_app_id" translatable="false">183600388851301</string>
+
+    <string name="fb_login_protocol_scheme" translatable="false">fb183600388851301</string>
+
+    <string name="header_live">Live:</string>
+    <string name="header_on">On:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+    <string name="it_s_better_with_friends">It\'s better with friends..</string>
+
+    <string name="log_in_to_enjoy_the_immense_experience">Log in to enjoy the immense experience</string>
+
+    <string name="login_with_facebook">Login with facebook</string>
+    <string name="login_with_twitter">Login with twitter</string>
 
     <string name="mock_2015">جميع الحقوق محفوظة لدائرة الحكومة الإلكترونية 2015</string>
     <string name="mock_ali_jassim_ahmed_director_general_of_the_network_said_that" translatable="false">Ali Jassim Ahmed, Director General of the Network, said that the network has worked since it\'s inception in march 1978 to achieve advanced position among the radio stations operating in the country, in accordance with it\'s vision of civilization, humanity and community, and to enhance it\'s competitive position to achieve greater uniqueness and excellence.</string>
@@ -27,27 +49,44 @@
     <string name="mock_contact_fax" translatable="false">+971 7777 6088</string>
     <string name="mock_contact_mail" translatable="false">ump@uae.com</string>
     <string name="mock_contact_phone_no" translatable="false">+971 7666 6088</string>
+    <string name="mock_date" translatable="false">2017/8/5</string>
     <string name="mock_dubai_24_khalifa_tower" translatable="false">Dubai, 24 Khalifa Tower</string>
     <string name="mock_from_2017_3_12_to_2017_3_30" translatable="false">From 2017/3/12 To 2017/3/30</string>
     <string name="mock_he_added_that_zee_middle_east_network" translatable="false">He added that Zee Middle East Network will provide advanced software content, a new concept in the entertainment and marketing world, and will provide the station with highly effective and competitive media experience. (WAM)</string>
     <string name="mock_his_highness_shieikh" translatable="false">His Highness Shieikh Saoud Bin Rashid Al-Mualla, Supreme Council Member And Ruler of Umm Al Quwain, Issued and Amiri Decree Amending the Name of Umm Al Quwain Radio to Become The Umm Al Quwain Radio Network.</string>
     <string name="mock_his_highness_shieikh_saoud" translatable="false">His Highness Shieikh Saoud Bin Rashid Al-Mualla, Supreme Council Member And Ruler of Umm Al Quwain</string>
+    <string name="mock_info_desc" translatable="false">Dance FM 97.8. 36K likes. Dance FM 97.8 The UAE\'s only dance station brings you exclusively the best in electronic music from over 100 local</string>
     <string name="mock_location_on_map">Location on map</string>
+    <string name="mock_news_desc" translatable="false">The British Academy Film Awards or BAFTA Film Awards are presented in an annual award show hosted by the British Academy of Film and Television Arts to honour the best British and international contributions to film.</string>
+    <string name="mock_news_title" translatable="false">Bafta Tv Awards 2018</string>
     <string name="mock_shieikh_saoud_bin_rashid_al_mualla" translatable="false">Shieikh Saoud Bin Rashid Al-Mualla</string>
     <string name="mock_songs_event" translatable="false">Songs Event</string>
     <string name="mock_station_category_mock" translatable="false">Genre/Category</string>
     <string name="mock_station_desc_mock" translatable="false">A very long program name</string>
     <string name="mock_station_name" translatable="false">Dance Station</string>
+    <string name="mock_time" translatable="false">02:43:40 PM</string>
+
+    <string name="no_internet">Sorry No Internet Some Feature May not Work</string>
+
+    <string name="read_more">Read More</string>
+
+    <string name="share_with">Share With</string>
+
+    <string name="skip">Skip</string>
 
     <string name="title_about_us">About Us</string>
     <string name="title_address">Address</string>
     <string name="title_albums">Albums</string>
+    <string name="title_comment">Comments</string>
     <string name="title_contact_us">Contact Us</string>
     <string name="title_email">Email</string>
     <string name="title_events">Events</string>
     <string name="title_favs">Favs</string>
     <string name="title_images">Images</string>
+    <string name="title_info">Info</string>
     <string name="title_join_us">Join Us</string>
+    <string name="title_language">العربية</string>
+    <string name="title_log_in">Log In</string>
     <string name="title_log_out">Log out</string>
     <string name="title_media">Media</string>
     <string name="title_mission">Mission</string>
@@ -57,6 +96,8 @@
     <string name="title_phone">Phone</string>
     <string name="title_program_albums">Program Albums</string>
     <string name="title_programs">Programs</string>
+    <string name="title_schedule">Schedule</string>
+    <string name="title_search">Search</string>
     <string name="title_setting">Setting</string>
     <string name="title_share">Share</string>
     <string name="title_sponsor">Sponsors</string>
@@ -64,54 +105,29 @@
     <string name="title_submit">Submit</string>
     <string name="title_videos">Videos</string>
     <string name="title_vision">Vision</string>
-    <string name="mock_date" translatable="false">2017/8/5</string>
-    <string name="mock_time" translatable="false">02:43:40 PM</string>
-    <string name="mock_news_desc" translatable="false">The British Academy Film Awards or BAFTA Film Awards are presented in an annual award show hosted by the British Academy of Film and Television Arts to honour the best British and international contributions to film.</string>
-    <string name="read_more">Read More</string>
-    <string name="mock_news_title" translatable="false">Bafta Tv Awards 2018</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-    <string name="title_info">Info</string>
-    <string name="mock_info_desc" translatable="false">Dance FM 97.8. 36K likes. Dance FM 97.8 The UAE\'s only dance station brings you exclusively the best in electronic music from over 100 local</string>
-    <string name="title_language">العربية</string>
-    <string name="title_search">Search</string>
-    <string name="error_network_connectivity">Please Check your Internet Connection</string>
-    <string name="title_comment">Comments</string>
-    <string name="share_with">Share With</string>
-    <string name="title_log_in">Log In</string>
-
-    <string name="cd_repeat" translatable="false">Repeat one or all</string>
-    <string name="cd_previous" translatable="false">Skip backwards</string>
-    <string name="cd_play" translatable="false">Play and pause</string>
-    <string name="cd_next" translatable="false">Skip forwards</string>
-    <string name="header_live">Live:</string>
-    <string name="header_on">On:</string>
-    <string name="title_schedule">Schedule</string>
-    <string name="log_in_to_enjoy_the_immense_experience">Log in to enjoy the immense experience</string>
-    <string name="login_with_facebook">Login with facebook</string>
-    <string name="it_s_better_with_friends">It\'s better with friends..</string>
-    <string name="login_with_twitter">Login with twitter</string>
-    <string name="skip">Skip</string>
-    <string name="error_open">Can\'t Open</string>
-    <string name="toast_facebook_login_success">Facebook Login Success</string>
     <string name="toas_completed">Completed</string>
-    <string name="toast_error">Error</string>
-    <string name="toast_prepared">Prepared</string>
-    <string name="toast_service_started">Service Started</string>
-    <string name="toast_clicked_play">Clicked Play</string>
-    <string name="toast_pause" translatable="false">pause</string>
-    <string name="toast_start" translatable="false">start</string>
-    <string name="toast_clicked_previous" translatable="false">Clicked Previous</string>
+
     <string name="toast_clicked_next" translatable="false">Clicked Next</string>
-    <string name="toast_service_stoped" translatable="false">Service Stoped</string>
-    <string name="toast_foreground_recived" translatable="false">Received Stop Foreground Intent</string>
-    <string name="toast_thanks_for_your_contribution">Thanks for your contribution</string>
-    <string name="toast_twitter_login_error">Twitter Email Login error</string>
+    <string name="toast_clicked_play">Clicked Play</string>
+    <string name="toast_clicked_previous" translatable="false">Clicked Previous</string>
+    <string name="toast_error">Error</string>
+    <string name="toast_event_already_added">Already Added</string>
     <string name="toast_facebook_login_canceled">Facebook Login canceled</string>
     <string name="toast_facebook_login_error">Facebook Login error</string>
+    <string name="toast_facebook_login_success">Facebook Login Success</string>
+    <string name="toast_foreground_recived" translatable="false">Received Stop Foreground Intent</string>
+    <string name="toast_main_activity_permission_allow">Please Allow Permission</string>
+    <string name="toast_must_login">You Must Login</string>
+    <string name="toast_pause" translatable="false">pause</string>
     <string name="toast_please_upload_file">Please Upload File</string>
-    <string name="toast_event_already_added">Already Added</string>
-    <string name="toast_main_activity_permisstion_allow">Please Allow Permission</string>
-    <string name="no_internet">Sorry No Internet Some Feature May not Work</string>
+    <string name="toast_prepared">Prepared</string>
+    <string name="toast_service_started">Service Started</string>
+    <string name="toast_service_stop" translatable="false">Service Stop</string>
+    <string name="toast_start" translatable="false">start</string>
+    <string name="toast_thanks_for_comment">Thanks for Your Comment</string>
+    <string name="toast_thanks_for_your_contribution">Thanks for your contribution</string>
+    <string name="toast_twitter_login_error">Twitter Email Login error</string>
+    <string name="enter_your_comment">Enter Your Comment</string>
+    <string name="toast_empty_comment">Comment Can\'t Be Empty</string>
 </resources>

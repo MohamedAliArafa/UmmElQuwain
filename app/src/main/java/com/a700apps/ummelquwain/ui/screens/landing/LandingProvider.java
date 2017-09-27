@@ -6,9 +6,11 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.models.request.CommentRequestModel;
 import com.a700apps.ummelquwain.models.request.FavouriteRequestModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageResultModel;
@@ -17,6 +19,7 @@ import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.player.Player;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationContract;
 import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -39,7 +42,9 @@ public class LandingProvider implements LifecycleObserver, LandingContract.UserA
     private Realm mRealm;
     private int favStatus;
     private Call<MessageModel> mFavCall;
+    private Call<MessageModel> mCommentCall;
     private boolean playing;
+
     public LandingProvider(LandingFragment view, Context context, Lifecycle lifecycle) {
         mView = view;
         mLifeCycle = lifecycle;
@@ -48,7 +53,7 @@ public class LandingProvider implements LifecycleObserver, LandingContract.UserA
         mPlayer = MyApplication.get(context).getPlayer();
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     void init() {
         mRealm = Realm.getDefaultInstance();
         mStationModel = mRealm.where(StationResultModel.class).findAll();
@@ -132,7 +137,7 @@ public class LandingProvider implements LifecycleObserver, LandingContract.UserA
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, model.getStationName()
-                + "\n" + model.getStationFrequency() + " - " +model.getStationLanguage()
+                + "\n" + model.getStationFrequency() + " - " + model.getStationLanguage()
                 + "\n" + model.getStationWebsite());
         sendIntent.setType("text/plain");
         mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.share_with)));
@@ -147,5 +152,44 @@ public class LandingProvider implements LifecycleObserver, LandingContract.UserA
                 + "\n" + model.getProgramDescription());
         sendIntent.setType("text/plain");
         mContext.startActivity(Intent.createChooser(sendIntent, mContext.getString(R.string.share_with)));
+    }
+
+    @Override
+    public void addComment(ProgramResultModel model) {
+        String user = MyApplication.get(mContext).getUser();
+        if (user.equals("-1")) {
+            Toast.makeText(mContext, R.string.toast_must_login, Toast.LENGTH_SHORT).show();
+            ((MainActivity) mView.getActivity()).launchLogin();
+            return;
+        }
+        new LovelyTextInputDialog(mContext, R.style.AppTheme)
+                .setTopColorRes(R.color.colorPrimary)
+                .setTitle(model.getProgramName())
+                .setMessage(R.string.enter_your_comment)
+                .setConfirmButton(android.R.string.ok, text -> {
+                    if (text.isEmpty()) {
+                        Toast.makeText(mContext, R.string.toast_empty_comment, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    mCommentCall = MyApplication.get(mContext).getApiService()
+                            .addComment(new CommentRequestModel(user, model.getProgramID(), text));
+                    mCommentCall.enqueue(new Callback<MessageModel>() {
+                        @Override
+                        public void onResponse(@NonNull Call<MessageModel> call, @NonNull Response<MessageModel> response) {
+                            try {
+                                Toast.makeText(mContext, R.string.toast_thanks_for_comment, Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<MessageModel> call, @NonNull Throwable t) {
+                            t.printStackTrace();
+                            Toast.makeText(mContext, R.string.toast_error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .show();
     }
 }

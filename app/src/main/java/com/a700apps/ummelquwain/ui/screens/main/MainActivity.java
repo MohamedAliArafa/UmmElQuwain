@@ -15,9 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -174,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     registerDeviceID();
                 } else {
-                    Toast.makeText(this, R.string.toast_main_activity_permisstion_allow, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_main_activity_permission_allow, Toast.LENGTH_SHORT).show();
                 }
             }
             break;
@@ -183,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 } else {
-                    Toast.makeText(this, R.string.toast_main_activity_permisstion_allow, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_main_activity_permission_allow, Toast.LENGTH_SHORT).show();
                 }
                 break;
             }
@@ -191,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
-                    Toast.makeText(this, R.string.toast_main_activity_permisstion_allow, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_main_activity_permission_allow, Toast.LENGTH_SHORT).show();
                 }
                 break;
             }

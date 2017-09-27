@@ -242,11 +242,17 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
         mProgramModel = model;
         if (isAdded())
             mProgramModel.addChangeListener(realmModel -> {
-                mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(mProgramModel.isPlaying() ?
-                        R.drawable.ic_puss : R.drawable.ic_paly_liste));
-                mLikeImageView.setImageDrawable(mContext.getResources()
-                        .getDrawable(mProgramModel.getIsFavourite() == 1 ?
-                                R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+
+                try {
+                    mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(mProgramModel.isPlaying() ?
+                            R.drawable.ic_puss : R.drawable.ic_paly_liste));
+                    mLikeImageView.setImageDrawable(mContext.getResources()
+                            .getDrawable(mProgramModel.getIsFavourite() == 1 ?
+                                    R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
                 changed = true;
             });
         mStationNameTextView.setText(mProgramModel.getProgramName());
@@ -265,6 +271,10 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
         });
         mPlayImageView.setOnClickListener(view -> {
                     mProvider.playStream(model);
+                }
+        );
+        mCommentImageView.setOnClickListener(view -> {
+                    mProvider.addComment(model);
                 }
         );
         Animation anim = AnimationUtils.loadAnimation(mContext,

@@ -3,6 +3,7 @@ package com.a700apps.ummelquwain.ui.screens.landing.programs.details;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -66,6 +67,7 @@ public class ProgramFragment extends Fragment implements ProgramContract.ModelVi
     private static List<Fragment> supplierFragments;
 
     private static int mProgramID;
+    private Context mContext;
 
     public ProgramFragment() {
         // Required empty public constructor
@@ -94,6 +96,12 @@ public class ProgramFragment extends Fragment implements ProgramContract.ModelVi
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    @Override
     public LifecycleRegistry getLifecycle() {
         return mLifecycleRegistry;
     }
@@ -113,8 +121,8 @@ public class ProgramFragment extends Fragment implements ProgramContract.ModelVi
         mProgramCategoryTextView.setText(model.getCategorName());
         mProgramAnchorTextView.setText(model.getBroadcasterName());
         if (model.getIsLiveAudio() != null)
-            mProgramAnchorLiveTextView.setText(model.getIsLiveAudio() ? getString(R.string.header_live) : getString(R.string.header_on));
-        mPlayBtn.setImageDrawable(getResources().getDrawable(model.isPlaying() ?
+            mProgramAnchorLiveTextView.setText(model.getIsLiveAudio() ? mContext.getString(R.string.header_live) : mContext.getString(R.string.header_on));
+        mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
                 R.drawable.ic_puss : R.drawable.ic_paly_liste));
         mPlayBtn.setOnClickListener(view -> mPresenter.playStream());
         mIndicatorView.setVisibility(model.isPlaying() ?

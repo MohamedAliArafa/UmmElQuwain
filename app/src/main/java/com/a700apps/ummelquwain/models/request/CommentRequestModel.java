@@ -42,4 +42,10 @@ public class CommentRequestModel {
     public void setCommentText(String commentText) {
         this.commentText = commentText;
     }
+
+    public CommentRequestModel(String userID, Integer programID, String commentText) {
+        this.userID = userID;
+        this.programID = programID;
+        this.commentText = commentText;
+    }
 }

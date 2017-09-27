@@ -73,6 +73,11 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        String user = MyApplication.get(getContext()).getUser();
+        if (user.equals("-1"))
+            logoutTextView.setText(getString(R.string.title_log_in));
+        else
+            logoutTextView.setText(getString(R.string.title_log_out));
 //        ((LandingFragment) getParentFragment()).moveToHome();
     }
 
@@ -140,13 +145,12 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                     .addToBackStack(null).commit();
             logoutTextView.setText(getString(R.string.title_log_out));
             LoginManager.getInstance().logOut();
-        }
-        else {
+        } else {
             getParentFragment().getFragmentManager()
                     .beginTransaction().replace(R.id.fragment_container,
                     new LoginFragment(), "login_fragment")
                     .addToBackStack(null).commit();
-            logoutTextView.setText(getString(R.string.title_log_in));
+//            logoutTextView.setText(getString(R.string.title_log_in));
             LoginManager.getInstance().logOut();
         }
     }

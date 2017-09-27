@@ -46,6 +46,7 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     private RealmResults<StationResultModel> mModel;
     private Realm mRealm;
     private Player mPlayer;
+    private boolean playing;
 
     public StationsPresenter(Context mContext, StationsFragment mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
@@ -54,6 +55,21 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
         this.mFragmentManager = mFragmentManager;
         mPlayer = MyApplication.get(mContext).getPlayer();
     }
+
+//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+//    public void resume() {
+//        mRealm = Realm.getDefaultInstance();
+//        mModel = mRealm.where(StationResultModel.class).findAll();
+//        playing = false;
+//        mModel.addChangeListener(stationResultModels -> {
+//            for (StationResultModel station : mModel) {
+//                if (station.isPlaying()) {
+//                    ((LandingFragment) mView.getParentFragment()).showPlayer(station);
+//                    playing = true;
+//                }
+//            }
+//        });
+//    }
 
     @Override
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

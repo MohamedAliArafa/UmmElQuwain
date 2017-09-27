@@ -35,5 +35,7 @@ public interface LandingContract {
         void shareFromPlayer(StationResultModel model);
 
         void shareFromPlayer(ProgramResultModel model);
+
+        void addComment(ProgramResultModel model);
     }
 }

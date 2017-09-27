@@ -97,11 +97,16 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
             holder.mIndicatorView.setVisibility(model.isPlaying() ?
                     View.VISIBLE : View.GONE);
             holder.mLikeImageView.setOnClickListener(view -> {
-                mPresenter.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
-                    mRealm.beginTransaction();
-                    model.setIsFavourite(fav);
-                    mRealm.commitTransaction();
-                });
+                try {
+                    //ToDo Fix Issue
+                    mPresenter.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
+                        mRealm.beginTransaction();
+                        model.setIsFavourite(fav);
+                        mRealm.commitTransaction();
+                    });
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
             holder.itemView.setOnClickListener(view ->
                     mPresenter.openDetails(model.getStationID())
