@@ -95,7 +95,7 @@ public class EventDetailsFragment extends Fragment implements EventDetailContrac
     @Override
     public void updateUI(EventResultModel model) {
         mEventTitleTextView.setText(model.getEventName());
-        String formattedDate = String.format("From: %s \t To: %s", model.getEventStartDate(), model.getEventEndDate());
+        String formattedDate = String.format(getString(R.string.title_from_to), model.getEventStartDate(), model.getEventEndDate());
         mEventDateTextView.setText(formattedDate);
         mEventLocationTextView.setText(model.getEventPlace());
         mEventDescTextView.setText(model.getEventDescription());
@@ -142,7 +142,7 @@ public class EventDetailsFragment extends Fragment implements EventDetailContrac
     @Override
     public void onClick(View view) {
         int viewId = view.getId();
-        switch (viewId){
+        switch (viewId) {
             case R.id.iv_toolbar_back:
                 getFragmentManager().popBackStack();
                 break;

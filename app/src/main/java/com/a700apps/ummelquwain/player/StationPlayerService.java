@@ -3,6 +3,8 @@ package com.a700apps.ummelquwain.player;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -72,9 +74,6 @@ public class StationPlayerService extends Service {
             mRealm.commitTransaction();
             Log.i("Completed", "true");
             stopForeground(true);
-//            if (mRemoteViews != null)
-//                mRemoteViews.setImageViewResource(R.id.status_bar_play,
-//                        R.drawable.ic_paly_liste);
         });
         mPlayer.setOnErrorListener((mp, what, extra) -> {
             isPreparing = false;
@@ -84,9 +83,6 @@ public class StationPlayerService extends Service {
             mRealm.commitTransaction();
             Log.i("Error", "true");
             stopForeground(true);
-//            if (mRemoteViews != null)
-//                mRemoteViews.setImageViewResource(R.id.status_bar_play,
-//                        R.drawable.ic_paly_liste);
             return false;
         });
         // TODO Auto-generated method stub
@@ -96,7 +92,6 @@ public class StationPlayerService extends Service {
             if (mModel != null)
                 mModel.setPlaying(true);
             mRealm.commitTransaction();
-            showNotification(mModel.getStationName(), mModel.getCurrentProgramName(), mModel.getStationImage());
             Log.i("Prepared", "true");
             mediaPlayer.start();
         });
@@ -111,6 +106,7 @@ public class StationPlayerService extends Service {
         mRealm.commitTransaction();
 
         mModel = model;
+        showNotification(model.getStationName(), model.getCurrentProgramName(), model.getStationLogo());
         if (!model.isPlaying()) {
             mModel = model;
             mRealm.beginTransaction();
@@ -131,8 +127,6 @@ public class StationPlayerService extends Service {
             if (mModel != null)
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
-//            if (mRemoteViews != null)
-//                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
         }
     }
 
@@ -145,18 +139,12 @@ public class StationPlayerService extends Service {
             if (mModel != null)
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
-//            if (mRemoteViews != null)
-//                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
         } else {
             try {
                 mPlayer.reset();
                 mPlayer.setDataSource(station.getStreamLink());
                 mPlayer.prepareAsync();
-//                if (mRemoteViews != null)
-//                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
             } catch (IOException e) {
-//                if (mRemoteViews != null)
-//                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
                 e.printStackTrace();
             }
         }
@@ -175,7 +163,7 @@ public class StationPlayerService extends Service {
         } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
             Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
         } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-            togglePlay(mModel);
+            preparePlayer(mModel);
         } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
             Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
         } else if (intent.getAction().equals(
@@ -245,6 +233,14 @@ public class StationPlayerService extends Service {
         else
             mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
 
+        mModel.addChangeListener(realmModel -> {
+            if (mModel.isPlaying())
+                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
+            else
+                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
+            startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
+        });
+
         mNotification = new Notification.Builder(this).build();
         mNotification.contentView = mRemoteViews;
         mNotification.flags = Notification.FLAG_ONGOING_EVENT;
@@ -258,6 +254,22 @@ public class StationPlayerService extends Service {
     public class ServiceBinder extends Binder {
         public StationPlayerService getService() {
             return StationPlayerService.this;
+        }
+    }
+
+    private class BecomingNoisyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                // Pause the playback
+                if (mPlayer.isPlaying()) {
+                    mPlayer.pause();
+                    mRealm.beginTransaction();
+                    if (mModel != null)
+                        mModel.setPlaying(false);
+                    mRealm.commitTransaction();
+                }
+            }
         }
     }
 }

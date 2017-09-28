@@ -109,7 +109,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                 ft.replace(R.id.fragment_container, LandingFragment.newInstance());
                                 ft.addToBackStack(LANDING_FRAGMENT_KEY);
                                 ft.commit();
-                            }else {
+                            } else {
                                 getFragmentManager().popBackStack();
                                 fragment.moveToHome();
                             }
@@ -118,14 +118,40 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void failure(TwitterException exception) {
-//                        Toast.makeText(getContext(), R.string.toast_twitter_login_error, Toast.LENGTH_SHORT).show();
+                        if (getFragmentManager().getBackStackEntryCount() == 0)
+                            ((MainActivity) getActivity()).launchLanding();
+                        else {
+                            LandingFragment fragment = (LandingFragment) getFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
+                            if (fragment == null) { //fragment not in back stack, create it.
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.replace(R.id.fragment_container, LandingFragment.newInstance());
+                                ft.addToBackStack(LANDING_FRAGMENT_KEY);
+                                ft.commit();
+                            } else {
+                                getFragmentManager().popBackStack();
+                                fragment.moveToHome();
+                            }
+                        }
                     }
                 });
             }
 
             @Override
             public void failure(TwitterException exception) {
-//                Toast.makeText(getContext(), R.string.toast_twitter_login_error, Toast.LENGTH_SHORT).show();
+                if (getFragmentManager().getBackStackEntryCount() == 0)
+                    ((MainActivity) getActivity()).launchLanding();
+                else {
+                    LandingFragment fragment = (LandingFragment) getFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
+                    if (fragment == null) { //fragment not in back stack, create it.
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.fragment_container, LandingFragment.newInstance());
+                        ft.addToBackStack(LANDING_FRAGMENT_KEY);
+                        ft.commit();
+                    } else {
+                        getFragmentManager().popBackStack();
+                        fragment.moveToHome();
+                    }
+                }
             }
         };
     }
@@ -138,7 +164,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // Handle success
-                        Toast.makeText(getContext(), R.string.toast_facebook_login_success, Toast.LENGTH_SHORT).show();
                         User user = new User();
                         GraphRequest request = GraphRequest.newMeRequest(
                                 loginResult.getAccessToken(),
@@ -170,7 +195,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                 ft.replace(R.id.fragment_container, LandingFragment.newInstance());
                                 ft.addToBackStack(LANDING_FRAGMENT_KEY);
                                 ft.commit();
-                            }else {
+                            } else {
                                 getFragmentManager().popBackStack();
                                 fragment.moveToHome();
                             }
@@ -179,11 +204,38 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onCancel() {
-//                        Toast.makeText(getContext(), R.string.toast_facebook_login_canceled, Toast.LENGTH_SHORT).show();
+                        if (getFragmentManager().getBackStackEntryCount() == 0)
+                            ((MainActivity) getActivity()).launchLanding();
+                        else {
+                            LandingFragment fragment = (LandingFragment) getFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
+                            if (fragment == null) { //fragment not in back stack, create it.
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.replace(R.id.fragment_container, LandingFragment.newInstance());
+                                ft.addToBackStack(LANDING_FRAGMENT_KEY);
+                                ft.commit();
+                            } else {
+                                getFragmentManager().popBackStack();
+                                fragment.moveToHome();
+                            }
+                        }
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
+                        if (getFragmentManager().getBackStackEntryCount() == 0)
+                            ((MainActivity) getActivity()).launchLanding();
+                        else {
+                            LandingFragment fragment = (LandingFragment) getFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
+                            if (fragment == null) { //fragment not in back stack, create it.
+                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                ft.replace(R.id.fragment_container, LandingFragment.newInstance());
+                                ft.addToBackStack(LANDING_FRAGMENT_KEY);
+                                ft.commit();
+                            } else {
+                                getFragmentManager().popBackStack();
+                                fragment.moveToHome();
+                            }
+                        }
                         Toast.makeText(getContext(), R.string.toast_facebook_login_error, Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -213,7 +265,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         ft.replace(R.id.fragment_container, LandingFragment.newInstance());
                         ft.addToBackStack(LANDING_FRAGMENT_KEY);
                         ft.commit();
-                    }else {
+                    } else {
                         getFragmentManager().popBackStack();
                         fragment.moveToHome();
                     }

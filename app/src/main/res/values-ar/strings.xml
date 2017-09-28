@@ -1,18 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="app_name">UBN</string>
+
+    <string name="btn_mark_my_calender">حدد في التقويم</string>
+    <string name="btn_upload_mp3_or_video">إرفع (ملف صوتى او فيديو)</string>
+
+    <string name="desc_contact_us_on_the_following_channels">إتصل بنا على القنوات الأتية:</string>
+    <string name="desc_on_start">الأن : </string>
     <string name="desc_powered_by">مشغل بواسطة:</string>
     <string name="desc_search_a_program">إبحث عن برنامج</string>
+    <string name="desc_search_a_program_or_station">إبحث عن برنامج أو قناة</string>
+
+    <string name="enter_your_comment">أدخل تعليقك هنا</string>
+
+    <string name="error_network_connectivity">من فضلك تحقق من إتصالك بالإنترنت</string>
+    <string name="error_open">خطأ في الفتح</string>
+
+    <string name="header_live">مباشر:</string>
+    <string name="header_on">الأن:</string>
+
+    <string name="it_s_better_with_friends">إنة أفضل مع الأصدقاء...</string>
+
+    <string name="log_in_to_enjoy_the_immense_experience">سجل الدخول للإستمتاع بتجربة هائلة</string>
+
+    <string name="login_with_facebook">تسجيل الدخول بالفيسبوك</string>
+    <string name="login_with_twitter">تسجيل الدخول بتويتر</string>
+
     <string name="mock_2015">جميع الحقوق محفوظة لدائرة الحكومة الإلكترونية 2015</string>
+    <string name="mock_location_on_map">المكان على الخريطة</string>
+
+    <string name="no_internet">لا يوجد إتصال</string>
+
+    <string name="read_more">إقرأ المزيد</string>
+
+    <string name="share_with">مشاركة عن طريق</string>
+
+    <string name="skip">تخطي</string>
+
     <string name="title_about_us">عن الشبكة</string>
     <string name="title_address">العنوان</string>
     <string name="title_albums">البومات</string>
+    <string name="title_comment">تعليقات</string>
     <string name="title_contact_us">إتصل بنا</string>
     <string name="title_email">البريد الإلكترونى</string>
     <string name="title_events">أحداث</string>
     <string name="title_favs">المفضلة</string>
+    <string name="title_from">من:</string>
     <string name="title_images">الصور</string>
+    <string name="title_info">معلومات</string>
     <string name="title_join_us">إنضم لنا</string>
+    <string name="title_language">English</string>
+    <string name="title_log_in">تسجيل دخول</string>
     <string name="title_log_out">تسجيل خروج</string>
     <string name="title_media">الوسائط</string>
     <string name="title_mission">الهدف</string>
@@ -22,6 +60,8 @@
     <string name="title_phone">هاتف</string>
     <string name="title_program_albums">ألبوم البرنامج</string>
     <string name="title_programs">برامج</string>
+    <string name="title_schedule">جدول</string>
+    <string name="title_search">إبحث</string>
     <string name="title_setting">إعدادات</string>
     <string name="title_share">مشاركة</string>
     <string name="title_sponsor">الرعاة</string>
@@ -29,45 +69,25 @@
     <string name="title_submit">تأكيد</string>
     <string name="title_videos">فيديو</string>
     <string name="title_vision">الرؤية</string>
-    <string name="read_more">إقرأ المزيد</string>
-    <string name="title_info">معلومات</string>
-    <string name="title_schedule">جدول</string>
-    <string name="desc_on_start">الأن : </string>
-    <string name="btn_upload_mp3_or_video">إرفع (ملف صوتى او فيديو)</string>
-    <string name="btn_mark_my_calender">حدد في التقويم</string>
-    <string name="title_language">English</string>
-    <string name="desc_search_a_program_or_station">إبحث عن برنامج أو قناة</string>
-    <string name="desc_contact_us_on_the_following_channels">إتصل بنا على القنوات الأتية:</string>
-    <string name="mock_location_on_map">المكان على الخريطة</string>
-    <string name="title_search">إبحث</string>
-    <string name="error_network_connectivity">من فضلك تحقق من إتصالك بالإنترنت</string>
-    <string name="title_comment">تعليقات</string>
-    <string name="share_with">مشاركة عن طريق</string>
-    <string name="title_log_in">تسجيل دخول</string>
-    <string name="skip">تخطي</string>
-    <string name="login_with_twitter">تسجيل الدخول بتويتر</string>
-    <string name="it_s_better_with_friends">إنة أفضل مع الأصدقاء...</string>
-    <string name="login_with_facebook">تسجيل الدخول بالفيسبوك</string>
-    <string name="log_in_to_enjoy_the_immense_experience">سجل الدخول للإستمتاع بتجربة هائلة</string>
-    <string name="header_on">الأن:</string>
-    <string name="header_live">مباشر:</string>
-    <string name="toast_facebook_login_success">تم تسجيل الدخول بنجاح</string>
+
     <string name="toas_completed">إكتمل</string>
-    <string name="toast_error">خطأ</string>
-    <string name="toast_prepared">جاهز</string>
-    <string name="toast_service_started">بدء الخدمة\\</string>
-    <string name="error_open">خطأ في الفتح</string>
+
     <string name="toast_clicked_play">تشغيل</string>
-    <string name="toast_thanks_for_your_contribution">شكرا لمشاركتك</string>
-    <string name="toast_twitter_login_error">خطأ في تسجيل الخزل</string>
+    <string name="toast_empty_comment">من فضلك أدخل تعليق</string>
+    <string name="toast_error">خطأ</string>
+    <string name="toast_event_already_added">تم إضافتة مسبقا</string>
     <string name="toast_facebook_login_canceled">تسجيل الدخول تم إلغاؤه</string>
     <string name="toast_facebook_login_error">خطأ في تسجيل الدخول</string>
-    <string name="toast_please_upload_file">من فضلك قم برفع ملف</string>
-    <string name="toast_event_already_added">تم إضافتة مسبقا</string>
+    <string name="toast_facebook_login_success">تم تسجيل الدخول بنجاح</string>
     <string name="toast_main_activity_permission_allow">من فضل قم بإعطاء تصريح</string>
-    <string name="no_internet">لا يوجد إتصال</string>
     <string name="toast_must_login">يجب عليك تسجيل الدخول</string>
+    <string name="toast_please_upload_file">من فضلك قم برفع ملف</string>
+    <string name="toast_prepared">جاهز</string>
+    <string name="toast_service_started">بدء الخدمة\\</string>
     <string name="toast_thanks_for_comment">شكرا لتعليقك</string>
-    <string name="enter_your_comment">أدخل تعليقك هنا</string>
-    <string name="toast_empty_comment">من فضلك أدخل تعليق</string>
+    <string name="toast_thanks_for_your_contribution">شكرا لمشاركتك</string>
+    <string name="toast_twitter_login_error">خطأ في تسجيل الخزل</string>
+    <string name="title_from_to">من: %s \t إلي: %s</string>
+    <string name="toast_login_success">تم تسجيل الدخول بنجاح</string>
+
 </resources>

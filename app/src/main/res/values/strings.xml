@@ -22,6 +22,8 @@
     <string name="desc_search_a_program">Search a program</string>
     <string name="desc_search_a_program_or_station">Search a program or station</string>
 
+    <string name="enter_your_comment">Enter Your Comment</string>
+
     <string name="error_network_connectivity">Please Check your Internet Connection</string>
     <string name="error_open">Can\'t Open</string>
 
@@ -82,6 +84,7 @@
     <string name="title_email">Email</string>
     <string name="title_events">Events</string>
     <string name="title_favs">Favs</string>
+    <string name="title_from">From:</string>
     <string name="title_images">Images</string>
     <string name="title_info">Info</string>
     <string name="title_join_us">Join Us</string>
@@ -111,6 +114,7 @@
     <string name="toast_clicked_next" translatable="false">Clicked Next</string>
     <string name="toast_clicked_play">Clicked Play</string>
     <string name="toast_clicked_previous" translatable="false">Clicked Previous</string>
+    <string name="toast_empty_comment">Comment Can\'t Be Empty</string>
     <string name="toast_error">Error</string>
     <string name="toast_event_already_added">Already Added</string>
     <string name="toast_facebook_login_canceled">Facebook Login canceled</string>
@@ -128,6 +132,6 @@
     <string name="toast_thanks_for_comment">Thanks for Your Comment</string>
     <string name="toast_thanks_for_your_contribution">"Thanks for your contacting with us "</string>
     <string name="toast_twitter_login_error">Twitter Email Login error</string>
-    <string name="enter_your_comment">Enter Your Comment</string>
-    <string name="toast_empty_comment">Comment Can\'t Be Empty</string>
+    <string name="title_from_to">From: %s \t To: %s</string>
+    <string name="toast_login_success">Logged In Successfully</string>
 </resources>

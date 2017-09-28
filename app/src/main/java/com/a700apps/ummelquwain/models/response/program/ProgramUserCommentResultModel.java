@@ -18,7 +18,7 @@ public class ProgramUserCommentResultModel extends RealmObject{
     private Integer commentID;
     @SerializedName("UserID")
     @Expose
-    private Integer userID;
+    private String userID;
     @SerializedName("ProgramID")
     @Expose
     private Integer programID;
@@ -46,11 +46,11 @@ public class ProgramUserCommentResultModel extends RealmObject{
         this.commentID = commentID;
     }
 
-    public Integer getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(Integer userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 

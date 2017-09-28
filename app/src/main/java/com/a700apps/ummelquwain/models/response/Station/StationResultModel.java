@@ -84,7 +84,7 @@ public class StationResultModel  extends RealmObject implements Parcelable{
     private Integer language;
     @SerializedName("UserID")
     @Expose
-    private Integer userID;
+    private String userID;
     @SerializedName("keyword")
     @Expose
     private String keyword;
@@ -295,11 +295,11 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.language = language;
     }
 
-    public Integer getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(Integer userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
@@ -375,7 +375,7 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.isFavourite = (Integer) in.readValue(Integer.class.getClassLoader());
         this.stationLanguage = in.readString();
         this.language = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.userID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.userID = (String) in.readValue(Integer.class.getClassLoader());
         this.keyword = in.readString();
     }
 

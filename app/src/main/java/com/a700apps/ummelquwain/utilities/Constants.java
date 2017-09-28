@@ -22,6 +22,7 @@ public class Constants {
     public final static String LANDING_FRAGMENT_KEY = "landing_fragment_key";
     public final static String STATION_FRAGMENT_KEY = "station_fragment_key";
     public final static String PROGRAM_FRAGMENT_KEY = "program_fragment_key";
+    public static String Broadcast_PLAY_NEW_AUDIO = "broadcast_play_new_audio";
 
 
     public interface ACTION {

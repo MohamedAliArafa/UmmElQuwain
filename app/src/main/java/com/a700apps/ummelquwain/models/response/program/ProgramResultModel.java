@@ -61,7 +61,7 @@ public class ProgramResultModel extends RealmObject {
     private Integer isFavourite;
     @SerializedName("UserID")
     @Expose
-    private Integer userID;
+    private String userID;
     @SerializedName("keyword")
     @Expose
     private String keyword;
@@ -205,11 +205,11 @@ public class ProgramResultModel extends RealmObject {
         this.isFavourite = isFavourite;
     }
 
-    public Integer getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(Integer userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 

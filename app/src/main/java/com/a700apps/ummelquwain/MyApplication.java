@@ -11,6 +11,8 @@ import com.a700apps.ummelquwain.dagger.Application.component.DaggerApplicationCo
 import com.a700apps.ummelquwain.dagger.Application.module.ContextModule;
 import com.a700apps.ummelquwain.models.User;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
+import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
+import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.player.Player;
 import com.a700apps.ummelquwain.service.ApiService;
 import com.squareup.picasso.Picasso;
@@ -85,6 +87,10 @@ public class MyApplication extends Application {
             mRealm.beginTransaction();
             mRealm.copyToRealmOrUpdate(mLanguageRequestModel);
             mRealm.commitTransaction();
+            mRealm.executeTransaction(realm -> {
+                realm.delete(StationResultModel.class);
+                realm.delete(ProgramResultModel.class);
+            });
         } else {
             setLocale(getLanguage());
         }
@@ -158,6 +164,10 @@ public class MyApplication extends Application {
                 mRealm.commitTransaction();
                 break;
         }
+        mRealm.executeTransaction(realm -> {
+            realm.delete(StationResultModel.class);
+            realm.delete(ProgramResultModel.class);
+        });
     }
 
     @Override

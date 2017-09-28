@@ -3,8 +3,10 @@ package com.a700apps.ummelquwain.ui.screens.login;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
+import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.User;
 import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 
@@ -46,6 +48,8 @@ public class LoginPresenter implements LoginContract.UserAction {
                     mRealm.beginTransaction();
                     mRealm.copyToRealmOrUpdate(mModel);
                     mRealm.commitTransaction();
+                    Toast.makeText(mContext, R.string.toast_login_success, Toast.LENGTH_SHORT).show();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

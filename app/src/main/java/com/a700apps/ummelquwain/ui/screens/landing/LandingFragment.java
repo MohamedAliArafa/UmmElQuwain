@@ -200,11 +200,15 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
         mStationModel = model;
         if (isAdded())
             mStationModel.addChangeListener(realmModel -> {
-                mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(mStationModel.isPlaying() ?
-                        R.drawable.ic_puss : R.drawable.ic_paly_liste));
-                mLikeImageView.setImageDrawable(mContext.getResources()
-                        .getDrawable(mStationModel.getIsFavourite() == 1 ?
-                                R.drawable.ic_favorite_active : R.drawable.ic_favorite));
+                try {
+                    mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(mStationModel.isPlaying() ?
+                            R.drawable.ic_puss : R.drawable.ic_paly_liste));
+                    mLikeImageView.setImageDrawable(mContext.getResources()
+                            .getDrawable(mStationModel.getIsFavourite() == 1 ?
+                                    R.drawable.ic_favorite_active : R.drawable.ic_favorite));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 changed = true;
             });
         mCommentImageView.setAlpha(0.3f);
@@ -225,12 +229,13 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
                     mProvider.playStream(model);
                 }
         );
-        Animation anim = AnimationUtils.loadAnimation(mContext,
-                R.anim.slide_up);
-        if (!changed)
-            mConstrainContainer.setAnimation(anim);
+        if (mContext != null) {
+            Animation anim = AnimationUtils.loadAnimation(mContext,
+                    R.anim.slide_up);
+            if (!changed)
+                mConstrainContainer.setAnimation(anim);
+        }
         mConstrainContainer.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -248,8 +253,8 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
                             R.drawable.ic_puss : R.drawable.ic_paly_liste));
                     mLikeImageView.setImageDrawable(mContext.getResources()
                             .getDrawable(mProgramModel.getIsFavourite() == 1 ?
-                                    R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
-                }catch (Exception e){
+                                    R.drawable.ic_favorite_active : R.drawable.ic_favorite));
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -259,13 +264,11 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
         mProgramNameTextView.setText(mProgramModel.getBroadcasterName());
         mCommentImageView.setAlpha(1f);
         mLikeImageView.setAlpha(0.3f);
-        mLikeImageView.setOnClickListener(view -> {
-            mProvider.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
-                mRealm.beginTransaction();
-                model.setIsFavourite(fav);
-                mRealm.commitTransaction();
-            });
-        });
+        mLikeImageView.setOnClickListener(view -> mProvider.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
+            mRealm.beginTransaction();
+            model.setIsFavourite(fav);
+            mRealm.commitTransaction();
+        }));
         mShareImageView.setOnClickListener(view -> {
             mProvider.shareFromPlayer(model);
         });

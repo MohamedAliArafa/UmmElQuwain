@@ -98,7 +98,6 @@ public class ProgramPlayerService extends Service {
     }
 
     public void preparePlayer(ProgramResultModel model) {
-        showNotification(model.getProgramName(), model.getBroadcasterName(), model.getProgramLogo());
         mRealm.beginTransaction();
         if (mModel != null)
             if (mModel.getProgramID() != model.getProgramID())
@@ -106,6 +105,7 @@ public class ProgramPlayerService extends Service {
         mRealm.commitTransaction();
 
         mModel = model;
+        showNotification(model.getProgramName(), model.getBroadcasterName(), model.getProgramLogo());
         if (!model.isPlaying()) {
             mModel = model;
             mRealm.beginTransaction();
@@ -140,6 +140,10 @@ public class ProgramPlayerService extends Service {
             mRealm.commitTransaction();
         } else {
             try {
+                mRealm.beginTransaction();
+                if (mModel != null)
+                    mModel.setPlaying(true);
+                mRealm.commitTransaction();
                 mPlayer.reset();
                 mPlayer.setDataSource(station.getAudioProgramLink());
                 mPlayer.prepareAsync();
@@ -162,7 +166,7 @@ public class ProgramPlayerService extends Service {
         } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
             Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
         } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-            togglePlay(mModel);
+            preparePlayer(mModel);
         } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
             Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
         } else if (intent.getAction().equals(
@@ -231,6 +235,7 @@ public class ProgramPlayerService extends Service {
                 mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
             else
                 mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
+            startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
         });
 
         mRemoteViews.setTextViewText(R.id.status_bar_track_name, stationName);

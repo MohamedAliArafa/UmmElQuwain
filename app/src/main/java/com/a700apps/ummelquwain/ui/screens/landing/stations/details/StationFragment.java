@@ -114,19 +114,19 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
     public void updateUI(StationResultModel model) {
         mStationNameTextView.setText(model.getStationName());
         mStationCategoryTextView.setText(model.getCategoryName());
-        mStationCurrentProgramIsLiveTextView.setText(model.getIsLive() ? mContext.getString(R.string.header_live) : mContext.getString(R.string.header_on));
         mStationCurrentProgramTextView.setText(model.getCurrentProgramName());
         mStationDescTextView.setText(model.getStationInfo());
         mPicasso.load(model.getStationLogo()).into(mStationLogoImageView);
         mPicasso.load(model.getStationImage()).into(mStationBackImageView);
         supplierFragments = Arrays.asList(StationInfoFragment.newInstance(model),
                 StationScheduleFragment.newInstance(model));
-        mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
-                R.drawable.ic_puss : R.drawable.ic_paly_liste));
         mPlayBtn.setOnClickListener(view -> mPresenter.playStream());
-        mIndicatorView.setVisibility(model.isPlaying() ?
-                View.VISIBLE : View.GONE);
         try {
+            mStationCurrentProgramIsLiveTextView.setText(model.getIsLive() ? mContext.getString(R.string.header_live) : mContext.getString(R.string.header_on));
+            mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
+                    R.drawable.ic_puss : R.drawable.ic_paly_liste));
+            mIndicatorView.setVisibility(model.isPlaying() ?
+                    View.VISIBLE : View.GONE);
             mLikeBtn.setImageDrawable(mContext.getResources()
                     .getDrawable(model.getIsFavourite() == 1 ?
                             R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));

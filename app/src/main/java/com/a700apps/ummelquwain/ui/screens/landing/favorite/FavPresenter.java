@@ -73,7 +73,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         this.mFragmentManager = mFragmentManager;
         mServiceIntent = new Intent(mContext, StationPlayerService.class);
         mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-        mPlayer = new Player(mContext);
+        mPlayer = MyApplication.get(mContext).getPlayer();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
