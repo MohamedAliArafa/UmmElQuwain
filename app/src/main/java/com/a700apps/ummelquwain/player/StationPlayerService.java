@@ -72,9 +72,9 @@ public class StationPlayerService extends Service {
             mRealm.commitTransaction();
             Log.i("Completed", "true");
             stopForeground(true);
-            if (mRemoteViews != null)
-                mRemoteViews.setImageViewResource(R.id.status_bar_play,
-                        R.drawable.ic_paly_liste);
+//            if (mRemoteViews != null)
+//                mRemoteViews.setImageViewResource(R.id.status_bar_play,
+//                        R.drawable.ic_paly_liste);
         });
         mPlayer.setOnErrorListener((mp, what, extra) -> {
             isPreparing = false;
@@ -84,9 +84,9 @@ public class StationPlayerService extends Service {
             mRealm.commitTransaction();
             Log.i("Error", "true");
             stopForeground(true);
-            if (mRemoteViews != null)
-                mRemoteViews.setImageViewResource(R.id.status_bar_play,
-                        R.drawable.ic_paly_liste);
+//            if (mRemoteViews != null)
+//                mRemoteViews.setImageViewResource(R.id.status_bar_play,
+//                        R.drawable.ic_paly_liste);
             return false;
         });
         // TODO Auto-generated method stub
@@ -131,8 +131,8 @@ public class StationPlayerService extends Service {
             if (mModel != null)
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
-            if (mRemoteViews != null)
-                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
+//            if (mRemoteViews != null)
+//                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
         }
     }
 
@@ -145,18 +145,18 @@ public class StationPlayerService extends Service {
             if (mModel != null)
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
-            if (mRemoteViews != null)
-                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
+//            if (mRemoteViews != null)
+//                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
         } else {
             try {
                 mPlayer.reset();
                 mPlayer.setDataSource(station.getStreamLink());
                 mPlayer.prepareAsync();
-                if (mRemoteViews != null)
-                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
+//                if (mRemoteViews != null)
+//                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
             } catch (IOException e) {
-                if (mRemoteViews != null)
-                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
+//                if (mRemoteViews != null)
+//                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
                 e.printStackTrace();
             }
         }
@@ -200,7 +200,7 @@ public class StationPlayerService extends Service {
         mRemoteViews = new RemoteViews(getPackageName(), R.layout.status_bar);
 
         // showing default album image
-        mRemoteViews.setViewVisibility(R.id.status_bar_icon, View.VISIBLE);
+//        mRemoteViews.setViewVisibility(R.id.status_bar_icon, View.VISIBLE);
         mRemoteViews.setViewVisibility(R.id.status_bar_album_art, View.GONE);
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -239,6 +239,11 @@ public class StationPlayerService extends Service {
 
         mRemoteViews.setTextViewText(R.id.status_bar_track_name, stationName);
         mRemoteViews.setTextViewText(R.id.status_bar_artist_name, programName);
+
+        if (mModel.isPlaying())
+            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
+        else
+            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
 
         mNotification = new Notification.Builder(this).build();
         mNotification.contentView = mRemoteViews;

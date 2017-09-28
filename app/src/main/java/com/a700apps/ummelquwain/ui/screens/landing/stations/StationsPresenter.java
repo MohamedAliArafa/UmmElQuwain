@@ -56,21 +56,6 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
         mPlayer = MyApplication.get(mContext).getPlayer();
     }
 
-//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-//    public void resume() {
-//        mRealm = Realm.getDefaultInstance();
-//        mModel = mRealm.where(StationResultModel.class).findAll();
-//        playing = false;
-//        mModel.addChangeListener(stationResultModels -> {
-//            for (StationResultModel station : mModel) {
-//                if (station.isPlaying()) {
-//                    ((LandingFragment) mView.getParentFragment()).showPlayer(station);
-//                    playing = true;
-//                }
-//            }
-//        });
-//    }
-
     @Override
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getData() {
@@ -122,8 +107,6 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
             ft.addToBackStack(PROGRAM_FRAGMENT_KEY + String.valueOf(stationID));
             ft.commit();
         }
-//        mFragmentManager.beginTransaction().addToBackStack(null)
-//                .add(R.id.fragment_container, StationFragment.newInstance(stationID)).commit();
     }
 
     @Override
@@ -148,7 +131,7 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
                         .contains("stationLanguage", keyword, Case.INSENSITIVE)
                         .findAll();
         }
-        if (query.isLoaded() && !query.isEmpty()) {
+        if (query.isLoaded()) {
             mView.hideProgress();
             mModel = query;
             mView.updateUI(mModel);

@@ -33,7 +33,7 @@
     <string name="title_info">معلومات</string>
     <string name="title_schedule">جدول</string>
     <string name="desc_on_start">الأن : </string>
-    <string name="btn_upload_mp3_or_video">إرفع (ملف mp3 او فيديو)</string>
+    <string name="btn_upload_mp3_or_video">إرفع (ملف صوتى او فيديو)</string>
     <string name="btn_mark_my_calender">حدد في التقويم</string>
     <string name="title_language">English</string>
     <string name="desc_search_a_program_or_station">إبحث عن برنامج أو قناة</string>
@@ -66,4 +66,8 @@
     <string name="toast_event_already_added">تم إضافتة مسبقا</string>
     <string name="toast_main_activity_permission_allow">من فضل قم بإعطاء تصريح</string>
     <string name="no_internet">لا يوجد إتصال</string>
+    <string name="toast_must_login">يجب عليك تسجيل الدخول</string>
+    <string name="toast_thanks_for_comment">شكرا لتعليقك</string>
+    <string name="enter_your_comment">أدخل تعليقك هنا</string>
+    <string name="toast_empty_comment">من فضلك أدخل تعليق</string>
 </resources>

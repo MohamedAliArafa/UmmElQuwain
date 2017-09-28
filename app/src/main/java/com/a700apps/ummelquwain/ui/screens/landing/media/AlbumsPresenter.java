@@ -98,7 +98,7 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
 
         mRealm = Realm.getDefaultInstance();
         RealmResults<AlbumResultModel> query = mRealm.where(AlbumResultModel.class).findAll();
-        if (query.isLoaded() && !query.isEmpty()) {
+        if (query.isLoaded()) {
             mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);

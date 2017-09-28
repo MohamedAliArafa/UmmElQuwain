@@ -42,6 +42,9 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
         @BindView(R.id.tv_program_desc)
         TextView mProgramTextView;
 
+        @BindView(R.id.tv_on_live)
+        TextView mLiveOnTextView;
+
         @BindView(R.id.iv_station_logo)
         ImageView mThumpImageView;
 
@@ -87,13 +90,22 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
         holder.mTitleTextView.setText(model.getStationName());
         holder.mCategoryTextView.setText(model.getCategoryName());
         holder.mProgramTextView.setText(model.getCurrentProgramName());
+        if (model.getIsLive()){
+            holder.mLiveOnTextView.setText(R.string.header_live);
+            holder.mLiveOnTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+            holder.mProgramTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+        }else {
+            holder.mLiveOnTextView.setTextColor(mContext.getResources().getColor(R.color.statusColor));
+            holder.mProgramTextView.setTextColor(mContext.getResources().getColor(R.color.statusColor));
+        }
+
         mPicasso.load(model.getStationLogo()).into(holder.mThumpImageView);
         try {
             holder.mLikeImageView.setImageDrawable(mContext.getResources()
                     .getDrawable(model.getIsFavourite() == 1 ?
                             R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
             holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
-                            R.drawable.ic_puss : R.drawable.ic_paly_liste));
+                    R.drawable.ic_puss : R.drawable.ic_paly_liste));
             holder.mIndicatorView.setVisibility(model.isPlaying() ?
                     View.VISIBLE : View.GONE);
             holder.mLikeImageView.setOnClickListener(view -> {
@@ -104,7 +116,7 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
                         model.setIsFavourite(fav);
                         mRealm.commitTransaction();
                     });
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             });

@@ -23,6 +23,7 @@ import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.models.response.Station.StationsModel;
 import com.a700apps.ummelquwain.player.Player;
 import com.a700apps.ummelquwain.player.StationPlayerService;
+import com.a700apps.ummelquwain.ui.screens.landing.LandingFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsContract;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragment;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
@@ -63,6 +64,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
 
     private static boolean isServiceStarted = false;
     private Player mPlayer;
+    private boolean playing;
 
     public FavPresenter(Context mContext, FavFragment mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
@@ -72,6 +74,22 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         mServiceIntent = new Intent(mContext, StationPlayerService.class);
         mServiceIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
         mPlayer = new Player(mContext);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void resume() {
+        mRealm = Realm.getDefaultInstance();
+        RealmResults<StationResultModel> model = mRealm.where(StationResultModel.class).findAll();
+        playing = false;
+        model.addChangeListener(stationResultModels -> {
+            getStationData();
+            for (StationResultModel station : model) {
+                if (station.isPlaying()) {
+                    ((LandingFragment) mView.getParentFragment()).showPlayer(station);
+                    playing = true;
+                }
+            }
+        });
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -91,14 +109,14 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
                 mView.hideProgress();
-               try {
-                   Utility.addStationsToRealm(response.body().getResult(),
-                           () -> mStationModel.addChangeListener(stationResultModels -> {
-                               mView.updateFavUI(mStationModel);
-                           }));
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
+                try {
+                    Utility.addStationsToRealm(response.body().getResult(),
+                            () -> mStationModel.addChangeListener(stationResultModels -> {
+                                mView.updateFavUI(mStationModel);
+                            }));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -110,9 +128,9 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             }
         });
 
-//        mStationModel.addChangeListener(stationResultModels -> {
-//            mView.updateFavUI(mStationModel);
-//        });
+        mStationModel.addChangeListener(stationResultModels -> {
+            mView.updateFavUI(mStationModel);
+        });
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

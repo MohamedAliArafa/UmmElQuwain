@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_secondary"
-    android:focusable="true"
     android:clickable="true"
+    android:focusable="true"
     tools:context=".ui.screens.landing.more.MoreFragment">
 
 
@@ -13,15 +13,15 @@
         android:id="@+id/ll_contact"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="9dp"
         android:background="@android:color/white"
-        android:elevation="3dp"
+        android:elevation="1dp"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_about">
 
         <ImageView
@@ -36,7 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/title_contact_us" />
+            android:text="@string/title_contact_us"
+            android:textColor="@color/gray" />
 
         <ImageView
             android:id="@+id/iv_contact_arrow"
@@ -49,15 +50,15 @@
         android:id="@+id/ll_events"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="3dp"
+        android:elevation="1dp"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_language">
 
         <ImageView
@@ -72,7 +73,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/title_events" />
+            android:text="@string/title_events"
+            android:textColor="@color/gray" />
 
         <ImageView
             android:id="@+id/iv_events_arrow"
@@ -85,15 +87,15 @@
         android:id="@+id/ll_join"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="3dp"
+        android:elevation="1dp"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_sponser">
 
         <ImageView
@@ -108,7 +110,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/title_join_us" />
+            android:text="@string/title_join_us"
+            android:textColor="@color/gray" />
 
         <ImageView
             android:id="@+id/iv_join_arrow"
@@ -120,17 +123,18 @@
     <LinearLayout
         android:id="@+id/ll_sponser"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="7dp"
         android:background="@android:color/white"
-        android:elevation="3dp"
+        android:elevation="1dp"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_news">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_news"
+        tools:layout_editor_absoluteY="151dp">
 
         <ImageView
             android:id="@+id/iv_sponsers"
@@ -144,7 +148,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/title_sponsor" />
+            android:text="@string/title_sponsor"
+            android:textColor="@color/gray" />
 
         <ImageView
             android:id="@+id/iv_sponser_arrow"
@@ -157,15 +162,15 @@
         android:id="@+id/ll_news"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="3dp"
+        android:elevation="1dp"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_events">
 
         <ImageView
@@ -180,7 +185,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/title_news" />
+            android:text="@string/title_news"
+            android:textColor="@color/gray" />
 
         <ImageView
             android:id="@+id/iv_news_arrow"
@@ -193,15 +199,15 @@
         android:id="@+id/ll_about"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="3dp"
+        android:elevation="1dp"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_join">
 
         <ImageView
@@ -216,7 +222,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/title_about_us" />
+            android:text="@string/title_about_us"
+            android:textColor="@color/gray" />
 
         <ImageView
             android:id="@+id/iv_about_arrow"
@@ -229,15 +236,15 @@
         android:id="@+id/ll_language"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="3dp"
+        android:elevation="1dp"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -250,10 +257,11 @@
             android:id="@+id/tv_language"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="end"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/title_language" />
+            android:gravity="end"
+            android:text="@string/title_language"
+            android:textColor="@color/gray" />
 
         <ImageView
             android:id="@+id/iv_setting_arrow"
@@ -266,15 +274,15 @@
         android:id="@+id/ll_logout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:elevation="3dp"
+        android:elevation="1dp"
         android:orientation="horizontal"
         android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_contact">
 
         <ImageView
@@ -289,7 +297,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="@string/title_log_out" />
+            android:text="@string/title_log_out"
+            android:textColor="@color/gray" />
 
         <ImageView
             android:id="@+id/iv_logout_arrow"

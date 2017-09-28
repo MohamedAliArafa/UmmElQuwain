@@ -110,7 +110,7 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         RealmResults<ProgramResultModel> query = mRealm.where(ProgramResultModel.class)
                 .contains("programName", keyword, Case.INSENSITIVE).findAll();
         mModel = query;
-        if (query.isLoaded() && !query.isEmpty()) {
+        if (query.isLoaded()) {
             mView.hideProgress();
             mView.updateUI(mModel);
         }

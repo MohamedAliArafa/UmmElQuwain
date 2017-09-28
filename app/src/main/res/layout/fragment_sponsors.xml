@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_main"
+    android:clickable="true"
+    android:focusable="true"
     tools:context="com.a700apps.ummelquwain.ui.screens.landing.more.events.EventsFragment">
 
     <RelativeLayout

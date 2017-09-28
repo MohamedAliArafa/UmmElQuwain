@@ -11,11 +11,8 @@ import com.a700apps.ummelquwain.dagger.Application.component.DaggerApplicationCo
 import com.a700apps.ummelquwain.dagger.Application.module.ContextModule;
 import com.a700apps.ummelquwain.models.User;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
-import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
-import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.player.Player;
 import com.a700apps.ummelquwain.service.ApiService;
-import com.scand.realmbrowser.RealmBrowser;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.Twitter;
 
@@ -72,12 +69,12 @@ public class MyApplication extends Application {
         Realm.setDefaultConfiguration(config);
 
         mRealm = Realm.getDefaultInstance();
-        new RealmBrowser.Builder(this)
-                // add class, you want to view
-                .add(mRealm, StationResultModel.class)
-                .add(mRealm, ProgramResultModel.class)
-                // call method showNotification()
-                .showNotification();
+//        new RealmBrowser.Builder(this)
+//                // add class, you want to view
+//                .add(mRealm, StationResultModel.class)
+//                .add(mRealm, ProgramResultModel.class)
+//                // call method showNotification()
+//                .showNotification();
 
         mPlayer = MyApplication.get(this).getPlayer();
 

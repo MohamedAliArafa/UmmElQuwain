@@ -2,13 +2,14 @@
 <resources>
     <color name="colorPrimary">#203c63</color>
     <color name="colorPrimaryDark">#051b44</color>
-    <color name="colorAccent">#fdbf02</color>
+    <color name="colorAccent">#ffc000</color>
     <color name="trans_white_10">#19ffffff</color>
     <color name="trans_white_50">#81ffffff</color>
     <color name="trans_white_70">#bfffffff</color>
     <color name="trans_black_50">#81000000</color>
     <color name="trans_black_10">#19000000</color>
     <color name="trans">#00000000</color>
+    <color name="gray">#838383</color>
 
 
     <color name="transColorPrimary">#88051b44</color>

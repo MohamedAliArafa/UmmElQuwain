@@ -71,11 +71,10 @@ public class ProgramPlayerService extends Service {
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
             Log.i("Completed", "true");
+        });
+        mPlayer.setOnBufferingUpdateListener((mediaPlayer, i) -> {
+            Log.d("Buffering", "->" + i);
 
-//            if (mRemoteViews != null)
-//                mRemoteViews.setImageViewResource(R.id.status_bar_play,
-//                        R.drawable.ic_paly);
-            showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramLogo());
         });
         mPlayer.setOnErrorListener((mp, what, extra) -> {
             isPreparing = false;
@@ -84,10 +83,6 @@ public class ProgramPlayerService extends Service {
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
             Log.i("Error", "true");
-//            if (mRemoteViews != null)
-//                mRemoteViews.setImageViewResource(R.id.status_bar_play,
-//                        R.drawable.ic_paly);
-            showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramLogo());
             return false;
         });
         // TODO Auto-generated method stub
@@ -97,14 +92,13 @@ public class ProgramPlayerService extends Service {
             if (mModel != null)
                 mModel.setPlaying(true);
             mRealm.commitTransaction();
-            showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramLogo());
             Log.i("Prepared", "true");
             mediaPlayer.start();
         });
     }
 
     public void preparePlayer(ProgramResultModel model) {
-//        showNotification(model.getStationName(), model.getCurrentProgramName(), model.getStationImage());
+        showNotification(model.getProgramName(), model.getBroadcasterName(), model.getProgramLogo());
         mRealm.beginTransaction();
         if (mModel != null)
             if (mModel.getProgramID() != model.getProgramID())
@@ -126,16 +120,12 @@ public class ProgramPlayerService extends Service {
             }
             mPlayer.prepareAsync();
             isPreparing = true;
-            showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramLogo());
         } else {
             mPlayer.pause();
             mRealm.beginTransaction();
             if (mModel != null)
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
-//            if (mRemoteViews != null)
-//                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly);
-            showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramLogo());
         }
     }
 
@@ -148,21 +138,12 @@ public class ProgramPlayerService extends Service {
             if (mModel != null)
                 mModel.setPlaying(false);
             mRealm.commitTransaction();
-//            if (mRemoteViews != null)
-//                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly);
-            showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramLogo());
         } else {
             try {
                 mPlayer.reset();
                 mPlayer.setDataSource(station.getAudioProgramLink());
                 mPlayer.prepareAsync();
-//                if (mRemoteViews != null)
-//                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
-                showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramLogo());
             } catch (IOException e) {
-//                if (mRemoteViews != null)
-//                    mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly);
-                showNotification(mModel.getProgramName(), mModel.getBroadcasterName(), mModel.getProgramLogo());
                 e.printStackTrace();
             }
         }
@@ -205,7 +186,7 @@ public class ProgramPlayerService extends Service {
         mRemoteViews = new RemoteViews(getPackageName(), R.layout.status_bar);
 
         // showing default album image
-        mRemoteViews.setViewVisibility(R.id.status_bar_icon, View.VISIBLE);
+//        mRemoteViews.setViewVisibility(R.id.status_bar_icon, View.VISIBLE);
         mRemoteViews.setViewVisibility(R.id.status_bar_album_art, View.VISIBLE);
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -240,10 +221,17 @@ public class ProgramPlayerService extends Service {
         mRemoteViews.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
         mRemoteViews.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
 
-//        if (mModel.isPlaying())
-//            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
-//        else
-//            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
+        if (mModel.isPlaying())
+            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
+        else
+            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
+
+        mModel.addChangeListener(realmModel -> {
+            if (mModel.isPlaying())
+                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
+            else
+                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
+        });
 
         mRemoteViews.setTextViewText(R.id.status_bar_track_name, stationName);
         mRemoteViews.setTextViewText(R.id.status_bar_artist_name, programName);

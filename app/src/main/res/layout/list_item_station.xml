@@ -40,6 +40,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/desc_on_start"
         android:textColor="@color/statusColor"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/iv_station_logo"
         app:layout_constraintTop_toBottomOf="@+id/tv_station_name" />
@@ -54,6 +55,7 @@
         android:maxLines="1"
         android:text="@string/mock_station_desc_mock"
         android:textColor="@color/statusColor"
+        android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/iv_like"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tv_on_live"
@@ -63,12 +65,12 @@
         android:id="@+id/tv_station_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:paddingBottom="8dp"
         android:text="@string/mock_station_category_mock"
         android:textColor="@android:color/white"
+        android:textSize="10sp"
         app:layout_constraintStart_toEndOf="@+id/iv_station_logo"
         app:layout_constraintTop_toBottomOf="@+id/tv_program_desc" />
 

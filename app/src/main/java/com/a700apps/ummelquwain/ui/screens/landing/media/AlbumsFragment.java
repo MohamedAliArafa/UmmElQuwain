@@ -99,6 +99,8 @@ public class AlbumsFragment extends Fragment implements AlbumsContract.ModelView
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().isEmpty())
                     mPresenter.getData();
+                else
+                    mPresenter.search(editable.toString());
             }
         });
         mSearchEditText.setOnEditorActionListener((textView, i, keyEvent) -> {

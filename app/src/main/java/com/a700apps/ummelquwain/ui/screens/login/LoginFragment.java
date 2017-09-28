@@ -118,14 +118,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void failure(TwitterException exception) {
-                        Toast.makeText(getContext(), R.string.toast_twitter_login_error, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), R.string.toast_twitter_login_error, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
             @Override
             public void failure(TwitterException exception) {
-                Toast.makeText(getContext(), R.string.toast_twitter_login_error, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), R.string.toast_twitter_login_error, Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -179,7 +179,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onCancel() {
-                        Toast.makeText(getContext(), R.string.toast_facebook_login_canceled, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), R.string.toast_facebook_login_canceled, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

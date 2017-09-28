@@ -88,6 +88,8 @@ public class ProgramsFragment extends Fragment implements ProgramsContract.Model
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().isEmpty())
                     mPresenter.getData();
+                else
+                    mPresenter.search(editable.toString());
             }
         });
         mSearchEditText.setOnEditorActionListener((textView, i, keyEvent) -> {

@@ -121,10 +121,10 @@ public class EventDetailsFragment extends Fragment implements EventDetailContrac
 
     @Override
     public boolean requestReadPermission() {
-        if (CheckPermission(this.getActivity(), Manifest.permission.READ_PHONE_STATE)) {
+        if (CheckPermission(this.getActivity(), Manifest.permission.WRITE_CALENDAR)) {
             return true;
         } else {
-            RequestPermission(this.getActivity(), Manifest.permission.READ_PHONE_STATE, REQUEST_READ_CALENDER_PERMISSION);
+            RequestPermission(this.getActivity(), Manifest.permission.WRITE_CALENDAR, REQUEST_READ_CALENDER_PERMISSION);
             return false;
         }
     }
