@@ -39,18 +39,8 @@ public class StationInfoPresenter implements StationInfoContract.UserAction {
 
     @Override
     public void openProgram(ProgramResultModel model) {
-//        Fragment fragment = mFragmentManager.findFragmentByTag(PROGRAM_FRAGMENT_KEY + String.valueOf(model.getProgramID());
-//        if (fragment != null)
-//            mFragmentManager.beginTransaction().addToBackStack(PROGRAM_FRAGMENT_KEY + String.valueOf(model.getProgramID()))
-//                    .add(R.id.fragment_container, fragment).commit();
-//        else
-//            mFragmentManager.beginTransaction().addToBackStack(PROGRAM_FRAGMENT_KEY + String.valueOf(model.getProgramID()))
-//                    .add(R.id.fragment_container, ProgramFragment.newInstance(model.getProgramID())).commit();
-//        mFragmentManager.executePendingTransactions();
-
         boolean fragmentPopped = mFragmentManager.popBackStackImmediate(
                 PROGRAM_FRAGMENT_KEY + String.valueOf(model.getProgramID()), 0);
-
         if (!fragmentPopped) { //fragment not in back stack, create it.
             FragmentTransaction ft = mFragmentManager.beginTransaction();
             ft.replace(R.id.fragment_container, ProgramFragment.newInstance(model.getProgramID()));

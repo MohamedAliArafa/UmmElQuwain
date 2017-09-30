@@ -1,6 +1,7 @@
 package com.a700apps.ummelquwain.ui.screens.landing.more.contactus;
 
 
+import android.Manifest;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Intent;
@@ -23,6 +24,10 @@ import com.a700apps.ummelquwain.utilities.SwipeToDismissHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_PHONE_CALL_PERMISSION;
+import static com.a700apps.ummelquwain.utilities.Utility.CheckPermission;
+import static com.a700apps.ummelquwain.utilities.Utility.RequestPermission;
 
 
 /**
@@ -132,6 +137,10 @@ public class ContactUsFragment extends Fragment implements ContactUsContract.Mod
         mPhoneTextView.setText(mModel.getPhoneNumber());
         mPhoneTextView.setOnClickListener(view -> {
             if (mModel.getPhoneNumber() != null) {
+                if (!CheckPermission(getContext(), Manifest.permission.CALL_PHONE)) {
+                    RequestPermission(getActivity(), Manifest.permission.CALL_PHONE, REQUEST_PHONE_CALL_PERMISSION);
+                    return;
+                }
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + (mModel.getPhoneNumber())));
                 startActivity(intent);
             }
@@ -139,6 +148,10 @@ public class ContactUsFragment extends Fragment implements ContactUsContract.Mod
         mFaxTextView.setText(mModel.getFax());
         mFaxTextView.setOnClickListener(view -> {
             if (mModel.getFax() != null) {
+                if (!CheckPermission(getContext(), Manifest.permission.CALL_PHONE)) {
+                    RequestPermission(getActivity(), Manifest.permission.CALL_PHONE, REQUEST_PHONE_CALL_PERMISSION);
+                    return;
+                }
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + (mModel.getFax())));
                 startActivity(intent);
             }

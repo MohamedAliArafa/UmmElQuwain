@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +86,29 @@ public class JoinUsFragment extends Fragment implements View.OnClickListener, Jo
         mBackToolbarBtn.setOnClickListener(this);
         mSubmitBtn.setOnClickListener(this);
         mAttachBtn.setOnClickListener(this);
+        mPhoneEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!charSequence.toString().startsWith("0"))
+                {
+                    mPhoneEditText.setBackgroundResource(R.drawable.bg_trans_holo_red);
+                    phoneBool = false;
+                }else {
+                    mPhoneEditText.setBackgroundResource(R.drawable.bg_trans_holo_white);
+                    phoneBool = true;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         mGesture = new GestureDetector(getActivity(),
                 new SwipeToDismissHelper(getFragmentManager()));
         mProvider = new JoinUsProvider(getContext(), this, getFragmentManager());

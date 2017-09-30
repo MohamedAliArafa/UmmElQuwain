@@ -32,12 +32,12 @@ import static com.a700apps.ummelquwain.utilities.Constants.PROGRAM_FRAGMENT_KEY;
  * Created by mohamed.arafa on 9/10/2017.
  */
 
-public class ProgramsPresenter implements ProgramsContract.UserAction, LifecycleObserver {
+public class ProgramsPresenter implements ProgramsContract.UserAction, LifecycleObserver, Callback<ProgramsModel> {
     private final Player mPlayer;
     private Context mContext;
     private ProgramsContract.ModelView mView;
     private FragmentManager mFragmentManager;
-    private Call<ProgramsModel> mStationsCall;
+    private Call<ProgramsModel> mProgramCall;
     private RealmResults<ProgramResultModel> mModel;
     private Realm mRealm;
 
@@ -49,27 +49,29 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         mPlayer = MyApplication.get(mContext).getPlayer();
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     @Override
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getData() {
         mView.showProgress();
         mRealm = Realm.getDefaultInstance();
         RealmResults<ProgramResultModel> query = mRealm.where(ProgramResultModel.class).findAll().sort("programID");
+        mModel = query;
         if (query.isLoaded() && !query.isEmpty()) {
-            mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);
         }
-        mStationsCall = MyApplication.get(mContext).getApiService()
-                .getAllPrograms(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), MyApplication.get(mContext).getUser()));
-        mStationsCall.enqueue(new Callback<ProgramsModel>() {
+        String user = MyApplication.get(mContext).getUser();
+        String deviceId = MyApplication.get(mContext).getDeviceID();
+        if (user.equals("-1"))
+            user = deviceId;
+        mProgramCall = MyApplication.get(mContext).getApiService()
+                .getAllPrograms(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), user));
+        mProgramCall.enqueue(new Callback<ProgramsModel>() {
             @Override
             public void onResponse(@NonNull Call<ProgramsModel> call, @NonNull Response<ProgramsModel> response) {
                 try {
                     Utility.addProgramsToRealm(response.body().getResult(),
-                            () -> mModel.addChangeListener(stationResultModels -> {
-                                mView.updateUI(mModel);
-                            }));
+                            () -> mModel.addChangeListener(stationResultModels -> mView.updateUI(mModel)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -114,29 +116,30 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
             mView.hideProgress();
             mView.updateUI(mModel);
         }
-        mStationsCall = MyApplication.get(mContext).getApiService()
+        mProgramCall = MyApplication.get(mContext).getApiService()
                 .searchPrograms(new SearchRequestModel(keyword, MyApplication.get(mContext).getUser(), MyApplication.get(mContext).getLanguage()));
-        mStationsCall.enqueue(new Callback<ProgramsModel>() {
-            @Override
-            public void onResponse(@NonNull Call<ProgramsModel> call, @NonNull Response<ProgramsModel> response) {
-                try {
-                    Utility.addProgramsToRealm(response.body().getResult(),
-                            () -> mModel.addChangeListener(stationResultModels -> {
-                                mView.updateUI(mModel);
-                            }));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        mProgramCall.enqueue(this);
+    }
 
-                mView.hideProgress();
-            }
+    @Override
+    public void onResponse(Call<ProgramsModel> call, Response<ProgramsModel> response) {
+        try {
+            Utility.addProgramsToRealm(response.body().getResult(),
+                    () -> mModel.addChangeListener(stationResultModels -> {
+                        mView.updateUI(mModel);
+                    }));
+        } catch (Exception e) {
+            mView.showProgress();
+            mProgramCall.enqueue(this);
+            e.printStackTrace();
+        }
+        mView.hideProgress();
+    }
 
-            @Override
-            public void onFailure(@NonNull Call<ProgramsModel> call, @NonNull Throwable t) {
-                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
-                mView.hideProgress();
-            }
-        });
+    @Override
+    public void onFailure(Call<ProgramsModel> call, Throwable t) {
+        Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+        t.printStackTrace();
+        mView.hideProgress();
     }
 }

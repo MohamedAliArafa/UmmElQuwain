@@ -130,7 +130,7 @@
     <string name="toast_service_stop" translatable="false">Service Stop</string>
     <string name="toast_start" translatable="false">start</string>
     <string name="toast_thanks_for_comment">Thanks for Your Comment</string>
-    <string name="toast_thanks_for_your_contribution">"Thanks for your contacting with us "</string>
+    <string name="toast_thanks_for_your_contribution">Thanks for your contacting with us</string>
     <string name="toast_twitter_login_error">Twitter Email Login error</string>
     <string name="title_from_to">From: %s \t To: %s</string>
     <string name="toast_login_success">Logged In Successfully</string>

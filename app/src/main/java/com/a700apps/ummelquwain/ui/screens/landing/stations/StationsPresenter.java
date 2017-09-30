@@ -60,7 +60,6 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getData() {
         mView.showProgress();
-
         mRealm = Realm.getDefaultInstance();
         RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class).findAll();
         mModel = query;
@@ -80,12 +79,11 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
                 mView.hideProgress();
                 try {
                     Utility.addStationsToRealm(response.body().getResult(),
-                            () -> mModel.addChangeListener(stationResultModels -> {
-                        mView.updateUI(mModel);
-                    }));
+                            () -> mModel.addChangeListener(stationResultModels -> mView.updateUI(mModel)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                mView.hideProgress();
             }
 
             @Override

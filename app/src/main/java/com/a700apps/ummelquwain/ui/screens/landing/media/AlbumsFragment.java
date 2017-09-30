@@ -1,8 +1,6 @@
 package com.a700apps.ummelquwain.ui.screens.landing.media;
 
 
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,7 +29,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AlbumsFragment extends Fragment implements AlbumsContract.ModelView, LifecycleRegistryOwner, View.OnClickListener {
+public class AlbumsFragment extends Fragment implements AlbumsContract.ModelView, View.OnClickListener {
 
     LandingFragment mLandingFragment;
 
@@ -49,7 +47,6 @@ public class AlbumsFragment extends Fragment implements AlbumsContract.ModelView
 
     AlbumsAdapter mAdapter;
     AlbumsPresenter mPresenter;
-    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
     public AlbumsFragment() {
         // Required empty public constructor
@@ -122,11 +119,6 @@ public class AlbumsFragment extends Fragment implements AlbumsContract.ModelView
                     break;
             }
         });
-    }
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return mLifecycleRegistry;
     }
 
     @Override

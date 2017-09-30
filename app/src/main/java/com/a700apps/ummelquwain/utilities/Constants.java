@@ -16,6 +16,7 @@ public class Constants {
     public final static int REQUEST_READ_PHONE_PERMISSION = 1310;
     public final static int REQUEST_READ_CALENDER_PERMISSION = 1311;
     public static final int REQUEST_READ_STORAGE_PERMISSION = 1312;
+    public static final int REQUEST_PHONE_CALL_PERMISSION = 1313;
 
     public final static String POSITION_KEY = "position_list";
     public final static String LOGIN_FRAGMENT_KEY = "login_fragment_key";

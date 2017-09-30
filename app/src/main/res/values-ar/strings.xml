@@ -29,7 +29,7 @@
     <string name="mock_2015">جميع الحقوق محفوظة لدائرة الحكومة الإلكترونية 2015</string>
     <string name="mock_location_on_map">المكان على الخريطة</string>
 
-    <string name="no_internet">لا يوجد إتصال</string>
+    <string name="no_internet">لايوجد اتصال بالأنترنت يرجى المحاولة فى وقت لاحق</string>
 
     <string name="read_more">إقرأ المزيد</string>
 

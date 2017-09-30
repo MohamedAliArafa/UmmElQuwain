@@ -63,7 +63,7 @@ public class StationProgramsAdapter extends RecyclerView.Adapter<StationPrograms
         ProgramResultModel model = mList.get(position);
         holder.mNameTextView.setText(model.getProgramName());
         holder.mCategoryTextView.setText(model.getProgramImage());
-        holder.itemView.setOnClickListener(view -> mPresenter.openProgram(model));
+//        holder.itemView.setOnClickListener(view -> mPresenter.openProgram(model));
     }
 
     @Override

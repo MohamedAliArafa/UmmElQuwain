@@ -73,10 +73,7 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
     List<Integer> supplierIcons =
             Arrays.asList(R.drawable.ic_stations, R.drawable.ic_fav, R.drawable.ic_program,
                     R.drawable.ic_media, R.drawable.ic_more);
-    List<Fragment> supplierFragments =
-            Arrays.asList(StationsFragment.newInstance(), FavFragment.newInstance(),
-                    ProgramsFragment.newInstance(), AlbumsFragment.newInstance(),
-                    MoreFragment.newInstance());
+    List<Fragment> supplierFragments;
     StationResultModel mStationModel;
     ProgramResultModel mProgramModel;
     boolean changed = false;
@@ -97,6 +94,15 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(POSITION_KEY, mPosition);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (supplierFragments == null)
+            supplierFragments = Arrays.asList(StationsFragment.newInstance(), FavFragment.newInstance(),
+                            ProgramsFragment.newInstance(), AlbumsFragment.newInstance(),
+                            MoreFragment.newInstance());
     }
 
     @Override

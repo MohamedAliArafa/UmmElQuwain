@@ -1,8 +1,6 @@
 package com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.videos;
 
 
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -27,9 +25,8 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VideosFragment extends Fragment implements LifecycleRegistryOwner, MediaContract.ModelView {
+public class VideosFragment extends Fragment implements MediaContract.ModelView {
 
-    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     MediaContract.UserAction mPresenter;
 
     @BindView(R.id.tv_album_desc)
@@ -69,11 +66,6 @@ public class VideosFragment extends Fragment implements LifecycleRegistryOwner, 
         mRecycler.setAdapter(mAdapter);
         mAlbumDescTextView.setText(mAlbumDesc);
         return view;
-    }
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return mLifecycleRegistry;
     }
 
     @Override

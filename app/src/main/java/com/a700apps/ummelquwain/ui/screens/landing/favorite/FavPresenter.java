@@ -81,8 +81,10 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         mRealm = Realm.getDefaultInstance();
         RealmResults<StationResultModel> model = mRealm.where(StationResultModel.class).findAll();
         playing = false;
+        getStationData();
+        getSponsorData();
         model.addChangeListener(stationResultModels -> {
-            getStationData();
+//            getStationData();
             for (StationResultModel station : model) {
                 if (station.isPlaying()) {
                     ((LandingFragment) mView.getParentFragment()).showPlayer(station);
@@ -92,12 +94,12 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         });
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     @Override
     public void getStationData() {
         mView.showProgress();
         mRealm = Realm.getDefaultInstance();
-        RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class).equalTo("isFavourite", 1).findAll();
+        RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class)
+                .equalTo("isFavourite", 1).findAll();
         mStationModel = query;
         if (query.isLoaded() && !query.isEmpty()) {
             mView.hideProgress();
@@ -133,7 +135,6 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         });
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     @Override
     public void getSponsorData() {
         mView.showProgress();

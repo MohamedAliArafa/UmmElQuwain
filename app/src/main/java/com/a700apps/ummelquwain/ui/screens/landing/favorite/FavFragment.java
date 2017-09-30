@@ -1,7 +1,6 @@
 package com.a700apps.ummelquwain.ui.screens.landing.favorite;
 
 import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.RealmResults;
 
-public class FavFragment extends Fragment implements FavContract.ModelView, LifecycleRegistryOwner{
+public class FavFragment extends Fragment implements FavContract.ModelView{
 
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
@@ -89,11 +88,6 @@ public class FavFragment extends Fragment implements FavContract.ModelView, Life
     @Override
     public void hideProgress() {
         mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return mLifecycleRegistry;
     }
 
 }

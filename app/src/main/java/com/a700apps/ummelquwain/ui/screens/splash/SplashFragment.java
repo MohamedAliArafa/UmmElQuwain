@@ -1,7 +1,5 @@
 package com.a700apps.ummelquwain.ui.screens.splash;
 
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -17,11 +15,10 @@ import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
  * Created by mohamed.arafa on 9/5/2017.
  */
 
-public class SplashFragment extends Fragment implements SplashContract.ModelView, LifecycleRegistryOwner {
+public class SplashFragment extends Fragment implements SplashContract.ModelView {
 
     private static final long SPLASH_DISPLAY_LENGTH = 3000;
     SplashPresenter splashPresenter;
-    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
 
     public SplashFragment() {
@@ -62,10 +59,5 @@ public class SplashFragment extends Fragment implements SplashContract.ModelView
         if (mRunnable != null) {
             mHandler.removeCallbacks(mRunnable);
         }
-    }
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return mLifecycleRegistry;
     }
 }

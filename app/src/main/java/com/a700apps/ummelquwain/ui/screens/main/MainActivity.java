@@ -34,6 +34,7 @@ import io.fabric.sdk.android.Fabric;
 
 import static com.a700apps.ummelquwain.utilities.Constants.LANDING_FRAGMENT_KEY;
 import static com.a700apps.ummelquwain.utilities.Constants.LOGIN_FRAGMENT_KEY;
+import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_PHONE_CALL_PERMISSION;
 import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_CALENDER_PERMISSION;
 import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_PHONE_PERMISSION;
 import static com.a700apps.ummelquwain.utilities.Constants.REQUEST_READ_STORAGE_PERMISSION;
@@ -185,6 +186,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
                 break;
             }
             case REQUEST_READ_STORAGE_PERMISSION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    Toast.makeText(this, R.string.toast_main_activity_permission_allow, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            case REQUEST_PHONE_CALL_PERMISSION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
