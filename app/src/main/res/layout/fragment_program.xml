@@ -41,7 +41,7 @@
         android:id="@+id/rl_toolbar_container"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@drawable/bg_trans_gradiant_white"
+        android:background="@drawable/gradiant_bar"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -138,6 +138,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="24dp"
             android:layout_marginTop="8dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -146,9 +147,9 @@
         <View
             android:id="@+id/view_list_indicator"
             android:layout_width="3dp"
-            android:visibility="gone"
             android:layout_height="@dimen/logo_dimension_small"
             android:background="@color/colorAccent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

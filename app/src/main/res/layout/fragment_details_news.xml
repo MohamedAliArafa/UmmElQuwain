@@ -167,7 +167,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="@color/colorPrimary"
-        android:text="Share"
+        android:text="@string/title_share"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -92,50 +92,70 @@ public class ContactUsPresenter implements ContactUsContract.UserAction, Lifecyc
 
     @Override
     public void showFacebook() {
-        if (mModel != null && mModel.getFacebookUrl() != null) {
-            Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getFacebookUrl()));
-            mContext.startActivity(in);
-        } else {
-            Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
+        try {
+            if (mModel != null && mModel.getFacebookUrl() != null) {
+                Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getFacebookUrl()));
+                mContext.startActivity(in);
+            } else {
+                Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void showTwitter() {
-        if (mModel != null && mModel.getTwitterUrl() != null) {
-            Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getTwitterUrl()));
-            mContext.startActivity(in);
-        } else {
-            Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
+        try {
+            if (mModel != null && mModel.getTwitterUrl() != null) {
+                Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getTwitterUrl()));
+                mContext.startActivity(in);
+            } else {
+                Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void showInstagram() {
-        if (mModel != null && mModel.getInstagramUrl() != null) {
-            Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getInstagramUrl()));
-            mContext.startActivity(in);
-        } else {
-            Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
+        try {
+            if (mModel != null && mModel.getInstagramUrl() != null) {
+                Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getInstagramUrl()));
+                mContext.startActivity(in);
+            } else {
+                Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void showLinkedIn() {
-        if (mModel != null && mModel.getWebsiteLink() != null) {
-            Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getWebsiteLink()));
-            mContext.startActivity(in);
-        } else {
-            Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
+        try {
+            if (mModel != null && mModel.getLinkedInUrl() != null) {
+                Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(mModel.getLinkedInUrl()));
+                mContext.startActivity(in);
+            } else {
+                Toast.makeText(mContext.getApplicationContext(), R.string.error_open, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void openMap() {
-        if (mModel != null) {
-            String uri = "geo:" + mModel.getLatitude() + "," + mModel.getLongtiude();
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            mContext.startActivity(intent);
+        try {
+            if (mModel != null) {
+                String uri = "geo:" + mModel.getLatitude() + "," + mModel.getLongtiude();
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                mContext.startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

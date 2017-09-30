@@ -164,10 +164,10 @@ public class MyApplication extends Application {
                 mRealm.commitTransaction();
                 break;
         }
-        mRealm.executeTransaction(realm -> {
-            realm.delete(StationResultModel.class);
-            realm.delete(ProgramResultModel.class);
-        });
+//        mRealm.executeTransaction(realm -> {
+//            realm.delete(StationResultModel.class);
+//            realm.delete(ProgramResultModel.class);
+//        });
     }
 
     @Override

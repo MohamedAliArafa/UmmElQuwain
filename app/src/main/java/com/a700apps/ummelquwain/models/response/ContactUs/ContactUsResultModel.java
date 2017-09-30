@@ -49,6 +49,12 @@ public class ContactUsResultModel extends RealmObject{
     @SerializedName("language")
     @Expose
     private Integer language;
+    @SerializedName("LinkedInUrl")
+    @Expose
+    private String linkedInUrl;
+    @SerializedName("YouTubeUrl")
+    @Expose
+    private String youTubeUrl;
 
     public Integer getContactUsID() {
         return contactUsID;
@@ -144,5 +150,29 @@ public class ContactUsResultModel extends RealmObject{
 
     public void setLanguage(Integer language) {
         this.language = language;
+    }
+
+    public String geteMail() {
+        return eMail;
+    }
+
+    public void seteMail(String eMail) {
+        this.eMail = eMail;
+    }
+
+    public String getLinkedInUrl() {
+        return linkedInUrl;
+    }
+
+    public void setLinkedInUrl(String linkedInUrl) {
+        this.linkedInUrl = linkedInUrl;
+    }
+
+    public String getYouTubeUrl() {
+        return youTubeUrl;
+    }
+
+    public void setYouTubeUrl(String youTubeUrl) {
+        this.youTubeUrl = youTubeUrl;
     }
 }

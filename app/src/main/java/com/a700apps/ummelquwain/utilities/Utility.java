@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.CalendarContract;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -71,12 +72,33 @@ public class Utility {
     }
 
     public static String getRealPathFromURIPath(Uri contentURI, Activity activity) {
-        Cursor cursor = activity.getContentResolver().query(contentURI, null, null, null, null);
+        final String docId = DocumentsContract.getDocumentId(contentURI);
+        final String[] split = docId.split(":");
+        final String type = split[0];
+
+        Uri contentUri = null;
+        if ("image".equals(type)) {
+            contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        } else if ("video".equals(type)) {
+            contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        } else if ("audio".equals(type)) {
+            contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        }
+
+        Cursor cursor = activity.getContentResolver().query(contentUri, null, null, null, null);
+
         if (cursor == null) {
-            return contentURI.getPath();
+            return contentUri.getPath();
         } else {
             cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            int idx = 0;
+            if ("image".equals(type)) {
+                idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            } else if ("video".equals(type)) {
+                idx = cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA);
+            } else if ("audio".equals(type)) {
+                idx = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA);
+            }
             return cursor.getString(idx);
         }
     }

@@ -41,7 +41,7 @@
         android:id="@+id/rl_toolbar_container"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@drawable/bg_trans_gradiant_white"
+        android:background="@drawable/gradiant_bar"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
