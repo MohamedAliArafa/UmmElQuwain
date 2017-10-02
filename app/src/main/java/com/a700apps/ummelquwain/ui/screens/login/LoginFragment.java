@@ -110,7 +110,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                 ft.addToBackStack(LANDING_FRAGMENT_KEY);
                                 ft.commit();
                             } else {
-                                getFragmentManager().popBackStack();
+                                try {
+                                    getFragmentManager().popBackStack();
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
                                 fragment.moveToHome();
                             }
                         }

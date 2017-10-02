@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.program.ProgramScheduleResultModel;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,6 @@ import butterknife.ButterKnife;
 public class ProgramScheduleAdapter extends RecyclerView.Adapter<ProgramScheduleAdapter.MyViewHolder> {
 
     private final Context mContext;
-    private final Picasso mPicasso;
     private final FragmentManager mFragmentManager;
     private List<ProgramScheduleResultModel> mList = new ArrayList<>();
     private int mLayout;
@@ -49,7 +46,6 @@ public class ProgramScheduleAdapter extends RecyclerView.Adapter<ProgramSchedule
         mContext = context;
         mList = list;
         mLayout = layout;
-        mPicasso = ((MyApplication) mContext.getApplicationContext()).getPicasso();
         mFragmentManager = fragmentManager;
     }
 

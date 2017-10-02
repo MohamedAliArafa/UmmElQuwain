@@ -13,11 +13,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.AboutUs.AboutUsResultModel;
 import com.a700apps.ummelquwain.utilities.SwipeToDismissHelper;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +49,6 @@ public class AboutUsFragment extends Fragment implements
 
     @BindView(R.id.tv_mission)
     TextView mMission;
-    private Picasso mPicasso;
 
     public AboutUsFragment() {
         // Required empty public constructor
@@ -71,7 +70,6 @@ public class AboutUsFragment extends Fragment implements
     void setupView(View view) {
         mPresenter = new AboutUsPresenter(this, getContext(), getLifecycle());
         ButterKnife.bind(this, view);
-        mPicasso = MyApplication.get(getContext()).getPicasso();
         mBackToolbarBtn.setOnClickListener(this);
         mGesture = new GestureDetector(getActivity(),
                 new SwipeToDismissHelper(getFragmentManager()));
@@ -98,12 +96,16 @@ public class AboutUsFragment extends Fragment implements
     }
 
     @Override
-    public void updateUI(AboutUsResultModel mModel) {
-        mMangerMessage.setText(mModel.getUBNManagerWord());
-        mMangerName.setText(mModel.getMangerName());
-        mVision.setText(mModel.getVision());
-        mMission.setText(mModel.getMission());
-        mPicasso.load(mModel.getUBNManagerImage()).into(mMangerImage);
+    public void updateUI(AboutUsResultModel model) {
+        mMangerMessage.setText(model.getUBNManagerWord());
+        mMangerName.setText(model.getMangerName());
+        mVision.setText(model.getVision());
+        mMission.setText(model.getMission());
+        GlideApp.with(this)
+                .load(model.getUBNManagerImage())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(mMangerImage);
     }
 
     @Override

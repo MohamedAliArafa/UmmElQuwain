@@ -13,6 +13,7 @@ import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.Albums.MediaResultModel;
 import com.a700apps.ummelquwain.utilities.ViewPagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,14 +51,19 @@ public class ImageDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     public void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());
+        List<Fragment> fragmentList = new ArrayList<>();
+        List<String> fragmentTitleList = new ArrayList<>();
         for (int i = 0; i < mMedia.size(); i++) {
             Bundle b = new Bundle();
             b.putParcelable("media", mMedia.get(i));
             ImagePagerFragment fragment = new ImagePagerFragment();
             fragment.setArguments(b);
-            adapter.addFragment(fragment, "Fragment" + i);
+            fragmentList.add(fragment);
+            fragmentTitleList.add(String.valueOf(mMedia.get(i).getMediaID()));
         }
+        adapter.addFragments(fragmentList, fragmentTitleList);
+
 //        mPageIndicatorView.setViewPager(mViewPager);
 //        mPageIndicatorView.setInteractiveAnimation(true);
 //        mPageIndicatorView.setAnimationType(AnimationType.WORM);

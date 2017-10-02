@@ -1,8 +1,6 @@
 package com.a700apps.ummelquwain.ui.screens.landing.stations;
 
 
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,10 +26,9 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StationsFragment extends Fragment implements StationsContract.ModelView,
-        LifecycleRegistryOwner {
+public class StationsFragment extends Fragment implements StationsContract.ModelView {
 
-    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
+//    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     @BindView(R.id.recycler_stations)
     RecyclerView mRecycler;
 
@@ -114,10 +111,10 @@ public class StationsFragment extends Fragment implements StationsContract.Model
 
 
 
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return mLifecycleRegistry;
-    }
+//    @Override
+//    public LifecycleRegistry getLifecycle() {
+//        return mLifecycleRegistry;
+//    }
 
     @Override
     public void updateUI(RealmResults<StationResultModel> models) {

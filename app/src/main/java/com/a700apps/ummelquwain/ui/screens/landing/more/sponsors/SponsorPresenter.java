@@ -60,6 +60,7 @@ public class SponsorPresenter implements SponsorsContract.UserAction, LifecycleO
             @Override
             public void onFailure(@NonNull Call<SponsorModel> call, @NonNull Throwable t) {
                 Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+                Log.d(this.getClass().getSimpleName(), "Internet Fail");
 
                 t.printStackTrace();
                 mView.hideProgress();

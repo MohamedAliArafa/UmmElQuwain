@@ -14,10 +14,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.NewsBar.NewsBarResultModel;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +48,6 @@ public class NewsDetailsFragment extends Fragment implements NewsDetailContract.
     TextView mDescTextView;
 
     NewsDetailPresenter mPresenter;
-    Picasso mPicasso;
 
     @BindView(R.id.iv_back_image)
     ImageView mNewsImageView;
@@ -71,7 +70,6 @@ public class NewsDetailsFragment extends Fragment implements NewsDetailContract.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPicasso = ((MyApplication) getContext().getApplicationContext()).getPicasso();
         mPresenter = new NewsDetailPresenter(this, getContext(), getLifecycle(), mNewsID);
     }
 
@@ -97,7 +95,11 @@ public class NewsDetailsFragment extends Fragment implements NewsDetailContract.
         mTimeTextView.setText(model.getNewsTime());
         mDateTextView.setText(model.getNewsDate());
         mDescTextView.setText(model.getNewsDescription());
-        mPicasso.load(model.getNewsImage()).into(mNewsImageView);
+        GlideApp.with(this)
+                .load(model.getNewsImage())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(mNewsImageView);
         mShareButton.setOnClickListener(view -> mPresenter.shareNews(model));
     }
 

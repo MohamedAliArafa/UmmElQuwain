@@ -14,14 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.info.StationInfoFragment;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.details.schedule.StationScheduleFragment;
 import com.a700apps.ummelquwain.utilities.ViewPagerAdapter;
 import com.booking.rtlviewpager.RtlViewPager;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,8 +63,6 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
     @BindView(R.id.tv_station_desc)
     TextView mStationDescTextView;
 
-    private Picasso mPicasso;
-
     private Context mContext;
 
     StationPresenter mPresenter;
@@ -95,7 +93,6 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPicasso = MyApplication.get(getContext()).getPicasso();
         mPresenter = new StationPresenter(getContext(), mStationID, getFragmentManager(), this, getLifecycle());
         mRealm = Realm.getDefaultInstance();
     }
@@ -116,8 +113,17 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
         mStationCategoryTextView.setText(model.getCategoryName());
         mStationCurrentProgramTextView.setText(model.getCurrentProgramName());
         mStationDescTextView.setText(model.getStationInfo());
-        mPicasso.load(model.getStationLogo()).into(mStationLogoImageView);
-        mPicasso.load(model.getStationImage()).into(mStationBackImageView);
+        GlideApp.with(this)
+                .load(model.getStationLogo())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(mStationLogoImageView);
+
+        GlideApp.with(this)
+                .load(model.getStationImage())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(mStationBackImageView);
         supplierFragments = Arrays.asList(StationInfoFragment.newInstance(model),
                 StationScheduleFragment.newInstance(model));
         mPlayBtn.setOnClickListener(view -> mPresenter.playStream());
@@ -158,9 +164,9 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
     @Override
     public void setupViewPager() {
         if (!isAdded()) return;
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        for (int i = 0; i < supplierFragments.size(); i++)
-            adapter.addFragment(supplierFragments.get(i), getString(supplierNames.get(i)));
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());
+//        for (int i = 0; i < supplierFragments.size(); i++)
+            adapter.addFragmentsResources(supplierFragments, supplierNames);
         mViewPager.setAdapter(adapter);
     }
 

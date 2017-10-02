@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.Sponsors.SponsorResultModel;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,6 @@ public class SponsorAdapter extends RecyclerView.Adapter<SponsorAdapter.MyViewHo
     private List<SponsorResultModel> mList = new ArrayList<>();
     private int mLayout;
     private Context mContext;
-    private Picasso mPicasso;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.iv_logo)
@@ -43,7 +42,6 @@ public class SponsorAdapter extends RecyclerView.Adapter<SponsorAdapter.MyViewHo
         mList = list;
         mLayout = layout;
         mContext = context;
-        mPicasso = MyApplication.get(mContext).getPicasso();
     }
 
     public void updateData(List<SponsorResultModel> list) {
@@ -60,7 +58,11 @@ public class SponsorAdapter extends RecyclerView.Adapter<SponsorAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        mPicasso.load(mList.get(position).getSponserImage()).into(holder.mLogo);
+        GlideApp.with(holder.itemView)
+                .load(mList.get(position).getSponserImage())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(holder.mLogo);
     }
 
     @Override

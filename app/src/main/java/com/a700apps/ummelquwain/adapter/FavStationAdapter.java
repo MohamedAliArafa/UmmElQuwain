@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.ui.screens.landing.favorite.FavContract;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,9 +27,7 @@ import io.realm.RealmResults;
 public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultModel, FavStationAdapter.MyViewHolder> {
 
     private RealmResults<StationResultModel> mList;
-    private int mLayout;
     private FavContract.UserAction mPresenter;
-    private Picasso mPicasso;
     private Context mContext;
     private Realm mRealm;
 
@@ -70,7 +68,6 @@ public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultMod
         mList = list;
         mPresenter = presenter;
         mContext = context;
-        mPicasso = ((MyApplication) context.getApplicationContext()).getPicasso();
         mRealm = Realm.getDefaultInstance();
     }
 
@@ -101,8 +98,11 @@ public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultMod
             holder.mLiveOnTextView.setTextColor(mContext.getResources().getColor(R.color.statusColor));
             holder.mProgramTextView.setTextColor(mContext.getResources().getColor(R.color.statusColor));
         }
-
-        mPicasso.load(model.getStationLogo()).into(holder.mThumpImageView);
+        GlideApp.with(mContext)
+                .load(model.getStationLogo())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(holder.mThumpImageView);
         try {
             holder.mLikeImageView.setImageDrawable(mContext.getResources()
                     .getDrawable(model.getIsFavourite() == 1 ?

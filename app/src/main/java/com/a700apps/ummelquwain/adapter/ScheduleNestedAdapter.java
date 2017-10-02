@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.response.Station.Schedule.ScheduleModel;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,6 @@ public class ScheduleNestedAdapter extends RecyclerView.Adapter<ScheduleNestedAd
     private final Context mContext;
     private List<ScheduleModel> mList = new ArrayList<>();
     private int mLayout;
-    Picasso mPicasso;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -50,7 +47,6 @@ public class ScheduleNestedAdapter extends RecyclerView.Adapter<ScheduleNestedAd
             if (!scheduleModel.getSchedule().isEmpty())
                 mList.add(scheduleModel);
         mLayout = layout;
-        mPicasso = ((MyApplication) context.getApplicationContext()).getPicasso();
     }
 
     public void updateData(List<ScheduleModel> list) {

@@ -21,7 +21,7 @@ public class StationResultModel  extends RealmObject implements Parcelable{
     @PrimaryKey
     @SerializedName("StationID")
     @Expose
-    private Integer stationID;
+    private int stationID;
     @SerializedName("CategoryName")
     @Expose
     private String categoryName;
@@ -45,10 +45,10 @@ public class StationResultModel  extends RealmObject implements Parcelable{
     private String stationFrequency;
     @SerializedName("IsLive")
     @Expose
-    private Boolean isLive;
+    private boolean isLive;
     @SerializedName("IsVideo")
     @Expose
-    private Boolean isVideo;
+    private boolean isVideo;
     @SerializedName("StreamLink")
     @Expose
     private String streamLink;
@@ -72,7 +72,7 @@ public class StationResultModel  extends RealmObject implements Parcelable{
     private String currentProgramName;
     @SerializedName("IsFavourite")
     @Expose
-    private Integer isFavourite;
+    private int isFavourite;
 
     private boolean Playing;
 
@@ -81,7 +81,7 @@ public class StationResultModel  extends RealmObject implements Parcelable{
     private String stationLanguage;
     @SerializedName("language")
     @Expose
-    private Integer language;
+    private int language;
     @SerializedName("UserID")
     @Expose
     private String userID;
@@ -95,19 +95,19 @@ public class StationResultModel  extends RealmObject implements Parcelable{
     @Expose
     private RealmList<ScheduleModel> schedule;
 
-    public Boolean getLive() {
+    public boolean getLive() {
         return isLive;
     }
 
-    public void setLive(Boolean live) {
+    public void setLive(boolean live) {
         isLive = live;
     }
 
-    public Boolean getVideo() {
+    public boolean getVideo() {
         return isVideo;
     }
 
-    public void setVideo(Boolean video) {
+    public void setVideo(boolean video) {
         isVideo = video;
     }
 
@@ -127,11 +127,11 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.programs = programs;
     }
 
-    public Integer getStationID() {
+    public int getStationID() {
         return stationID;
     }
 
-    public void setStationID(Integer stationID) {
+    public void setStationID(int stationID) {
         this.stationID = stationID;
     }
 
@@ -191,19 +191,19 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.stationFrequency = stationFrequency;
     }
 
-    public Boolean getIsLive() {
+    public boolean getIsLive() {
         return isLive;
     }
 
-    public void setIsLive(Boolean isLive) {
+    public void setIsLive(boolean isLive) {
         this.isLive = isLive;
     }
 
-    public Boolean getIsVideo() {
+    public boolean getIsVideo() {
         return isVideo;
     }
 
-    public void setIsVideo(Boolean isVideo) {
+    public void setIsVideo(boolean isVideo) {
         this.isVideo = isVideo;
     }
 
@@ -263,11 +263,11 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.currentProgramName = currentProgramName;
     }
 
-    public Integer getIsFavourite() {
+    public int getIsFavourite() {
         return isFavourite;
     }
 
-    public void setIsFavourite(Integer isFavourite) {
+    public void setIsFavourite(int isFavourite) {
         this.isFavourite = isFavourite;
     }
 
@@ -287,11 +287,11 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.stationLanguage = stationLanguage;
     }
 
-    public Integer getLanguage() {
+    public int getLanguage() {
         return language;
     }
 
-    public void setLanguage(Integer language) {
+    public void setLanguage(int language) {
         this.language = language;
     }
 
@@ -355,7 +355,7 @@ public class StationResultModel  extends RealmObject implements Parcelable{
     }
 
     protected StationResultModel(Parcel in) {
-        this.stationID = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.stationID = (int) in.readValue(int.class.getClassLoader());
         this.categoryName = in.readString();
         this.stationName = in.readString();
         this.stationInfo = in.readString();
@@ -363,8 +363,8 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.stationLogo = in.readString();
         this.stationImage = in.readString();
         this.stationFrequency = in.readString();
-        this.isLive = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.isVideo = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.isLive = (boolean) in.readValue(boolean.class.getClassLoader());
+        this.isVideo = (boolean) in.readValue(boolean.class.getClassLoader());
         this.streamLink = in.readString();
         this.whiteLabelURL = in.readString();
         this.uRLPLS = in.readString();
@@ -372,10 +372,10 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.facebookLink = in.readString();
         this.twitterLink = in.readString();
         this.currentProgramName = in.readString();
-        this.isFavourite = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.isFavourite = (int) in.readValue(int.class.getClassLoader());
         this.stationLanguage = in.readString();
-        this.language = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.userID = (String) in.readValue(Integer.class.getClassLoader());
+        this.language = (int) in.readValue(int.class.getClassLoader());
+        this.userID = (String) in.readValue(int.class.getClassLoader());
         this.keyword = in.readString();
     }
 

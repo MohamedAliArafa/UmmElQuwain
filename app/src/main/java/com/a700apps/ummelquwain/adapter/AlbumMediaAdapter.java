@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.Albums.MediaResultModel;
 import com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.MediaContract;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,6 @@ public class AlbumMediaAdapter extends RecyclerView.Adapter<AlbumMediaAdapter.My
     private List<MediaResultModel> mList = new ArrayList<>();
     private int mLayout;
     private MediaContract.UserAction mPresenter;
-    Picasso mPicasso;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_album_title)
@@ -49,7 +48,6 @@ public class AlbumMediaAdapter extends RecyclerView.Adapter<AlbumMediaAdapter.My
         mList = list;
         mLayout = layout;
         mPresenter = presenter;
-        mPicasso = ((MyApplication) context.getApplicationContext()).getPicasso();
     }
 
     public void updateData(List<MediaResultModel> list) {
@@ -68,7 +66,11 @@ public class AlbumMediaAdapter extends RecyclerView.Adapter<AlbumMediaAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         MediaResultModel model = mList.get(position);
         holder.mTitleTextView.setText(model.getDescription());
-        mPicasso.load(model.getVideoThumb()).into(holder.mThumpImageView);
+        GlideApp.with(holder.itemView)
+                .load(model.getVideoThumb())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(holder.mThumpImageView);
         holder.itemView.setOnClickListener(view -> mPresenter.openDetails(mList, position));
     }
 

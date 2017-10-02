@@ -116,10 +116,10 @@ public class StationPlayerService extends Service {
             mPlayer.reset();
             try {
                 mPlayer.setDataSource(mModel.getStreamLink());
+                mPlayer.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            mPlayer.prepareAsync();
             isPreparing = true;
         } else {
             mPlayer.pause();
@@ -247,7 +247,6 @@ public class StationPlayerService extends Service {
         mNotification.icon = R.drawable.logo;
         mNotification.contentIntent = pendingIntent;
         mPicasso.load(stationImage).into(mRemoteViews, R.id.status_bar_album_art, Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
-
         startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
     }
 

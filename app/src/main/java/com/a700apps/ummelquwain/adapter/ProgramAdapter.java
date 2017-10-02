@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.ui.screens.landing.programs.ProgramsContract;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,6 @@ public class ProgramAdapter extends RealmRecyclerViewAdapter<ProgramResultModel,
     private List<ProgramResultModel> mList = new ArrayList<>();
     private int mLayout;
     private ProgramsContract.UserAction mPresenter;
-    private Picasso mPicasso;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_program_name)
@@ -65,7 +64,6 @@ public class ProgramAdapter extends RealmRecyclerViewAdapter<ProgramResultModel,
         mList = list;
         mLayout = layout;
         mPresenter = presenter;
-        mPicasso = ((MyApplication) context.getApplicationContext()).getPicasso();
     }
 
     public void updateData(RealmResults<ProgramResultModel> list) {
@@ -86,7 +84,11 @@ public class ProgramAdapter extends RealmRecyclerViewAdapter<ProgramResultModel,
         holder.mTitleTextView.setText(model.getProgramName());
         holder.mCategoryTextView.setText(model.getCategorName());
         holder.mProgramTextView.setText(model.getProgramDescription());
-        mPicasso.load(model.getProgramLogo()).into(holder.mThumpImageView);
+        GlideApp.with(mContext)
+                .load(model.getProgramLogo())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(holder.mThumpImageView);
         holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model.getProgramID()));
         holder.mPlayImageView.setImageDrawable(mContext.getResources()
                 .getDrawable(model.isPlaying() ?

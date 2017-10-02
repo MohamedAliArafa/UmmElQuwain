@@ -68,9 +68,9 @@ public class AlbumFragment extends Fragment implements AlbumContract.ModelView, 
 
     @Override
     public void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        for (int i = 0; i < supplierFragments.size(); i++)
-            adapter.addFragment(supplierFragments.get(i), getString(supplierNames.get(i)));
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());
+//        for (int i = 0; i < supplierFragments.size(); i++)
+            adapter.addFragmentsResources(supplierFragments, supplierNames);
         mViewPager.setAdapter(adapter);
     }
 

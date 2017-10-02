@@ -7,12 +7,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.FavouriteRequestModel;
-import com.a700apps.ummelquwain.models.request.SearchRequestModel;
 import com.a700apps.ummelquwain.models.request.StationsRequestModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageModel;
 import com.a700apps.ummelquwain.models.response.Message.MessageResultModel;
@@ -37,7 +37,7 @@ import static com.a700apps.ummelquwain.utilities.Constants.PROGRAM_FRAGMENT_KEY;
  * Created by mohamed.arafa on 8/24/2017.
  */
 
-public class StationsPresenter implements StationsContract.UserAction, LifecycleObserver {
+public class StationsPresenter implements StationsContract.UserAction, LifecycleObserver, Callback<StationsModel> {
     private Context mContext;
     private StationsFragment mView;
     private FragmentManager mFragmentManager;
@@ -90,6 +90,7 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
             public void onFailure(@NonNull Call<StationsModel> call, @NonNull Throwable t) {
                 t.printStackTrace();
                 Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+                Log.d(this.getClass().getSimpleName(), "Internet Fail");
                 mView.hideProgress();
             }
         });
@@ -142,34 +143,6 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
             ((MainActivity) mView.getActivity()).requestReadPermission();
             return;
         }
-        mStationsCall = MyApplication.get(mContext).getApiService()
-                .searchStations(new SearchRequestModel(keyword, user, MyApplication.get(mContext).getLanguage()));
-        mStationsCall.enqueue(new Callback<StationsModel>() {
-            @Override
-            public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
-//                mModel = response.body().getResult();
-                mView.hideProgress();
-                try {
-                    try {
-                        Utility.addStationsToRealm(response.body().getResult(),
-                                () -> mModel.addChangeListener(stationResultModels -> {
-                                    mView.updateUI(mModel);
-                                }));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<StationsModel> call, @NonNull Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
-                mView.hideProgress();
-            }
-        });
     }
 
     private int favStatus;
@@ -221,5 +194,24 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     public void openLogin() {
         mFragmentManager.beginTransaction().replace(R.id.fragment_container, new LoginFragment(), "login_fragment")
                 .addToBackStack(null).commit();
+    }
+
+    @Override
+    public void onResponse(Call<StationsModel> call, Response<StationsModel> response) {
+        try {
+            Utility.addStationsToRealm(response.body().getResult(),
+                    () -> mModel.addChangeListener(stationResultModels -> mView.updateUI(mModel)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mView.hideProgress();
+    }
+
+    @Override
+    public void onFailure(Call<StationsModel> call, Throwable t) {
+        t.printStackTrace();
+        Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+        Log.d(this.getClass().getSimpleName(), "Internet Fail");
+        mView.hideProgress();
     }
 }

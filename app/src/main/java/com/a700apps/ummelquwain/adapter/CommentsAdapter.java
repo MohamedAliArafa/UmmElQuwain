@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.program.ProgramUserCommentResultModel;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,6 @@ import butterknife.ButterKnife;
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyViewHolder> {
 
     private final Context mContext;
-    private final Picasso mPicasso;
     private List<ProgramUserCommentResultModel> mList = new ArrayList<>();
     private int mLayout;
 
@@ -50,7 +49,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
         mContext = context;
         mList = list;
         mLayout = layout;
-        mPicasso = ((MyApplication) mContext.getApplicationContext()).getPicasso();
     }
 
     public void updateData(List<ProgramUserCommentResultModel> list) {
@@ -68,7 +66,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         ProgramUserCommentResultModel model = mList.get(position);
-        mPicasso.load(model.getUserImage()).into(holder.mUserImageView);
+        GlideApp.with(holder.itemView)
+                .load(model.getUserImage())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(holder.mUserImageView);
         holder.mUserTextView.setText(model.getUserName());
         holder.mCommentTextView.setText(model.getCommentText());
     }

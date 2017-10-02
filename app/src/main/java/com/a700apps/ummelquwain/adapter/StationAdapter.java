@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.Station.StationResultModel;
 import com.a700apps.ummelquwain.ui.screens.landing.stations.StationsContract;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +28,6 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
 
     private RealmResults<StationResultModel> mList;
     private StationsContract.UserAction mPresenter;
-    private Picasso mPicasso;
     private Context mContext;
     private Realm mRealm;
 
@@ -68,7 +67,6 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
         mList = list;
         mPresenter = presenter;
         mContext = context;
-        mPicasso = ((MyApplication) context.getApplicationContext()).getPicasso();
         mRealm = Realm.getDefaultInstance();
     }
 
@@ -90,13 +88,19 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
         holder.mTitleTextView.setText(model.getStationName());
         holder.mCategoryTextView.setText(model.getCategoryName());
         holder.mProgramTextView.setText(model.getCurrentProgramName());
-        mPicasso.load(model.getStationLogo()).into(holder.mThumpImageView);
+        if (model.getStationLogo() != null) {
+            GlideApp.with(mContext)
+                    .load(model.getStationLogo())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerInside()
+                    .into(holder.mThumpImageView);
+        }
         try {
-            if (model.getIsLive()){
+            if (model.getIsLive()) {
                 holder.mLiveOnTextView.setText(R.string.header_live);
                 holder.mLiveOnTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
                 holder.mProgramTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
-            }else {
+            } else {
                 holder.mLiveOnTextView.setTextColor(mContext.getResources().getColor(R.color.statusColor));
                 holder.mProgramTextView.setTextColor(mContext.getResources().getColor(R.color.statusColor));
             }

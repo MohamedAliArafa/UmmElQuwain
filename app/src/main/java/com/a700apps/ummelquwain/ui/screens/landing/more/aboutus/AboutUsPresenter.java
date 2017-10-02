@@ -71,7 +71,7 @@ public class AboutUsPresenter implements AboutUsContract.UserAction, LifecycleOb
 
                 t.printStackTrace();
                 Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
-
+                Log.d(this.getClass().getSimpleName(), "Internet Fail");
                 mView.hideProgress();
             }
         });

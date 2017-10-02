@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
@@ -29,7 +30,6 @@ import com.a700apps.ummelquwain.ui.screens.landing.stations.details.StationFragm
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
 import com.a700apps.ummelquwain.ui.screens.main.MainActivity;
 import com.a700apps.ummelquwain.utilities.Constants;
-import com.a700apps.ummelquwain.utilities.Utility;
 
 import java.util.List;
 
@@ -81,8 +81,8 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         mRealm = Realm.getDefaultInstance();
         RealmResults<StationResultModel> model = mRealm.where(StationResultModel.class).findAll();
         playing = false;
-        getStationData();
-        getSponsorData();
+//        getStationData();
+//        getSponsorData();
         model.addChangeListener(stationResultModels -> {
 //            getStationData();
             for (StationResultModel station : model) {
@@ -95,13 +95,14 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
     }
 
     @Override
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getStationData() {
         mView.showProgress();
         mRealm = Realm.getDefaultInstance();
         RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class)
                 .equalTo("isFavourite", 1).findAll();
         mStationModel = query;
-        if (query.isLoaded() && !query.isEmpty()) {
+        if (query.isLoaded()) {
             mView.hideProgress();
             mView.updateFavUI(mStationModel);
         }
@@ -111,21 +112,13 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
             @Override
             public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
                 mView.hideProgress();
-                try {
-                    Utility.addStationsToRealm(response.body().getResult(),
-                            () -> mStationModel.addChangeListener(stationResultModels -> {
-                                mView.updateFavUI(mStationModel);
-                            }));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
             }
 
             @Override
             public void onFailure(@NonNull Call<StationsModel> call, @NonNull Throwable t) {
                 t.printStackTrace();
                 Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+                Log.d(this.getClass().getSimpleName(), "Internet Fail");
                 mView.hideProgress();
             }
         });
@@ -136,11 +129,12 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
     }
 
     @Override
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void getSponsorData() {
         mView.showProgress();
         mRealm = Realm.getDefaultInstance();
         RealmResults<SponsorResultModel> query = mRealm.where(SponsorResultModel.class).findAll();
-        if (query.isLoaded() && !query.isEmpty()) {
+        if (query.isLoaded()) {
             mSponsorModel = query;
             mView.hideProgress();
             mView.updateSponsorUI(mSponsorModel);
@@ -154,7 +148,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
                     mSponsorModel = response.body().getResult();
 
                     mRealm.beginTransaction();
-                    mRealm.copyToRealmOrUpdate(mStationModel);
+                    mRealm.copyToRealmOrUpdate(mSponsorModel);
                     mRealm.commitTransaction();
 
                     mView.updateSponsorUI(mSponsorModel);
@@ -167,7 +161,6 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
 
             @Override
             public void onFailure(@NonNull Call<SponsorModel> call, @NonNull Throwable t) {
-
                 t.printStackTrace();
                 mView.hideProgress();
             }

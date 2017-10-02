@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.Albums.MediaResultModel;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -41,7 +41,6 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
 
     Fragment mediaVideoFragment;
 
-    Picasso mPicasso;
     private static final int RECOVERY_DIALOG_REQUEST = 1;
     YouTubePlayerSupportFragment mYouTubePlayerFragment;
 
@@ -64,7 +63,6 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMedia = getArguments().getParcelable("media");
-        mPicasso = MyApplication.get(getContext()).getPicasso();
     }
 
     @Override
@@ -74,8 +72,10 @@ public class VideoPagerFragment extends Fragment implements VideosDetailContract
         View view = inflater.inflate(R.layout.fragment_video_pager, container, false);
         ButterKnife.bind(this, view);
         mYouTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
-        mPicasso.load(mMedia.getVideoThumb()
-                .replace("http://108.179.204.213:8093/UploadedImages/", ""))
+        GlideApp.with(view)
+                .load(mMedia.getVideoThumb())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
                 .into(mMediaVideoImageView);
         mMediaDescTextView.setText(mMedia.getDescription());
         return view;

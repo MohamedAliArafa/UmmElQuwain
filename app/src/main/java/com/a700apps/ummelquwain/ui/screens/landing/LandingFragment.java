@@ -101,8 +101,8 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
         super.onResume();
         if (supplierFragments == null)
             supplierFragments = Arrays.asList(StationsFragment.newInstance(), FavFragment.newInstance(),
-                            ProgramsFragment.newInstance(), AlbumsFragment.newInstance(),
-                            MoreFragment.newInstance());
+                    ProgramsFragment.newInstance(), AlbumsFragment.newInstance(),
+                    MoreFragment.newInstance());
     }
 
     @Override
@@ -146,9 +146,10 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
 
     @Override
     public void setupViewPager() {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        for (int i = 0; i < supplierFragments.size(); i++)
-            adapter.addFragment(supplierFragments.get(i), getString(supplierNames.get(i)));
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());
+//        for (int i = 0; i < supplierFragments.size(); i++)
+        adapter.addFragmentsResources(supplierFragments, supplierNames);
+//            adapter.addFragment(supplierFragments.get(i), getString(supplierNames.get(i)));
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -201,7 +202,7 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
     public void showPlayer(StationResultModel model) {
         changed = false;
         if (mStationModel != null)
-            if (model.getStationID().equals(mStationModel.getStationID()))
+            if (model.getStationID() == mStationModel.getStationID())
                 changed = true;
         mStationModel = model;
         if (isAdded())

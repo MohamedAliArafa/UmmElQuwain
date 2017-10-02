@@ -26,6 +26,9 @@ import com.a700apps.ummelquwain.ui.screens.landing.LandingFragment;
 import com.a700apps.ummelquwain.ui.screens.login.LoginFragment;
 import com.a700apps.ummelquwain.ui.screens.splash.SplashFragment;
 import com.crashlytics.android.Crashlytics;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
 
 import java.util.UUID;
 
@@ -58,6 +61,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(
+                getString(R.string.com_twitter_sdk_android_CONSUMER_KEY),
+                getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET));
+        TwitterConfig.Builder builder=new TwitterConfig.Builder(this);
+        builder.twitterAuthConfig(authConfig);
+        Twitter.initialize(builder.build());
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
         FragmentManager fragmentManager = getSupportFragmentManager();

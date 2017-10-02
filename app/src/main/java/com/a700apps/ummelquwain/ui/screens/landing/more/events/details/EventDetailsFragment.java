@@ -19,12 +19,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
+import com.a700apps.ummelquwain.dagger.Application.module.GlideApp;
 import com.a700apps.ummelquwain.models.response.Events.EventResultModel;
 import com.a700apps.ummelquwain.ui.screens.landing.more.events.EventsContract;
 import com.a700apps.ummelquwain.ui.screens.landing.more.events.EventsPresenter;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -64,7 +64,6 @@ public class EventDetailsFragment extends Fragment implements EventDetailContrac
 
     LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     EventsPresenter mPresenter;
-    private Picasso mPicasso;
 
     public EventDetailsFragment() {
         // Required empty public constructor
@@ -77,7 +76,6 @@ public class EventDetailsFragment extends Fragment implements EventDetailContrac
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_details_event, container, false);
         mPresenter = new EventsPresenter(getContext(), this, getFragmentManager(), getLifecycle());
-        mPicasso = MyApplication.get(getContext()).getPicasso();
         ButterKnife.bind(this, view);
         mBackToolbarBtn.setOnClickListener(this);
         mShareBtn.setOnClickListener(this);
@@ -99,8 +97,11 @@ public class EventDetailsFragment extends Fragment implements EventDetailContrac
         mEventDateTextView.setText(formattedDate);
         mEventLocationTextView.setText(model.getEventPlace());
         mEventDescTextView.setText(model.getEventDescription());
-        mPicasso.load(model.getEventImage()).resize(1024, 820)
-                .onlyScaleDown().into(mEventImageView);
+        GlideApp.with(this)
+                .load(model.getEventImage())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerInside()
+                .into(mEventImageView);
         hideProgress();
     }
 

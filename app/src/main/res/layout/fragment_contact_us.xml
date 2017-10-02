@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/bg_secondary" />
+        app:srcCompat="@drawable/bg_secondary_colored" />
 
     <RelativeLayout
         android:id="@+id/rl_toolbar_container"
@@ -160,7 +160,7 @@
             android:layout_height="35dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_face_unactive" />
+            app:srcCompat="@drawable/ic_face_active" />
 
         <ImageView
             android:id="@+id/iv_twitter"
@@ -168,7 +168,7 @@
             android:layout_height="35dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_tiwteer_unactive" />
+            app:srcCompat="@drawable/ic_tiwteer_active" />
 
         <ImageView
             android:id="@+id/iv_insta"
@@ -176,7 +176,7 @@
             android:layout_height="35dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_instgram_unactive" />
+            app:srcCompat="@drawable/ic_instgram_active" />
 
         <ImageView
             android:id="@+id/iv_linked_in"
@@ -184,7 +184,7 @@
             android:layout_height="35dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/ic_linked_in_unactive" />
+            app:srcCompat="@drawable/ic_linked_in_active" />
     </LinearLayout>
 
     <ProgressBar

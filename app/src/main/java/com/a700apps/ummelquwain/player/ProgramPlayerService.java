@@ -155,31 +155,32 @@ public class ProgramPlayerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
-            try {
-                mPlayer.setDataSource(mModel.getAudioProgramLink());
-                mPlayer.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (intent != null)
+            if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
+                try {
+                    mPlayer.setDataSource(mModel.getAudioProgramLink());
+                    mPlayer.prepareAsync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(this.getApplicationContext(), "Service Started", Toast.LENGTH_SHORT).show();
+            } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
+                Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
+            } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
+                preparePlayer(mModel);
+            } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
+                Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
+            } else if (intent.getAction().equals(
+                    Constants.ACTION.STOPFOREGROUND_ACTION)) {
+                Log.i(LOG_TAG, getString(R.string.toast_foreground_recived));
+                mPlayer.reset();
+                mRealm.beginTransaction();
+                if (mModel != null)
+                    mModel.setPlaying(false);
+                mRealm.commitTransaction();
+                stopForeground(true);
+                stopSelf();
             }
-            Toast.makeText(this.getApplicationContext(), "Service Started", Toast.LENGTH_SHORT).show();
-        } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
-        } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-            preparePlayer(mModel);
-        } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
-        } else if (intent.getAction().equals(
-                Constants.ACTION.STOPFOREGROUND_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_foreground_recived));
-            mPlayer.reset();
-            mRealm.beginTransaction();
-            if (mModel != null)
-                mModel.setPlaying(false);
-            mRealm.commitTransaction();
-            stopForeground(true);
-            stopSelf();
-        }
         return START_STICKY;
     }
 

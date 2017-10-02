@@ -107,33 +107,37 @@
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginStart="0dp"
-        android:orientation="horizontal"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/btn_share"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
-            android:layout_marginEnd="5dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@color/blueish"
+            android:background="@color/colorPrimaryDark"
+            android:drawableStart="@drawable/ic_share_no_boarder"
             android:selectAllOnFocus="false"
             android:text="@string/title_share"
             android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/btn_add_calender"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="@dimen/button_height"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@color/blueish"
+            android:background="@color/colorPrimaryDark"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_calender"
+            android:padding="5dp"
             android:text="@string/btn_mark_my_calender"
             android:textColor="@android:color/white" />
     </LinearLayout>

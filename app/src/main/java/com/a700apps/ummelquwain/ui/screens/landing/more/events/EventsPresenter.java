@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
@@ -71,7 +72,7 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
             @Override
             public void onFailure(@NonNull Call<EventsModel> call, @NonNull Throwable t) {
                 Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
-
+                Log.d(this.getClass().getSimpleName(), "Internet Fail");
                 t.printStackTrace();
                 mView.hideProgress();
             }

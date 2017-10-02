@@ -6,18 +6,19 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
 import com.a700apps.ummelquwain.models.request.LanguageRequestModel;
-import com.a700apps.ummelquwain.models.request.SearchRequestModel;
 import com.a700apps.ummelquwain.models.response.Albums.AlbumResultModel;
 import com.a700apps.ummelquwain.models.response.Albums.AlbumsModel;
 import com.a700apps.ummelquwain.ui.screens.landing.media.albums.AlbumFragment;
 
 import java.util.List;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import retrofit2.Call;
@@ -80,7 +81,7 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
 
                 t.printStackTrace();
                 Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
-
+                Log.d(this.getClass().getSimpleName(), "Internet Fail");
                 mView.hideProgress();
             }
         });
@@ -97,36 +98,13 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
         mView.showProgress();
 
         mRealm = Realm.getDefaultInstance();
-        RealmResults<AlbumResultModel> query = mRealm.where(AlbumResultModel.class).findAll();
+        RealmResults<AlbumResultModel> query = mRealm.where(AlbumResultModel.class)
+                .contains("albumName", keyword, Case.INSENSITIVE)
+                .findAll();
         if (query.isLoaded()) {
             mModel = query;
             mView.hideProgress();
             mView.updateUI(mModel);
         }
-        mAlbumsCall = MyApplication.get(mContext).getApiService()
-                .searchAlbums(new SearchRequestModel(keyword, MyApplication.get(mContext).getUser(), MyApplication.get(mContext).getLanguage()));
-        mAlbumsCall.enqueue(new Callback<AlbumsModel>() {
-            @Override
-            public void onResponse(@NonNull Call<AlbumsModel> call, @NonNull Response<AlbumsModel> response) {
-                try {
-                    mModel = response.body().getResult();
-                    mRealm.beginTransaction();
-                    mRealm.copyToRealmOrUpdate(mModel);
-                    mRealm.commitTransaction();
-
-                    mView.updateUI(mModel);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mView.hideProgress();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<AlbumsModel> call, @NonNull Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
-                mView.hideProgress();
-            }
-        });
     }
 }

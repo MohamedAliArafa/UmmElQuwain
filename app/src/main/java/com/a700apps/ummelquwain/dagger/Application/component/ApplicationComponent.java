@@ -1,8 +1,8 @@
 package com.a700apps.ummelquwain.dagger.Application.component;
 
 import com.a700apps.ummelquwain.dagger.Application.module.ApiServiceModule;
-import com.a700apps.ummelquwain.dagger.Application.scope.ApplicationScope;
 import com.a700apps.ummelquwain.dagger.Application.module.PicassoModule;
+import com.a700apps.ummelquwain.dagger.Application.scope.ApplicationScope;
 import com.a700apps.ummelquwain.service.ApiService;
 import com.squareup.picasso.Picasso;
 

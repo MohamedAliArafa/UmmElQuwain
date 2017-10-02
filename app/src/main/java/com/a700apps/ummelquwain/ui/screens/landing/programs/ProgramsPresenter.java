@@ -4,14 +4,12 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
 import com.a700apps.ummelquwain.R;
-import com.a700apps.ummelquwain.models.request.SearchRequestModel;
 import com.a700apps.ummelquwain.models.request.StationsRequestModel;
 import com.a700apps.ummelquwain.models.response.program.ProgramResultModel;
 import com.a700apps.ummelquwain.models.response.program.ProgramsModel;
@@ -66,24 +64,7 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
             user = deviceId;
         mProgramCall = MyApplication.get(mContext).getApiService()
                 .getAllPrograms(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), user));
-        mProgramCall.enqueue(new Callback<ProgramsModel>() {
-            @Override
-            public void onResponse(@NonNull Call<ProgramsModel> call, @NonNull Response<ProgramsModel> response) {
-                try {
-                    Utility.addProgramsToRealm(response.body().getResult(),
-                            () -> mModel.addChangeListener(stationResultModels -> mView.updateUI(mModel)));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mView.hideProgress();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ProgramsModel> call, @NonNull Throwable t) {
-                t.printStackTrace();
-                mView.hideProgress();
-            }
-        });
+        mProgramCall.enqueue(this);
     }
 
     @Override
@@ -116,9 +97,6 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
             mView.hideProgress();
             mView.updateUI(mModel);
         }
-        mProgramCall = MyApplication.get(mContext).getApiService()
-                .searchPrograms(new SearchRequestModel(keyword, MyApplication.get(mContext).getUser(), MyApplication.get(mContext).getLanguage()));
-        mProgramCall.enqueue(this);
     }
 
     @Override
@@ -130,7 +108,6 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
                     }));
         } catch (Exception e) {
             mView.showProgress();
-            mProgramCall.enqueue(this);
             e.printStackTrace();
         }
         mView.hideProgress();
