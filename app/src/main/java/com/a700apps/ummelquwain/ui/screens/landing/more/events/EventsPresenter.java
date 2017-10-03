@@ -124,7 +124,6 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
             e.printStackTrace();
         }
         intent.putExtra("allDay", true);
-        intent.putExtra("rrule", "FREQ=YEARLY");
         intent.putExtra("title", model.getEventName());
         mContext.startActivity(intent);
     }

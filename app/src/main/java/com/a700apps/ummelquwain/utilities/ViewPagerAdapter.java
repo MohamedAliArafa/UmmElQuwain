@@ -39,12 +39,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public void addFragments(List<Fragment> fragment, List<String> title) {
         mFragmentList = fragment;
         mFragmentTitleList = title;
+        notifyDataSetChanged();
     }
 
     public void addFragmentsResources(List<Fragment> fragment, List<Integer> title) {
         mFragmentList = fragment;
         for (int i = 0; i < title.size(); i++)
             mFragmentTitleList.add(mContext.getString(title.get(i)));
+        notifyDataSetChanged();
     }
 
     @Override

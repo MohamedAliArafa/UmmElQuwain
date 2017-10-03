@@ -135,4 +135,5 @@
     <string name="title_from_to">From: %s \t To: %s</string>
     <string name="toast_login_success">Logged In Successfully</string>
     <string name="title_calender">Calender</string>
+    <string name="title_pin">Pin</string>
 </resources>

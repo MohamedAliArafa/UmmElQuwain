@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,10 +49,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         TextView mDescTextView;
 
         @BindView(R.id.btn_event_share)
-        Button mEventShareButton;
+        FrameLayout mEventShareButton;
 
         @BindView(R.id.btn_event_calender)
-        Button mEventCalenderButton;
+        FrameLayout mEventCalenderButton;
 
         @BindView(R.id.iv_event_image)
         ImageView mEventImageView;

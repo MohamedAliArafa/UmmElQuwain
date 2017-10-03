@@ -90,5 +90,6 @@
     <string name="title_from_to">من: %s \t إلي: %s</string>
     <string name="toast_login_success">تم تسجيل الدخول بنجاح</string>
     <string name="title_calender">تقويم</string>
+    <string name="title_pin">إضافة</string>
 
 </resources>

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
 
-    android:background="@color/trans_white_20">
+    android:background="@color/colorPrimaryDark">
 
     <ImageView
         android:id="@+id/iv_event_image"
@@ -96,35 +96,70 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/iv_event_image">
 
-        <Button
+        <FrameLayout
             android:id="@+id/btn_event_share"
+            android:background="@drawable/bg_holo_white"
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_holo_white"
-            android:drawableStart="@drawable/ic_share_no_boarder"
-            android:selectAllOnFocus="false"
-            android:text="@string/title_share"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="10sp" />
+            android:layout_weight="1">
 
-        <Button
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_share_no_boarder"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_share"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/btn_event_calender"
+            android:background="@drawable/bg_holo_white"
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_margin="8dp"
-            android:layout_weight="2"
-            android:background="@drawable/bg_holo_white"
-            android:drawableStart="@drawable/ic_calender"
-            android:padding="5dp"
-            android:text="@string/btn_mark_my_calender"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="10sp" />
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_calender"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_pin"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <TextView

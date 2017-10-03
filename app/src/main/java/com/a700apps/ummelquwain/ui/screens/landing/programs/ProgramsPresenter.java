@@ -6,6 +6,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.a700apps.ummelquwain.MyApplication;
@@ -116,6 +117,7 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
     @Override
     public void onFailure(Call<ProgramsModel> call, Throwable t) {
         Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
+        Log.d(this.getClass().getSimpleName(), "Internet Fail");
         t.printStackTrace();
         mView.hideProgress();
     }
