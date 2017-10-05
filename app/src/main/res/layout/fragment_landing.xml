@@ -28,7 +28,6 @@
         android:id="@+id/cl_container"
         android:layout_width="0dp"
         android:layout_height="162dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -111,17 +110,19 @@
 
         <TextView
             android:id="@+id/tv_program_name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:text="NOW LIVE: long program name"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="NOW LIVE: long pdfsgdfsgsdfgsdfgsdfgsdfgsdfgsdfgdfgsdfgsdfgdfgsgdfgrogram name"
             android:textColor="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="@+id/iv_player_bg"
-            app:layout_constraintEnd_toEndOf="@+id/iv_player_bg"
-            app:layout_constraintStart_toStartOf="@+id/iv_player_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_station_name" />
 
 

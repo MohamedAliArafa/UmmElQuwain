@@ -65,16 +65,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_manager_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:background="@color/trans_white_50"
-                android:textAlignment="viewStart" />
-
             <ImageView
                 android:id="@+id/iv_manager_image"
                 android:layout_width="@dimen/logo_dimension"
@@ -95,6 +85,16 @@
                 android:layout_marginTop="8dp"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/tv_manager_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:background="@color/trans_white_50"
+                android:textAlignment="viewStart" />
 
             <TextView
                 android:layout_width="wrap_content"
