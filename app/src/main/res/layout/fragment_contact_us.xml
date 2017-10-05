@@ -10,11 +10,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clickable="true"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/bg_secondary_colored" />
@@ -160,6 +160,7 @@
             android:layout_height="35dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:tint="@android:color/white"
             app:srcCompat="@drawable/ic_face_active" />
 
         <ImageView
@@ -168,6 +169,7 @@
             android:layout_height="35dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:tint="@android:color/white"
             app:srcCompat="@drawable/ic_tiwteer_active" />
 
         <ImageView
@@ -176,6 +178,7 @@
             android:layout_height="35dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:tint="@android:color/white"
             app:srcCompat="@drawable/ic_instgram_active" />
 
         <ImageView
@@ -184,6 +187,7 @@
             android:layout_height="35dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:tint="@android:color/white"
             app:srcCompat="@drawable/ic_linked_in_active" />
     </LinearLayout>
 

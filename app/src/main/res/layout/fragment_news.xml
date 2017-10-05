@@ -6,7 +6,7 @@
     android:background="@drawable/bg_main"
     android:focusable="true"
     android:clickable="true"
-    tools:context="com.a700apps.ummelquwain.ui.screens.landing.more.news.NewsFragment">
+    tools:context="com.ubn.ummelquwain.ui.screens.landing.more.news.NewsFragment">
 
     <RelativeLayout
         android:id="@+id/rl_toolbar_container"

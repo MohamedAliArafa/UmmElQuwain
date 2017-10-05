@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.a700apps.ummelquwain.ui.screens.landing.stations.details.schedule.StationScheduleFragment">
+    tools:context="com.ubn.ummelquwain.ui.screens.landing.stations.details.schedule.StationScheduleFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_schedule_main"

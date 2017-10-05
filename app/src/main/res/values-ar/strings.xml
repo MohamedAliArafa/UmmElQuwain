@@ -19,7 +19,7 @@
     <string name="header_live">مباشر:</string>
     <string name="header_on">الأن:</string>
 
-    <string name="it_s_better_with_friends">إنة أفضل مع الأصدقاء...</string>
+    <string name="it_s_better_with_friends">إنة أفضل مع الأصدقاء…</string>
 
     <string name="log_in_to_enjoy_the_immense_experience">سجل الدخول للإستمتاع بتجربة هائلة</string>
 
@@ -40,12 +40,14 @@
     <string name="title_about_us">عن الشبكة</string>
     <string name="title_address">العنوان</string>
     <string name="title_albums">البومات</string>
+    <string name="title_calender">تقويم</string>
     <string name="title_comment">تعليقات</string>
     <string name="title_contact_us">إتصل بنا</string>
     <string name="title_email">البريد الإلكترونى</string>
     <string name="title_events">أحداث</string>
     <string name="title_favs">المفضلة</string>
     <string name="title_from">من:</string>
+    <string name="title_from_to">من: %s \t إلي: %s</string>
     <string name="title_images">الصور</string>
     <string name="title_info">معلومات</string>
     <string name="title_join_us">إنضم لنا</string>
@@ -58,6 +60,7 @@
     <string name="title_name">إسم</string>
     <string name="title_news">أخبار</string>
     <string name="title_phone">هاتف</string>
+    <string name="title_pin">إضافة</string>
     <string name="title_program_albums">ألبوم البرنامج</string>
     <string name="title_programs">برامج</string>
     <string name="title_schedule">جدول</string>
@@ -79,17 +82,15 @@
     <string name="toast_facebook_login_canceled">تسجيل الدخول تم إلغاؤه</string>
     <string name="toast_facebook_login_error">خطأ في تسجيل الدخول</string>
     <string name="toast_facebook_login_success">تم تسجيل الدخول بنجاح</string>
+    <string name="toast_login_success">تم تسجيل الدخول بنجاح</string>
     <string name="toast_main_activity_permission_allow">من فضل قم بإعطاء تصريح</string>
     <string name="toast_must_login">يجب عليك تسجيل الدخول</string>
     <string name="toast_please_upload_file">من فضلك قم برفع ملف</string>
     <string name="toast_prepared">جاهز</string>
-    <string name="toast_service_started">بدء الخدمة\\</string>
+    <string name="toast_service_started">بدء الخدمة</string>
     <string name="toast_thanks_for_comment">شكرا لتعليقك</string>
     <string name="toast_thanks_for_your_contribution">شكرا لمشاركتك</string>
     <string name="toast_twitter_login_error">خطأ في تسجيل الخزل</string>
-    <string name="title_from_to">من: %s \t إلي: %s</string>
-    <string name="toast_login_success">تم تسجيل الدخول بنجاح</string>
-    <string name="title_calender">تقويم</string>
-    <string name="title_pin">إضافة</string>
-
+    <string name="title_current_program">البرنامج الحالى</string>
+    <string name="title_now">الأن:</string>
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="com.a700apps.ummelquwain.ui.screens.landing.media.albums.media.images.details.ImagePagerFragment">
+    tools:context="com.ubn.ummelquwain.ui.screens.landing.media.albums.media.images.details.ImagePagerFragment">
 
 
     <ImageView
@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="200dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/image_list_box"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

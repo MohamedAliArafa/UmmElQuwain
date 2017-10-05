@@ -7,7 +7,7 @@
     tools:context=".ui.screens.landing.stations.StationsFragment">
 
 
-    <com.a700apps.ummelquwain.utilities.ClickableEditText
+    <com.ubn.ummelquwain.utilities.ClickableEditText
         android:id="@+id/et_search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -5,7 +5,7 @@
 
     <string name="app_name">UBN</string>
 
-    <string name="btn_mark_my_calender">Mark my calender</string>
+    <string name="btn_mark_my_calender">Mark Calender</string>
     <string name="btn_upload_mp3_or_video">Upload (mp3 or video)</string>
 
     <string name="cd_next" translatable="false">Skip forwards</string>
@@ -79,12 +79,15 @@
     <string name="title_about_us">About Us</string>
     <string name="title_address">Address</string>
     <string name="title_albums">Albums</string>
+    <string name="title_calender">Calender</string>
     <string name="title_comment">Comments</string>
     <string name="title_contact_us">Contact Us</string>
+    <string name="title_current_program">Current Program</string>
     <string name="title_email">Email</string>
     <string name="title_events">Events</string>
     <string name="title_favs">Favs</string>
     <string name="title_from">From:</string>
+    <string name="title_from_to">From: %s \t To: %s</string>
     <string name="title_images">Images</string>
     <string name="title_info">Info</string>
     <string name="title_join_us">Join Us</string>
@@ -96,7 +99,9 @@
     <string name="title_more">More</string>
     <string name="title_name">Name</string>
     <string name="title_news">News</string>
+    <string name="title_now">Now:</string>
     <string name="title_phone">Phone</string>
+    <string name="title_pin">Pin</string>
     <string name="title_program_albums">Program Albums</string>
     <string name="title_programs">Programs</string>
     <string name="title_schedule">Schedule</string>
@@ -121,6 +126,7 @@
     <string name="toast_facebook_login_error">Facebook Login error</string>
     <string name="toast_facebook_login_success">Facebook Login Success</string>
     <string name="toast_foreground_recived" translatable="false">Received Stop Foreground Intent</string>
+    <string name="toast_login_success">Logged In Successfully</string>
     <string name="toast_main_activity_permission_allow">Please Allow Permission</string>
     <string name="toast_must_login">You Must Login</string>
     <string name="toast_pause" translatable="false">pause</string>
@@ -132,8 +138,4 @@
     <string name="toast_thanks_for_comment">Thanks for Your Comment</string>
     <string name="toast_thanks_for_your_contribution">Thanks for your contacting with us</string>
     <string name="toast_twitter_login_error">Twitter Email Login error</string>
-    <string name="title_from_to">From: %s \t To: %s</string>
-    <string name="toast_login_success">Logged In Successfully</string>
-    <string name="title_calender">Calender</string>
-    <string name="title_pin">Pin</string>
 </resources>

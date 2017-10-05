@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/transColorPrimary"
-    tools:context="com.a700apps.ummelquwain.ui.screens.landing.more.news.details.NewsDetailsFragment">
+    tools:context="com.ubn.ummelquwain.ui.screens.landing.more.news.details.NewsDetailsFragment">
 
 
     <TextView

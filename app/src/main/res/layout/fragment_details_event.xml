@@ -6,7 +6,7 @@
     android:background="@drawable/bg_main"
     android:clickable="true"
     android:focusable="true"
-    tools:context="com.a700apps.ummelquwain.ui.screens.landing.more.events.details.EventDetailsFragment">
+    tools:context="com.ubn.ummelquwain.ui.screens.landing.more.events.details.EventDetailsFragment">
 
     <ImageView
         android:id="@+id/iv_event_image"
@@ -116,30 +116,70 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <FrameLayout
             android:id="@+id/btn_share"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
-            android:drawableStart="@drawable/ic_share_no_boarder"
-            android:selectAllOnFocus="false"
-            android:text="@string/title_share"
-            android:textColor="@android:color/white" />
+            android:background="@drawable/bg_holo_white">
 
-        <Button
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_share_no_boarder" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/title_share"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/btn_add_calender"
-            android:layout_width="200dp"
+            android:layout_width="120dp"
             android:layout_height="@dimen/button_height"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
-            android:drawablePadding="10dp"
-            android:drawableStart="@drawable/ic_calender"
-            android:padding="5dp"
-            android:text="@string/btn_mark_my_calender"
-            android:textColor="@android:color/white" />
+            android:background="@drawable/bg_holo_white">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_calender" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/title_pin"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <ScrollView

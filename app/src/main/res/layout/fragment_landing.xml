@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.a700apps.ummelquwain.ui.screens.main.MainActivity"
+    tools:context="com.ubn.ummelquwain.ui.screens.main.MainActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="25dp">
 

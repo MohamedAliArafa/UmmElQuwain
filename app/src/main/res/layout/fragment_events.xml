@@ -6,7 +6,7 @@
     android:background="@drawable/bg_event_page"
     android:clickable="true"
     android:focusable="true"
-    tools:context="com.a700apps.ummelquwain.ui.screens.landing.more.events.EventsFragment">
+    tools:context="com.ubn.ummelquwain.ui.screens.landing.more.events.EventsFragment">
 
     <ProgressBar
         android:id="@+id/progressBar"

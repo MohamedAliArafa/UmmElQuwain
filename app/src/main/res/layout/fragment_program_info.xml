@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.a700apps.ummelquwain.ui.screens.landing.programs.details.info.ProgramInfoFragment">
+    tools:context="com.ubn.ummelquwain.ui.screens.landing.programs.details.info.ProgramInfoFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
