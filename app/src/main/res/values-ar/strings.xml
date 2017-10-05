@@ -93,4 +93,5 @@
     <string name="toast_twitter_login_error">خطأ في تسجيل الخزل</string>
     <string name="title_current_program">البرنامج الحالى</string>
     <string name="title_now">الأن:</string>
+    <string name="desc_join_us">يمكنك الإنضمام إلينا بإرسال مشاركة صوتية أو مقطع فيديو</string>
 </resources>

@@ -62,7 +62,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/mock_an_hdhomerun_is_a_simple_tv"
+                android:text="@string/desc_join_us"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"

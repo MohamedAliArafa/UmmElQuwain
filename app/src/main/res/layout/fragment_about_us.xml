@@ -96,7 +96,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:background="@color/trans_white_50"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:textAlignment="viewStart" />
 
             <TextView
@@ -118,7 +118,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="7dp"
                 android:background="@color/trans_white_50"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:textAlignment="viewStart" />
 
             <TextView
@@ -141,7 +141,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="7dp"
                 android:background="@color/trans_white_50"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:textAlignment="viewStart" />
 
         </LinearLayout>

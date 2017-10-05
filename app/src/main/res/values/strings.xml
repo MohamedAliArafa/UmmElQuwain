@@ -138,4 +138,5 @@
     <string name="toast_thanks_for_comment">Thanks for Your Comment</string>
     <string name="toast_thanks_for_your_contribution">Thanks for your contacting with us</string>
     <string name="toast_twitter_login_error">Twitter Email Login error</string>
+    <string name="desc_join_us">You can join our community by sending us a Video or Audio contribution</string>
 </resources>

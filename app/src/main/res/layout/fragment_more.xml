@@ -28,7 +28,8 @@
             android:id="@+id/iv_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_contactus" />
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_contactus_colored" />
 
         <TextView
             android:id="@+id/tv_contact"
@@ -37,7 +38,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:text="@string/title_contact_us"
-            android:textColor="@color/gray" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/iv_contact_arrow"
@@ -65,7 +66,8 @@
             android:id="@+id/iv_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_events" />
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_events_colored" />
 
         <TextView
             android:id="@+id/tv_events"
@@ -74,7 +76,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:text="@string/title_events"
-            android:textColor="@color/gray" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/iv_events_arrow"
@@ -102,7 +104,8 @@
             android:id="@+id/iv_join"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_joinus" />
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_joinus_colored" />
 
         <TextView
             android:id="@+id/tv_join"
@@ -111,7 +114,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:text="@string/title_join_us"
-            android:textColor="@color/gray" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/iv_join_arrow"
@@ -140,7 +143,8 @@
             android:id="@+id/iv_sponsers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_sponser" />
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_sponser_colored" />
 
         <TextView
             android:id="@+id/tv_sponser"
@@ -149,7 +153,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:text="@string/title_sponsor"
-            android:textColor="@color/gray" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/iv_sponser_arrow"
@@ -177,7 +181,8 @@
             android:id="@+id/iv_news"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_news" />
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_news_colored" />
 
         <TextView
             android:id="@+id/tv_news"
@@ -186,7 +191,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:text="@string/title_news"
-            android:textColor="@color/gray" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/iv_news_arrow"
@@ -214,7 +219,7 @@
             android:id="@+id/iv_about"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_aboutus" />
+            app:srcCompat="@drawable/ic_aboutus_colored" />
 
         <TextView
             android:id="@+id/tv_about"
@@ -223,7 +228,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:text="@string/title_about_us"
-            android:textColor="@color/gray" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/iv_about_arrow"
@@ -251,7 +256,8 @@
             android:id="@+id/iv_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_languge" />
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_languge_colored" />
 
         <TextView
             android:id="@+id/tv_language"
@@ -261,7 +267,7 @@
             android:layout_weight="1"
             android:gravity="end"
             android:text="@string/title_language"
-            android:textColor="@color/gray" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/iv_setting_arrow"
@@ -289,7 +295,8 @@
             android:id="@+id/iv_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_logout" />
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_logout_colored" />
 
         <TextView
             android:id="@+id/tv_logout"
@@ -298,7 +305,7 @@
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:text="@string/title_log_out"
-            android:textColor="@color/gray" />
+            android:textColor="@color/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/iv_logout_arrow"
