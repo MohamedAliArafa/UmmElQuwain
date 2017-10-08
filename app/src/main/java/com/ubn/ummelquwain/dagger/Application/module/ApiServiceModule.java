@@ -31,6 +31,7 @@ public class ApiServiceModule {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .baseUrl("http://ubn.ae/api/")
+//                .baseUrl("http://23.236.154.106:8093/api/")
                 .build();
     }
 

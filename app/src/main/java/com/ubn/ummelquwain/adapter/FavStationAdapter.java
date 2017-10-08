@@ -5,14 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.favorite.FavContract;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +33,7 @@ public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultMod
     private FavContract.UserAction mPresenter;
     private Context mContext;
     private Realm mRealm;
+    RotateAnimation mRotateAnimation;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_station_name)
@@ -69,6 +73,13 @@ public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultMod
         mPresenter = presenter;
         mContext = context;
         mRealm = Realm.getDefaultInstance();
+        mRotateAnimation = new RotateAnimation(0, 360f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+
+        mRotateAnimation.setInterpolator(new LinearInterpolator());
+        mRotateAnimation.setDuration(500);
+        mRotateAnimation.setRepeatCount(Animation.INFINITE);
     }
 
     public void updateData(RealmResults<StationResultModel> list) {
@@ -107,10 +118,33 @@ public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultMod
             holder.mLikeImageView.setImageDrawable(mContext.getResources()
                     .getDrawable(model.getIsFavourite() == 1 ?
                             R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
-            holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
-                    R.drawable.ic_puss : R.drawable.ic_paly_liste));
-            holder.mIndicatorView.setVisibility(model.isPlaying() ?
-                    View.VISIBLE : View.GONE);
+            switch (model.isPlaying()){
+                case Paused:
+                    holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                    holder.mIndicatorView.setVisibility(View.GONE);
+                    mRotateAnimation.cancel();
+                    break;
+                case Playing:
+                    holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                    holder.mIndicatorView.setVisibility(View.VISIBLE);
+                    mRotateAnimation.cancel();
+                    break;
+                case Stopped:
+                    holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                    holder.mIndicatorView.setVisibility(View.GONE);
+                    mRotateAnimation.cancel();
+                    break;
+                case Buffering:
+                    holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                    holder.mIndicatorView.setVisibility(View.VISIBLE);
+                    holder.mPlayImageView.setAnimation(mRotateAnimation);
+                    break;
+            }
+
+//            holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
+//                    R.drawable.ic_puss : R.drawable.ic_paly_liste));
+//            holder.mIndicatorView.setVisibility(model.isPlaying() ?
+//                    View.VISIBLE : View.GONE);
             holder.mLikeImageView.setOnClickListener(view -> {
                 try {
                     //ToDo Fix Issue

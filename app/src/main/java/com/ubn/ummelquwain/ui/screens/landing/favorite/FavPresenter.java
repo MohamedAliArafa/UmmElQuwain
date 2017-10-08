@@ -85,7 +85,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         model.addChangeListener(stationResultModels -> {
 //            getStationData();
             for (StationResultModel station : model) {
-                if (station.isPlaying()) {
+                if (station.isPlaying() == StationResultModel.State.Playing) {
                     ((LandingFragment) mView.getParentFragment()).showPlayer(station);
                     playing = true;
                 }

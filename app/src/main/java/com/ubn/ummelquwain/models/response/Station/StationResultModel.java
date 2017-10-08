@@ -3,10 +3,10 @@ package com.ubn.ummelquwain.models.response.Station;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ubn.ummelquwain.models.response.Station.Schedule.ScheduleModel;
-import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ubn.ummelquwain.models.response.Station.Schedule.ScheduleModel;
+import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -16,7 +16,20 @@ import io.realm.annotations.PrimaryKey;
  * Created by mohamed.arafa on 9/5/2017.
  */
 
-public class StationResultModel  extends RealmObject implements Parcelable{
+public class StationResultModel extends RealmObject implements Parcelable {
+
+    // indicates the state our service:
+    public enum State {
+        Playing, // playback active (media player ready!). (but the media player may actually be
+        // playback stopped (media player NOT ready!!)
+        Stopped,
+        // paused in this state if we don't have audio focus. But we stay in this state
+        // so that we know we have to resume playback once we get focus back)
+        // playback paused (media player ready!)
+        Paused,
+        // Buffering
+        Buffering
+    }
 
     @PrimaryKey
     @SerializedName("StationID")
@@ -74,7 +87,7 @@ public class StationResultModel  extends RealmObject implements Parcelable{
     @Expose
     private int isFavourite;
 
-    private boolean Playing;
+    private String Playing;
 
     @SerializedName("StationLanguage")
     @Expose
@@ -271,12 +284,12 @@ public class StationResultModel  extends RealmObject implements Parcelable{
         this.isFavourite = isFavourite;
     }
 
-    public boolean isPlaying() {
-        return Playing;
+    public State isPlaying() {
+        return State.valueOf(Playing);
     }
 
-    public void setPlaying(boolean playing) {
-        Playing = playing;
+    public void setPlaying(State playing) {
+        Playing = playing.toString();
     }
 
     public String getStationLanguage() {

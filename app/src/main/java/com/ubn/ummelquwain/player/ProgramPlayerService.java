@@ -13,12 +13,12 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.ubn.ummelquwain.MyApplication;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
 import com.ubn.ummelquwain.ui.screens.main.MainActivity;
 import com.ubn.ummelquwain.utilities.Constants;
-import com.squareup.picasso.Picasso;
 
 import io.realm.Realm;
 
@@ -165,7 +165,10 @@ public class ProgramPlayerService extends Service {
             } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
                 Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
             } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-                preparePlayer(mModel);
+                int id = intent.getIntExtra("MODEL_ID", 0);
+                ProgramResultModel model = mRealm.where(ProgramResultModel.class).equalTo("programID", id).findFirst();
+                if (model != null)
+                    preparePlayer(model);
             } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
                 Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
             } else if (intent.getAction().equals(

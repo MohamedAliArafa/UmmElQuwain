@@ -1,8 +1,6 @@
 package com.ubn.ummelquwain.ui.screens.landing.stations.details;
 
 
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,17 +9,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.booking.rtlviewpager.RtlViewPager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.stations.details.info.StationInfoFragment;
 import com.ubn.ummelquwain.ui.screens.landing.stations.details.schedule.StationScheduleFragment;
 import com.ubn.ummelquwain.utilities.ViewPagerAdapter;
-import com.booking.rtlviewpager.RtlViewPager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +34,7 @@ import io.realm.Realm;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StationFragment extends Fragment implements StationContract.ModelView, LifecycleRegistryOwner, View.OnClickListener {
+public class StationFragment extends Fragment implements StationContract.ModelView, View.OnClickListener {
 
     @BindView(R.id.tl_details)
     TabLayout mTabLayout;
@@ -66,7 +67,6 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
     private Context mContext;
 
     StationPresenter mPresenter;
-    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
     List<Integer> supplierNames =
             Arrays.asList(R.string.title_info, R.string.title_schedule);
@@ -74,6 +74,7 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
 
     private static int mStationID;
     private Realm mRealm;
+    private RotateAnimation mRotateAnimation;
 
     public StationFragment() {
         // Required empty public constructor
@@ -95,6 +96,13 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
         super.onCreate(savedInstanceState);
         mPresenter = new StationPresenter(getContext(), mStationID, getFragmentManager(), this, getLifecycle());
         mRealm = Realm.getDefaultInstance();
+        mRotateAnimation = new RotateAnimation(0, 360f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+
+        mRotateAnimation.setInterpolator(new LinearInterpolator());
+        mRotateAnimation.setDuration(500);
+        mRotateAnimation.setRepeatCount(Animation.INFINITE);
     }
 
     @Override
@@ -109,30 +117,38 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
 
     @Override
     public void updateUI(StationResultModel model) {
+        if (!isAdded()) return;
         mStationNameTextView.setText(model.getStationName());
         mStationCategoryTextView.setText(model.getCategoryName());
         mStationCurrentProgramTextView.setText(model.getCurrentProgramName());
         mStationDescTextView.setText(model.getStationInfo());
-        GlideApp.with(this)
-                .load(model.getStationLogo())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .fitCenter()
-                .into(mStationLogoImageView);
-
-        GlideApp.with(this)
-                .load(model.getStationImage())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .fitCenter()
-                .into(mStationBackImageView);
         supplierFragments = Arrays.asList(StationInfoFragment.newInstance(model),
                 StationScheduleFragment.newInstance(model));
         mPlayBtn.setOnClickListener(view -> mPresenter.playStream());
         try {
             mStationCurrentProgramIsLiveTextView.setText(String.format("%s %s", mContext.getString(R.string.title_now), mContext.getString(R.string.title_current_program)));
-            mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
-                    R.drawable.ic_puss : R.drawable.ic_paly_liste));
-            mIndicatorView.setVisibility(model.isPlaying() ?
-                    View.VISIBLE : View.GONE);
+            switch (model.isPlaying()) {
+                case Paused:
+                    mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                    mIndicatorView.setVisibility(View.GONE);
+                    mRotateAnimation.cancel();
+                    break;
+                case Playing:
+                    mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                    mIndicatorView.setVisibility(View.VISIBLE);
+                    mRotateAnimation.cancel();
+                    break;
+                case Stopped:
+                    mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                    mIndicatorView.setVisibility(View.GONE);
+                    mRotateAnimation.cancel();
+                    break;
+                case Buffering:
+                    mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                    mIndicatorView.setVisibility(View.VISIBLE);
+                    mPlayBtn.startAnimation(mRotateAnimation);
+                    break;
+            }
             mLikeBtn.setImageDrawable(mContext.getResources()
                     .getDrawable(model.getIsFavourite() == 1 ?
                             R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
@@ -146,6 +162,18 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
                                     R.drawable.ic_favorite_liste_active : R.drawable.ic_favorite_liste_unactive));
                 });
             });
+
+            GlideApp.with(this)
+                    .load(model.getStationLogo())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .fitCenter()
+                    .into(mStationLogoImageView);
+
+            GlideApp.with(this)
+                    .load(model.getStationImage())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .fitCenter()
+                    .into(mStationBackImageView);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -166,7 +194,7 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
         if (!isAdded()) return;
         ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());
 //        for (int i = 0; i < supplierFragments.size(); i++)
-            adapter.addFragmentsResources(supplierFragments, supplierNames);
+        adapter.addFragmentsResources(supplierFragments, supplierNames);
         mViewPager.setAdapter(adapter);
     }
 
@@ -181,11 +209,6 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
             tab.setTextColor(getResources().getColorStateList(R.color.tab_colors_list_bright));
             mTabLayout.getTabAt(i).setCustomView(tab);
         }
-    }
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return mLifecycleRegistry;
     }
 
     @Override

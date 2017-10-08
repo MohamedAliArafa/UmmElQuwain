@@ -60,7 +60,7 @@ public class LandingProvider implements LifecycleObserver, LandingContract.UserA
         playing = false;
         mStationModel.addChangeListener(stationResultModels -> {
             for (StationResultModel station : mStationModel) {
-                if (station.isPlaying()) {
+                if (station.isPlaying() == StationResultModel.State.Playing || station.isPlaying() == StationResultModel.State.Buffering) {
                     mView.showPlayer(station);
                     playing = true;
                 }

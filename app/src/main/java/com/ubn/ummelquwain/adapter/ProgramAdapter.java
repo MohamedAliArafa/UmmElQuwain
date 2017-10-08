@@ -98,9 +98,7 @@ public class ProgramAdapter extends RealmRecyclerViewAdapter<ProgramResultModel,
         holder.itemView.setOnClickListener(view ->
                 mPresenter.openDetails(model.getProgramID())
         );
-        holder.mPlayImageView.setOnClickListener(view -> {
-                    mPresenter.playStream(model);
-                }
+        holder.mPlayImageView.setOnClickListener(view -> mPresenter.playStream(model)
         );
     }
 

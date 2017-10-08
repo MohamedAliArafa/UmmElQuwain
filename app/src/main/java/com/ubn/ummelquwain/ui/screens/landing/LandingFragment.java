@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -82,6 +84,7 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
     private int mPosition = 0;
     private Realm mRealm;
     private Context mContext;
+    private RotateAnimation mRotateAnimation;
 
     public LandingFragment() {
         // Required empty public constructor
@@ -112,6 +115,13 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
         setRetainInstance(true);
         mProvider = new LandingProvider(this, getContext(), getLifecycle());
         mRealm = MyApplication.get(getContext()).getRealm();
+        mRotateAnimation = new RotateAnimation(0, 360f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+
+        mRotateAnimation.setInterpolator(new LinearInterpolator());
+        mRotateAnimation.setDuration(500);
+        mRotateAnimation.setRepeatCount(Animation.INFINITE);
     }
 
     @Override
@@ -207,11 +217,27 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
             if (model.getStationID() == mStationModel.getStationID())
                 changed = true;
         mStationModel = model;
-        if (isAdded())
+        if (isAdded()) {
             mStationModel.addChangeListener(realmModel -> {
                 try {
-                    mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(mStationModel.isPlaying() ?
-                            R.drawable.ic_puss : R.drawable.ic_paly_liste));
+                    switch (mStationModel.isPlaying()) {
+                        case Paused:
+                            mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                            mRotateAnimation.cancel();
+                            break;
+                        case Playing:
+                            mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                            mRotateAnimation.cancel();
+                            break;
+                        case Stopped:
+                            mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                            mRotateAnimation.cancel();
+                            break;
+                        case Buffering:
+                            mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                            mPlayImageView.startAnimation(mRotateAnimation);
+                            break;
+                    }
                     mLikeImageView.setImageDrawable(mContext.getResources()
                             .getDrawable(mStationModel.getIsFavourite() == 1 ?
                                     R.drawable.ic_favorite_active : R.drawable.ic_favorite));
@@ -220,6 +246,28 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
                 }
                 changed = true;
             });
+            switch (mStationModel.isPlaying()) {
+                case Paused:
+                    mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                    mRotateAnimation.cancel();
+                    break;
+                case Playing:
+                    mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                    mRotateAnimation.cancel();
+                    break;
+                case Stopped:
+                    mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                    mRotateAnimation.cancel();
+                    break;
+                case Buffering:
+                    mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                    mPlayImageView.startAnimation(mRotateAnimation);
+                    break;
+            }
+            mLikeImageView.setImageDrawable(mContext.getResources()
+                    .getDrawable(mStationModel.getIsFavourite() == 1 ?
+                            R.drawable.ic_favorite_active : R.drawable.ic_favorite));
+        }
         mCommentImageView.setAlpha(0.3f);
         mLikeImageView.setAlpha(1f);
         mStationNameTextView.setText(mStationModel.getStationName());

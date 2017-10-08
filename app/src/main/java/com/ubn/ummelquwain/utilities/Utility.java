@@ -165,7 +165,7 @@ public class Utility {
                         .equalTo("stationID", mStation.getStationID()).findFirst();
                 if (station == null) {
                     station = realm1.createObject(StationResultModel.class, mStation.getStationID());
-                    station.setPlaying(false);
+                    station.setPlaying(StationResultModel.State.Stopped);
                 }
                 station.setStationName(mStation.getStationName());
                 station.setCategoryName(mStation.getCategoryName());
@@ -231,7 +231,7 @@ public class Utility {
                     .equalTo("stationID", mStation.getStationID()).findFirst();
             if (station == null) {
                 station = realm1.createObject(StationResultModel.class, mStation.getStationID());
-                station.setPlaying(false);
+                station.setPlaying(StationResultModel.State.Stopped);
             }
             station.setStationName(mStation.getStationName());
             station.setCategoryName(mStation.getCategoryName());

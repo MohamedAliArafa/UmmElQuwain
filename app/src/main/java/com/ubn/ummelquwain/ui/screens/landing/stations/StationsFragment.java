@@ -17,6 +17,7 @@ import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.adapter.StationAdapter;
 import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 import com.ubn.ummelquwain.utilities.ClickableEditText;
+import com.ubn.ummelquwain.utilities.RecyclerChildAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +63,7 @@ public class StationsFragment extends Fragment implements StationsContract.Model
         View view = inflater.inflate(R.layout.fragment_stations, container, false);
         ButterKnife.bind(this, view);
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecycler.setItemAnimator(new RecyclerChildAnimator());
         mAdapter = new StationAdapter(getContext(), null, mPresenter);
         mRecycler.setAdapter(mAdapter);
         setupSearch();
