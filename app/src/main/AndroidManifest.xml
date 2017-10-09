@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+
     <application
         android:name="com.ubn.ummelquwain.MyApplication"
         android:allowBackup="true"
@@ -22,8 +24,8 @@
         tools:replace="android:icon">
         <activity
             android:name="com.ubn.ummelquwain.ui.screens.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize|layoutDirection">
+            android:configChanges="orientation|keyboardHidden|screenSize|layoutDirection"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -56,7 +58,11 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.ubn.ummelquwain.player.StationPlayerService" />
+        <service android:name="com.ubn.ummelquwain.player.StationPlayerService">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
         <service android:name="com.ubn.ummelquwain.player.ProgramPlayerService" />
         <service android:name="com.ubn.ummelquwain.player.MediaPlayerService" />
 

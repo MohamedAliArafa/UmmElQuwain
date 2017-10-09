@@ -31,6 +31,7 @@ public class Constants {
         String INIT_ACTION = "com.marothiatechs.customnotification.action.init";
         String PREV_ACTION = "com.marothiatechs.customnotification.action.prev";
         String PLAY_ACTION = "com.marothiatechs.customnotification.action.play";
+        String PAUSE_ACTION = "com.marothiatechs.customnotification.action.pause";
         String NEXT_ACTION = "com.marothiatechs.customnotification.action.next";
         String STARTFOREGROUND_ACTION = "com.marothiatechs.customnotification.action.startforeground";
         String STOPFOREGROUND_ACTION = "com.marothiatechs.customnotification.action.stopforeground";
