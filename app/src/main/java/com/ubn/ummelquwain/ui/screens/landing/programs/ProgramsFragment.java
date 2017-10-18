@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class ProgramsFragment extends Fragment implements ProgramsContract.Model
 
     ProgramAdapter mAdapter;
     ProgramsPresenter mPresenter;
+    private String LOG_TAG = ProgramsFragment.class.getName();
 
     public ProgramsFragment() {
         // Required empty public constructor
@@ -121,6 +123,7 @@ public class ProgramsFragment extends Fragment implements ProgramsContract.Model
     @Override
     public void updateUI(RealmResults<ProgramResultModel> models) {
         mAdapter.updateData(models);
+        Log.d(LOG_TAG, "UI Updated");
     }
 
     @Override

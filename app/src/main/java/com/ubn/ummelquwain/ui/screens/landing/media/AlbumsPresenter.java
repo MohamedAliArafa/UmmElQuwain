@@ -90,7 +90,7 @@ public class AlbumsPresenter implements AlbumsContract.UserAction, LifecycleObse
     @Override
     public void openDetails(int albumID, String albumDesc) {
         mFragmentManager.beginTransaction().addToBackStack(null)
-                .add(R.id.fragment_container, AlbumFragment.newInstance(albumID, albumDesc)).commit();
+                .replace(R.id.fragment_container, AlbumFragment.newInstance(albumID, albumDesc)).commit();
     }
 
     @Override

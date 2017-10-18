@@ -14,10 +14,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.Option;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.NewsBar.NewsBarResultModel;
+import com.ubn.ummelquwain.utilities.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,6 +101,7 @@ public class NewsDetailsFragment extends Fragment implements NewsDetailContract.
         GlideApp.with(this)
                 .load(model.getNewsImage())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                 .fitCenter()
                 .into(mNewsImageView);
         mShareButton.setOnClickListener(view -> mPresenter.shareNews(model));

@@ -44,7 +44,7 @@ public class YoutubeFragment extends Fragment implements YouTubePlayer.OnInitial
         mYouTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.youtube_layout, mYouTubePlayerFragment).commit();
+        transaction.replace(R.id.youtube_layout, mYouTubePlayerFragment).commit();
         VIDEO_ID = getArguments().getString("video_url");
         mYouTubePlayerFragment.initialize(BuildConfig.YOUTUBE_API_KEY, this);
         return rootView;

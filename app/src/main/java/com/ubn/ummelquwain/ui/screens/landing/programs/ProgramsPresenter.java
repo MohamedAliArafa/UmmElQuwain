@@ -7,6 +7,7 @@ import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.ubn.ummelquwain.MyApplication;
@@ -16,6 +17,7 @@ import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
 import com.ubn.ummelquwain.models.response.program.ProgramsModel;
 import com.ubn.ummelquwain.player.Player;
 import com.ubn.ummelquwain.ui.screens.landing.programs.details.ProgramFragment;
+import com.ubn.ummelquwain.utilities.DetailsTransition;
 import com.ubn.ummelquwain.utilities.Utility;
 
 import io.realm.Case;
@@ -39,6 +41,7 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
     private Call<ProgramsModel> mProgramCall;
     private RealmResults<ProgramResultModel> mModel;
     private Realm mRealm;
+    private boolean isDataCalled = false;
 
     public ProgramsPresenter(Context mContext, ProgramsContract.ModelView mView, FragmentManager mFragmentManager, Lifecycle lifecycle) {
         lifecycle.addObserver(this);
@@ -65,17 +68,23 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
             user = deviceId;
         mProgramCall = MyApplication.get(mContext).getApiService()
                 .getAllPrograms(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), user));
-        mProgramCall.enqueue(this);
+        if (!isDataCalled)
+            mProgramCall.enqueue(this);
+        isDataCalled = true;
     }
 
     @Override
-    public void openDetails(int programID) {
+    public void openDetails(int programID, View viewShared) {
         boolean fragmentPopped = mFragmentManager.popBackStackImmediate(
                 PROGRAM_FRAGMENT_KEY + String.valueOf(programID), 0);
 
         if (!fragmentPopped) { //fragment not in back stack, create it.
+            ProgramFragment fragment = ProgramFragment.newInstance(programID);
+            fragment.setSharedElementEnterTransition(new DetailsTransition());
+            fragment.setSharedElementReturnTransition(new DetailsTransition());
             FragmentTransaction ft = mFragmentManager.beginTransaction();
-            ft.replace(R.id.fragment_container, ProgramFragment.newInstance(programID));
+            ft.replace(R.id.fragment_container, fragment);
+            ft.addSharedElement(viewShared, viewShared.getTransitionName());
             ft.addToBackStack(PROGRAM_FRAGMENT_KEY + String.valueOf(programID));
             ft.commit();
         }
@@ -96,6 +105,7 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         mModel = query;
         if (query.isLoaded()) {
             mView.hideProgress();
+            mModel.addChangeListener(programResultModels -> mView.updateUI(mModel));
             mView.updateUI(mModel);
         }
     }
@@ -104,13 +114,16 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
     public void onResponse(Call<ProgramsModel> call, Response<ProgramsModel> response) {
         try {
             Utility.addProgramsToRealm(response.body().getResult(),
-                    () -> mModel.addChangeListener(stationResultModels -> {
+                    () -> {
+                        mModel = mRealm.where(ProgramResultModel.class).findAll().sort("programID");
                         mView.updateUI(mModel);
-                    }));
+                    });
+            mModel.addChangeListener(programResultModels -> mView.updateUI(mModel));
         } catch (Exception e) {
             mView.showProgress();
             e.printStackTrace();
         }
+        isDataCalled = false;
         mView.hideProgress();
     }
 
@@ -120,5 +133,6 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         Log.d(this.getClass().getSimpleName(), "Internet Fail");
         t.printStackTrace();
         mView.hideProgress();
+        isDataCalled = false;
     }
 }

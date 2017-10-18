@@ -1,5 +1,7 @@
 package com.ubn.ummelquwain.ui.screens.landing.programs;
 
+import android.view.View;
+
 import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
 
 import io.realm.RealmResults;
@@ -17,7 +19,7 @@ public interface ProgramsContract {
 
     interface UserAction {
         void getData();
-        void openDetails(int programID);
+        void openDetails(int programID, View viewShared);
         void playStream(ProgramResultModel station);
         void search(String keyword);
     }

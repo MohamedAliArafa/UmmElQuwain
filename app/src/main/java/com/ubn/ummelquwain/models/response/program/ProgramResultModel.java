@@ -2,6 +2,7 @@ package com.ubn.ummelquwain.models.response.program;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ubn.ummelquwain.utilities.Constants.State;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -16,7 +17,7 @@ public class ProgramResultModel extends RealmObject {
     @PrimaryKey
     @SerializedName("ProgramID")
     @Expose
-    private Integer programID;
+    private int programID;
     @SerializedName("StationID")
     @Expose
     private Integer stationID;
@@ -75,17 +76,19 @@ public class ProgramResultModel extends RealmObject {
     @Expose
     private RealmList<ProgramScheduleResultModel> Schedule = null;
 
-    private boolean Playing;
+    private String Playing;
 
-    public boolean isPlaying() {
-        return Playing;
+    public State isPlaying() {
+        if (Playing == null)
+            return State.Stopped;
+        return State.valueOf(Playing);
     }
 
-    public void setPlaying(boolean playing) {
-        Playing = playing;
+    public void setPlaying(State playing) {
+        Playing = playing.toString();
     }
 
-    public Integer getProgramID() {
+    public int getProgramID() {
         return programID;
     }
 

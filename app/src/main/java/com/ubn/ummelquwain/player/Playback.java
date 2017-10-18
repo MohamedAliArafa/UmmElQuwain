@@ -1,5 +1,6 @@
 package com.ubn.ummelquwain.player;
 
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +13,6 @@ import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 import com.ubn.ummelquwain.utilities.Constants;
 
 import java.io.IOException;
@@ -40,12 +40,13 @@ public class Playback implements AudioManager.OnAudioFocusChangeListener,
     // we have full audio focus
     private static final int AUDIO_FOCUSED = 2;
 
-    private final StationPlayerService mService;
+    private final Service mService;
     private final WifiManager.WifiLock mWifiLock;
     private int mState;
     private boolean mPlayOnFocusGain;
     private Callback mCallback;
-    private StationResultModel mMusicProvider;
+    private int mMusicProviderID;
+    private String mMusicProviderStreamLink;
     private volatile boolean mAudioNoisyReceiverRegistered;
     private volatile int mCurrentPosition;
     private volatile String mCurrentMediaId;
@@ -58,22 +59,9 @@ public class Playback implements AudioManager.OnAudioFocusChangeListener,
     private IntentFilter mAudioNoisyIntentFilter =
             new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
 
-    private BroadcastReceiver mAudioNoisyReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
-                Log.d(TAG, "Headphones disconnected.");
-                if (isPlaying()) {
-                    Intent i = new Intent(context, StationPlayerService.class);
-                    i.setAction(Constants.ACTION.PAUSE_ACTION);
-                    mService.startService(i);
-                }
-            }
-        }
-    };
     private boolean ongoingCall;
 
-    public Playback(StationPlayerService service) {
+    public Playback(Service service) {
         this.mService = service;
         this.mAudioManager = (AudioManager) service.getSystemService(Context.AUDIO_SERVICE);
         // Create the Wifi lock (this does not acquire the lock, this just creates it)
@@ -81,10 +69,12 @@ public class Playback implements AudioManager.OnAudioFocusChangeListener,
                 service.getApplicationContext().getSystemService(Context.WIFI_SERVICE) != null ?
                         ((WifiManager) service.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
                                 .createWifiLock(WifiManager.WIFI_MODE_FULL, "sample_lock") : null;
+        registerAudioNoisyReceiver();
     }
 
-    public void setMedia(StationResultModel model) {
-        this.mMusicProvider = model;
+    public void setMedia(int id, String link) {
+        this.mMusicProviderID = id;
+        this.mMusicProviderStreamLink = link;
     }
 
     public void start() {
@@ -144,9 +134,9 @@ public class Playback implements AudioManager.OnAudioFocusChangeListener,
 
     public void play() {
         mPlayOnFocusGain = true;
-        tryToGetAudioFocus();
         registerAudioNoisyReceiver();
-        String mediaId = String.valueOf(mMusicProvider.getStationID());
+        tryToGetAudioFocus();
+        String mediaId = String.valueOf(mMusicProviderID);
         boolean mediaHasChanged = !TextUtils.equals(mediaId, mCurrentMediaId);
         if (mediaHasChanged) {
             mCurrentPosition = 0;
@@ -158,39 +148,42 @@ public class Playback implements AudioManager.OnAudioFocusChangeListener,
         } else {
             mState = PlaybackState.STATE_STOPPED;
             relaxResources(false); // release everything except MediaPlayer
-            String source = mMusicProvider.getStreamLink();
+            String source = mMusicProviderStreamLink;
 
-            try {
-                createMediaPlayerIfNeeded();
+            if (source != null)
 
-                mState = PlaybackState.STATE_BUFFERING;
+                try {
+                    createMediaPlayerIfNeeded();
 
-                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mMediaPlayer.setDataSource(source);
+                    mState = PlaybackState.STATE_BUFFERING;
 
-                // Starts preparing the media player in the background. When
-                // it's done, it will call our OnPreparedListener (that is,
-                // the onPrepared() method on this class, since we set the
-                // listener to 'this'). Until the media player is prepared,
-                // we *cannot* call start() on it!
-                mMediaPlayer.prepareAsync();
+                    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mMediaPlayer.setDataSource(source);
 
-                // If we are streaming from the internet, we want to hold a
-                // Wifi lock, which prevents the Wifi radio from going to
-                // sleep while the song is playing.
-                mWifiLock.acquire();
+                    // Starts preparing the media player in the background. When
+                    // it's done, it will call our OnPreparedListener (that is,
+                    // the onPrepared() method on this class, since we set the
+                    // listener to 'this'). Until the media player is prepared,
+                    // we *cannot* call start() on it!
+                    mMediaPlayer.prepareAsync();
 
-                if (mCallback != null) {
-                    mCallback.onPlaybackStatusChanged(mState);
+                    // If we are streaming from the internet, we want to hold a
+                    // Wifi lock, which prevents the Wifi radio from going to
+                    // sleep while the song is playing.
+                    mWifiLock.acquire();
+
+                    if (mCallback != null) {
+                        mCallback.onPlaybackStatusChanged(mState);
+                    }
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    Log.e(TAG, "Exception playing song");
+                    if (mCallback != null) {
+                        mCallback.onError(ex.getMessage());
+                    }
                 }
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                Log.e(TAG, "Exception playing song");
-                if (mCallback != null) {
-                    mCallback.onError(ex.getMessage());
-                }
-            }
+            else mCallback.onError(null);
         }
     }
 
@@ -450,6 +443,20 @@ public class Playback implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
+    private BroadcastReceiver mAudioNoisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                Log.d(TAG, "Headphones disconnected.");
+                if (isPlaying()) {
+                    Intent i = new Intent(context, mService.getClass());
+                    i.setAction(Constants.ACTION.PAUSE_ACTION);
+                    mService.startService(i);
+                }
+            }
+        }
+    };
+
     private void registerAudioNoisyReceiver() {
         if (!mAudioNoisyReceiverRegistered) {
             mService.registerReceiver(mAudioNoisyReceiver, mAudioNoisyIntentFilter);
@@ -458,9 +465,10 @@ public class Playback implements AudioManager.OnAudioFocusChangeListener,
     }
 
     private void unregisterAudioNoisyReceiver() {
-        if (mAudioNoisyReceiverRegistered) {
+        if (mAudioNoisyReceiverRegistered && mAudioNoisyReceiver != null) {
             mService.unregisterReceiver(mAudioNoisyReceiver);
             mAudioNoisyReceiverRegistered = false;
+            mAudioNoisyReceiver = null;
         }
     }
 

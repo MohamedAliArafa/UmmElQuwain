@@ -19,12 +19,27 @@ public class Constants {
     public static final int REQUEST_PHONE_CALL_PERMISSION = 1313;
 
     public final static String POSITION_KEY = "position_list";
+    public final static String MODEL_ID = "model_id_intent_key";
     public final static String LOGIN_FRAGMENT_KEY = "login_fragment_key";
     public final static String LANDING_FRAGMENT_KEY = "landing_fragment_key";
     public final static String STATION_FRAGMENT_KEY = "station_fragment_key";
     public final static String PROGRAM_FRAGMENT_KEY = "program_fragment_key";
     public static String Broadcast_PLAY_NEW_AUDIO = "broadcast_play_new_audio";
 
+    public static String GLIDE_TIMEOUT = "com.bumptech.glide.load.model.stream.HttpGlideUrlLoader.Timeout";
+
+    // indicates the state our service:
+    public enum State {
+        Retrieving, // the MediaRetriever is retrieving music
+        Stopped, // media player is stopped and not prepared to play
+        Preparing, // media player is preparing...
+        Buffering,
+        Playing, // playback active (media player ready!). (but the media player may actually be
+        // paused in this state if we don't have audio focus. But we stay in this state
+        // so that we know we have to resume playback once we get focus back)
+        Paused
+        // playback paused (media player ready!)
+    }
 
     public interface ACTION {
         String MAIN_ACTION = "com.marothiatechs.customnotification.action.main";

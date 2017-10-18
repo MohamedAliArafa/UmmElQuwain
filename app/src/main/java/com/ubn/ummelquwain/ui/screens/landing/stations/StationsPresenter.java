@@ -4,10 +4,12 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
+import android.os.Trace;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.ubn.ummelquwain.MyApplication;
@@ -21,6 +23,7 @@ import com.ubn.ummelquwain.models.response.Station.StationsModel;
 import com.ubn.ummelquwain.player.Player;
 import com.ubn.ummelquwain.ui.screens.landing.stations.details.StationFragment;
 import com.ubn.ummelquwain.ui.screens.login.LoginFragment;
+import com.ubn.ummelquwain.utilities.DetailsTransition;
 import com.ubn.ummelquwain.utilities.Utility;
 
 import io.realm.Case;
@@ -65,6 +68,7 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
         if (query.isLoaded() && !query.isEmpty()) {
             mView.hideProgress();
             mView.updateUI(mModel);
+            mModel.addChangeListener(stationResultModels -> mView.updateUI(mModel));
         }
         String user = MyApplication.get(mContext).getUser();
         String deviceId = MyApplication.get(mContext).getDeviceID();
@@ -72,36 +76,20 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
             user = deviceId;
         mStationsCall = MyApplication.get(mContext).getApiService()
                 .getAllStations(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), user));
-        mStationsCall.enqueue(new Callback<StationsModel>() {
-            @Override
-            public void onResponse(@NonNull Call<StationsModel> call, @NonNull Response<StationsModel> response) {
-                mView.hideProgress();
-                try {
-                    Utility.addStationsToRealm(response.body().getResult(),
-                            () -> mModel.addChangeListener(stationResultModels -> mView.updateUI(mModel)));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mView.hideProgress();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<StationsModel> call, @NonNull Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(mContext.getApplicationContext(), R.string.no_internet, Toast.LENGTH_SHORT).show();
-                Log.d(this.getClass().getSimpleName(), "Internet Fail");
-                mView.hideProgress();
-            }
-        });
+        mStationsCall.enqueue(this);
     }
 
     @Override
-    public void openDetails(int stationID) {
+    public void openDetails(int stationID, View viewShared) {
         boolean fragmentPopped = mFragmentManager.popBackStackImmediate(
                 PROGRAM_FRAGMENT_KEY + String.valueOf(stationID), 0);
         if (!fragmentPopped) { //fragment not in back stack, create it.
+            StationFragment fragment = StationFragment.newInstance(stationID);
+            fragment.setSharedElementEnterTransition(new DetailsTransition());
+            fragment.setSharedElementReturnTransition(new DetailsTransition());
             FragmentTransaction ft = mFragmentManager.beginTransaction();
-            ft.replace(R.id.fragment_container, StationFragment.newInstance(stationID));
+            ft.replace(R.id.fragment_container, fragment);
+            ft.addSharedElement(viewShared, viewShared.getTransitionName());
             ft.addToBackStack(PROGRAM_FRAGMENT_KEY + String.valueOf(stationID));
             ft.commit();
         }
@@ -115,7 +103,6 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     @Override
     public void search(String keyword) {
         mView.showProgress();
-
         mRealm = Realm.getDefaultInstance();
         RealmResults<StationResultModel> query = mRealm.where(StationResultModel.class)
                 .contains("stationName", keyword, Case.INSENSITIVE)
@@ -134,8 +121,6 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
             mModel = query;
             mView.updateUI(mModel);
         }
-        String user = MyApplication.get(mContext).getUser();
-        String deviceId = MyApplication.get(mContext).getDeviceID();
     }
 
     private int favStatus;
@@ -191,8 +176,13 @@ public class StationsPresenter implements StationsContract.UserAction, Lifecycle
     @Override
     public void onResponse(Call<StationsModel> call, Response<StationsModel> response) {
         try {
-            Utility.addStationsToRealm(response.body().getResult(),
-                    () -> mModel.addChangeListener(stationResultModels -> mView.updateUI(mModel)));
+            Trace.beginSection("Data structures");
+            Utility.addStationsToRealm(response.body().getResult(), () -> {
+                mModel = mRealm.where(StationResultModel.class).findAll();
+                mModel.addChangeListener(stationResultModels -> mView.updateUI(mModel));
+                mView.updateUI(mModel);
+            });
+            Trace.endSection();
         } catch (Exception e) {
             e.printStackTrace();
         }

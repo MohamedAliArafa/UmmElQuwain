@@ -11,11 +11,14 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.Option;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.stations.StationsContract;
+import com.ubn.ummelquwain.utilities.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -104,8 +107,11 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
             GlideApp.with(mContext)
                     .load(model.getStationLogo())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                     .fitCenter()
                     .into(holder.mThumpImageView);
+        }else {
+            GlideApp.with(mContext).clear(holder.mThumpImageView);
         }
         try {
             if (model.getIsLive()) {
@@ -155,8 +161,10 @@ public class StationAdapter extends RealmRecyclerViewAdapter<StationResultModel,
                     e.printStackTrace();
                 }
             });
+            holder.mThumpImageView.setTransitionName("stat_"+String.valueOf(model.getStationID()));
+
             holder.itemView.setOnClickListener(view ->
-                    mPresenter.openDetails(model.getStationID())
+                    mPresenter.openDetails(model.getStationID(), holder.mThumpImageView)
             );
             holder.mPlayImageView.setOnClickListener(view -> {
                         mPresenter.playStream(model);

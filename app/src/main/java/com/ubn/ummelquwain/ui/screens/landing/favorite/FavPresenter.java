@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.ubn.ummelquwain.MyApplication;
@@ -29,6 +30,7 @@ import com.ubn.ummelquwain.ui.screens.landing.stations.StationsContract;
 import com.ubn.ummelquwain.ui.screens.landing.stations.details.StationFragment;
 import com.ubn.ummelquwain.ui.screens.login.LoginFragment;
 import com.ubn.ummelquwain.utilities.Constants;
+import com.ubn.ummelquwain.utilities.Constants.State;
 
 import java.util.List;
 
@@ -85,7 +87,7 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
         model.addChangeListener(stationResultModels -> {
 //            getStationData();
             for (StationResultModel station : model) {
-                if (station.isPlaying() == StationResultModel.State.Playing) {
+                if (station.isPlaying() == State.Playing) {
                     ((LandingFragment) mView.getParentFragment()).showPlayer(station);
                     playing = true;
                 }
@@ -222,9 +224,9 @@ public class FavPresenter implements FavContract.UserAction, LifecycleObserver {
     }
 
     @Override
-    public void openDetails(int stationID) {
-        mFragmentManager.beginTransaction().addToBackStack(null)
-                .add(R.id.fragment_container, StationFragment.newInstance(stationID)).commit();
+    public void openDetails(int stationID, View viewShared) {
+        mFragmentManager.beginTransaction().addSharedElement(viewShared, viewShared.getTransitionName()).addToBackStack(null)
+                .replace(R.id.fragment_container, StationFragment.newInstance(stationID)).commit();
     }
 
     @Override

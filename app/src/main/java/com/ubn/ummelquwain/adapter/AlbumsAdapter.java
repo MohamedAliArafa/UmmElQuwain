@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.Option;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.Albums.AlbumResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.media.AlbumsContract;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.ubn.ummelquwain.utilities.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +72,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
         GlideApp.with(holder.itemView)
                 .load(model.getAlbumImage())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                 .fitCenter()
                 .into(holder.mThumpImageView);
         holder.itemView.setOnClickListener(view -> {

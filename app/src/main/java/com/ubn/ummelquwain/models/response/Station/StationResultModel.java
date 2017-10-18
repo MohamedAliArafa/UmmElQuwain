@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.ubn.ummelquwain.models.response.Station.Schedule.ScheduleModel;
 import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
+import com.ubn.ummelquwain.utilities.Constants.State;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -17,19 +18,6 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class StationResultModel extends RealmObject implements Parcelable {
-
-    // indicates the state our service:
-    public enum State {
-        Playing, // playback active (media player ready!). (but the media player may actually be
-        // playback stopped (media player NOT ready!!)
-        Stopped,
-        // paused in this state if we don't have audio focus. But we stay in this state
-        // so that we know we have to resume playback once we get focus back)
-        // playback paused (media player ready!)
-        Paused,
-        // Buffering
-        Buffering
-    }
 
     @PrimaryKey
     @SerializedName("StationID")

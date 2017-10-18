@@ -44,6 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
+import static com.ubn.ummelquwain.utilities.Constants.LANDING_FRAGMENT_KEY;
 import static com.ubn.ummelquwain.utilities.Constants.POSITION_KEY;
 
 
@@ -213,10 +214,13 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
     @Override
     public void showPlayer(StationResultModel model) {
         changed = false;
+        if (mProgramModel != null)
+            mProgramModel.removeAllChangeListeners();
         if (mStationModel != null)
             if (model.getStationID() == mStationModel.getStationID())
                 changed = true;
         mStationModel = model;
+
         if (isAdded()) {
             mStationModel.addChangeListener(realmModel -> {
                 try {
@@ -298,25 +302,64 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
     @Override
     public void showPlayer(ProgramResultModel model) {
         changed = false;
+        if (mStationModel != null)
+            mStationModel.removeAllChangeListeners();
         if (mProgramModel != null)
-            if (model.getProgramID().equals(mProgramModel.getProgramID()))
+            if (model.getProgramID() == mProgramModel.getProgramID())
                 changed = true;
         mProgramModel = model;
         if (isAdded())
             mProgramModel.addChangeListener(realmModel -> {
-
                 try {
-                    mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(mProgramModel.isPlaying() ?
-                            R.drawable.ic_puss : R.drawable.ic_paly_liste));
+                    switch (mProgramModel.isPlaying()) {
+                        case Paused:
+                            mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                            mRotateAnimation.cancel();
+                            break;
+                        case Playing:
+                            mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                            mRotateAnimation.cancel();
+                            break;
+                        case Stopped:
+                            mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                            mRotateAnimation.cancel();
+                            break;
+                        case Buffering:
+                            mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                            mPlayImageView.startAnimation(mRotateAnimation);
+                            break;
+                    }
                     mLikeImageView.setImageDrawable(mContext.getResources()
                             .getDrawable(mProgramModel.getIsFavourite() == 1 ?
                                     R.drawable.ic_favorite_active : R.drawable.ic_favorite));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 changed = true;
             });
+
+        switch (model.isPlaying()) {
+            case Paused:
+                mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                mRotateAnimation.cancel();
+                break;
+            case Playing:
+                mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                mRotateAnimation.cancel();
+                break;
+            case Stopped:
+                mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                mRotateAnimation.cancel();
+                break;
+            case Buffering:
+                mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                mPlayImageView.startAnimation(mRotateAnimation);
+                break;
+        }
+        mLikeImageView.setImageDrawable(mContext.getResources()
+                .getDrawable(mProgramModel.getIsFavourite() == 1 ?
+                        R.drawable.ic_favorite_active : R.drawable.ic_favorite));
+
         mStationNameTextView.setText(mProgramModel.getProgramName());
         mProgramNameTextView.setText(mProgramModel.getBroadcasterName());
         mCommentImageView.setAlpha(1f);
@@ -363,8 +406,8 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right, android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right);
-        fragmentTransaction.add(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.fragment_container, fragment, LANDING_FRAGMENT_KEY);
+        fragmentTransaction.addToBackStack(LANDING_FRAGMENT_KEY);
         fragmentTransaction.commit();
     }
 }

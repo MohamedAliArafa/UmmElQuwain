@@ -139,6 +139,6 @@
     <string name="toast_thanks_for_your_contribution">Thanks for your contacting with us</string>
     <string name="toast_twitter_login_error">Twitter Email Login error</string>
     <string name="desc_join_us">You can join our community by sending us a Video or Audio contribution</string>
-    <string name="toast_STARTFOREGROUND_ACTION">START FOREGROUND ACTION</string>
-    <string name="toast_media_clicked">Media Clicked</string>
+    <string name="toast_STARTFOREGROUND_ACTION" translatable="false">START FOREGROUND ACTION</string>
+    <string name="toast_media_clicked" translatable="false">Media Clicked</string>
 </resources>

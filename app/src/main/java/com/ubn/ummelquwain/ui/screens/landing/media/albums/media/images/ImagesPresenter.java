@@ -89,6 +89,6 @@ public class ImagesPresenter implements MediaContract.UserAction, LifecycleObser
     @Override
     public void openDetails(List<MediaResultModel> media, int position) {
         mFragmentManager.beginTransaction().addToBackStack(null)
-                .add(R.id.fragment_container, ImageDetailsFragment.newInstance(media, position)).commit();
+                .replace(R.id.fragment_container, ImageDetailsFragment.newInstance(media, position)).commit();
     }
 }

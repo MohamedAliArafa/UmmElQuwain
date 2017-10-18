@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.Option;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.programs.ProgramsContract;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.ubn.ummelquwain.utilities.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,16 +90,31 @@ public class ProgramAdapter extends RealmRecyclerViewAdapter<ProgramResultModel,
         GlideApp.with(mContext)
                 .load(model.getProgramLogo())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                 .fitCenter()
                 .into(holder.mThumpImageView);
-        holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model.getProgramID()));
-        holder.mPlayImageView.setImageDrawable(mContext.getResources()
-                .getDrawable(model.isPlaying() ?
-                        R.drawable.ic_puss : R.drawable.ic_paly_liste));
-        holder.mIndicatorView.setVisibility(model.isPlaying() ?
-                View.VISIBLE : View.GONE);
+        holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model.getProgramID(), holder.mThumpImageView));
+        switch (model.isPlaying()) {
+            case Paused:
+                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                holder.mIndicatorView.setVisibility(View.GONE);
+                break;
+            case Playing:
+                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                holder.mIndicatorView.setVisibility(View.VISIBLE);
+                break;
+            case Stopped:
+                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                holder.mIndicatorView.setVisibility(View.GONE);
+                break;
+            case Buffering:
+                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                holder.mIndicatorView.setVisibility(View.VISIBLE);
+                break;
+        }
+        holder.mThumpImageView.setTransitionName("prog_"+String.valueOf(model.getProgramID()));
         holder.itemView.setOnClickListener(view ->
-                mPresenter.openDetails(model.getProgramID())
+                mPresenter.openDetails(model.getProgramID(), holder.mThumpImageView)
         );
         holder.mPlayImageView.setOnClickListener(view -> mPresenter.playStream(model)
         );

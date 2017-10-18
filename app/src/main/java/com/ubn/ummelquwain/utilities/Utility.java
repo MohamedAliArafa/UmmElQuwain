@@ -26,6 +26,8 @@ import com.ubn.ummelquwain.models.response.program.ProgramScheduleResultModel;
 import com.ubn.ummelquwain.models.response.program.ProgramUserCommentResultModel;
 import com.ubn.ummelquwain.player.StationPlayerService;
 
+import com.ubn.ummelquwain.utilities.Constants.State;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -165,7 +167,7 @@ public class Utility {
                         .equalTo("stationID", mStation.getStationID()).findFirst();
                 if (station == null) {
                     station = realm1.createObject(StationResultModel.class, mStation.getStationID());
-                    station.setPlaying(StationResultModel.State.Stopped);
+                    station.setPlaying(State.Stopped);
                 }
                 station.setStationName(mStation.getStationName());
                 station.setCategoryName(mStation.getCategoryName());
@@ -231,7 +233,7 @@ public class Utility {
                     .equalTo("stationID", mStation.getStationID()).findFirst();
             if (station == null) {
                 station = realm1.createObject(StationResultModel.class, mStation.getStationID());
-                station.setPlaying(StationResultModel.State.Stopped);
+                station.setPlaying(State.Stopped);
             }
             station.setStationName(mStation.getStationName());
             station.setCategoryName(mStation.getCategoryName());
@@ -296,7 +298,7 @@ public class Utility {
                         .equalTo("programID", mProgram.getProgramID()).findFirst();
                 if (Program == null) {
                     Program = realm1.createObject(ProgramResultModel.class, mProgram.getProgramID());
-                    Program.setPlaying(false);
+                    Program.setPlaying(State.Stopped);
                 }
                 Program.setStationID(mProgram.getStationID());
                 Program.setCategorName(mProgram.getCategorName());
@@ -358,7 +360,7 @@ public class Utility {
                     .equalTo("programID", mProgram.getProgramID()).findFirst();
             if (Program == null) {
                 Program = realm1.createObject(ProgramResultModel.class, mProgram.getProgramID());
-                Program.setPlaying(false);
+                Program.setPlaying(State.Stopped);
             }
             Program.setStationID(mProgram.getStationID());
             Program.setCategorName(mProgram.getCategorName());

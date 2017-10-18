@@ -1,6 +1,5 @@
 package com.ubn.ummelquwain.player;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -23,37 +22,35 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.ubn.ummelquwain.MyApplication;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.models.response.Station.StationResultModel;
-import com.ubn.ummelquwain.ui.screens.main.MainActivity;
 import com.ubn.ummelquwain.utilities.Constants;
-
-import java.io.IOException;
+import com.ubn.ummelquwain.utilities.Constants.State;
 
 import io.realm.Realm;
 
 import static android.content.Intent.ACTION_MEDIA_BUTTON;
+import static com.ubn.ummelquwain.utilities.Constants.MODEL_ID;
 
-/**
+/*
  * Created by mohamed.arafa on 8/29/2017.
  */
 
 public class StationPlayerService extends Service implements MediaPlayer.OnPreparedListener,
-        MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener, Playback.Callback {
+        MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener, Playback.Callback,
+        HeadsetActionButtonReceiver.Delegate {
+
+    private final String LOG_TAG = StationPlayerService.class.getName();
 
     //Current Playing Station
     private static StationResultModel mModel;
 
     //Instance
     private static StationPlayerService mInstance = null;
-    private final String LOG_TAG = StationPlayerService.class.getName();
     private IBinder mBinder = new ServiceBinder();
 
     //MediaSession
@@ -64,15 +61,12 @@ public class StationPlayerService extends Service implements MediaPlayer.OnPrepa
     //Notification
     final int NOTIFICATION_ID = 1;
     NotificationManager mNotificationManager;
-    Notification mNotification = null;
-    RemoteViews mRemoteViews;
 
     //State
     public boolean isPreparing = false;
     State mState = State.Retrieving;
 
     //Player
-    private MediaPlayer mPlayer = null;
     private Playback mPlayback;
 
     //Third Parties
@@ -81,119 +75,13 @@ public class StationPlayerService extends Service implements MediaPlayer.OnPrepa
 
     //Phone Callback
     private boolean ongoingCall;
+    private boolean isHandsetRegistered = false;
 
     public StationPlayerService() {
     }
 
     public static StationPlayerService getInstance() {
         return mInstance;
-    }
-
-    public static void setSong(StationResultModel model) {
-        mModel = model;
-    }
-
-    @Override
-    public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
-        Toast.makeText(getApplicationContext(), "Buffering (" + i + ") ...", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-        isPreparing = false;
-        mRealm.beginTransaction();
-        if (mModel != null)
-            mModel.setPlaying(StationResultModel.State.Stopped);
-        mRealm.commitTransaction();
-        Log.i("Error", "true");
-        mState = State.Stopped;
-        stopForeground(true);
-        return false;
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        mState = State.Playing;
-        isPreparing = false;
-        mRealm.beginTransaction();
-        if (mModel != null)
-            mModel.setPlaying(StationResultModel.State.Playing);
-        mRealm.commitTransaction();
-        Log.i("Prepared", "true");
-    }
-
-    @Override
-    public void onCompletion() {
-        mState = State.Retrieving;
-        mRealm.beginTransaction();
-        if (mModel != null)
-            mModel.setPlaying(StationResultModel.State.Stopped);
-        mRealm.commitTransaction();
-    }
-
-    @Override
-    public void onPlaybackStatusChanged(int state) {
-        switch (state) {
-            case PlaybackState.STATE_PLAYING:
-                mRealm.beginTransaction();
-                if (mModel != null)
-                    mModel.setPlaying(StationResultModel.State.Playing);
-                mRealm.commitTransaction();
-                Toast.makeText(getApplicationContext(), "Playing", Toast.LENGTH_SHORT).show();
-                mState = State.Playing;
-                break;
-            case PlaybackState.STATE_PAUSED:
-                mRealm.beginTransaction();
-                if (mModel != null)
-                    mModel.setPlaying(StationResultModel.State.Paused);
-                mRealm.commitTransaction();
-                Toast.makeText(getApplicationContext(), "Paused", Toast.LENGTH_SHORT).show();
-                mState = State.Paused;
-                break;
-            case PlaybackState.STATE_STOPPED:
-                mRealm.beginTransaction();
-                if (mModel != null)
-                    mModel.setPlaying(StationResultModel.State.Stopped);
-                mRealm.commitTransaction();
-                Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
-                mState = State.Stopped;
-                break;
-            case PlaybackState.STATE_BUFFERING:
-                mRealm.beginTransaction();
-                if (mModel != null)
-                    mModel.setPlaying(StationResultModel.State.Buffering);
-                mRealm.commitTransaction();
-                Toast.makeText(getApplicationContext(), "Buffering", Toast.LENGTH_SHORT).show();
-                mState = State.Preparing;
-                break;
-
-        }
-    }
-
-    @Override
-    public void onError(String error) {
-        mState = State.Retrieving;
-        mRealm.beginTransaction();
-        if (mModel != null)
-            mModel.setPlaying(StationResultModel.State.Stopped);
-        mRealm.commitTransaction();
-    }
-
-    public MediaPlayer getMediaPlayer() {
-        return mPlayer;
-    }
-
-    @Override
-    public void onDestroy() {
-//        if (mPlayer != null)
-//            mPlayer.release();
-        mState = State.Retrieving;
-        mRealm.beginTransaction();
-        if (mModel != null)
-            mModel.setPlaying(StationResultModel.State.Stopped);
-        mRealm.commitTransaction();
-        mPlayback.stop(true);
-        super.onDestroy();
     }
 
     @Override
@@ -208,6 +96,18 @@ public class StationPlayerService extends Service implements MediaPlayer.OnPrepa
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mRealm = Realm.getDefaultInstance();
         callStateListener();
+        HeadsetActionButtonReceiver.register(getApplicationContext(), new HeadsetActionButtonReceiver.Delegate() {
+            @Override
+            public void onMediaButtonSingleClick() {
+                if (mModel != null)
+                    preparePlayer(mModel);
+            }
+
+            @Override
+            public void onMediaButtonDoubleClick() {
+
+            }
+        });
         try {
             initMediaSession();
         } catch (RemoteException e) {
@@ -217,24 +117,32 @@ public class StationPlayerService extends Service implements MediaPlayer.OnPrepa
         mPlayback = new Playback(this);
         mPlayback.setState(PlaybackState.STATE_NONE);
         mPlayback.setCallback(this);
-        mPlayback.start();
+    }
+
+    @Override
+    public void onDestroy() {
+        mState = State.Retrieving;
+        mRealm.beginTransaction();
+        if (mModel != null)
+            mModel.setPlaying(State.Stopped);
+        mRealm.commitTransaction();
+        super.onDestroy();
     }
 
     public void preparePlayer(StationResultModel model) {
         if (mModel != null)
             if (mModel.getStationID() != model.getStationID()) {
                 mRealm.beginTransaction();
-                mModel.setPlaying(StationResultModel.State.Stopped);
+                mModel.setPlaying(State.Stopped);
                 mRealm.commitTransaction();
                 mModel = model;
-                mPlayback.setMedia(mModel);
+                mPlayback.setMedia(mModel.getStationID(), mModel.getStreamLink());
                 mPlayback.play();
                 transportControls.play();
                 return;
             }
         mModel = model;
-//        showNotification(model.getStationName(), model.getCurrentProgramName(), model.getStationLogo());
-        if (model.isPlaying() != StationResultModel.State.Playing && model.isPlaying() != StationResultModel.State.Buffering) {
+        if (model.isPlaying() != State.Playing && model.isPlaying() != State.Buffering) {
             mModel = model;
             startMusic();
             transportControls.play();
@@ -242,19 +150,18 @@ public class StationPlayerService extends Service implements MediaPlayer.OnPrepa
         } else {
             pauseMusic();
             transportControls.pause();
-            mRealm.beginTransaction();
-            if (mModel != null)
-                mModel.setPlaying(StationResultModel.State.Paused);
-            mRealm.commitTransaction();
+//            mRealm.beginTransaction();
+//            if (mModel != null)
+//                mModel.setPlaying(State.Paused);
+//            mRealm.commitTransaction();
         }
     }
 
     public void pauseMusic() {
         if (mState.equals(State.Playing)) {
-            mPlayback.setMedia(mModel);
+            mPlayback.setMedia(mModel.getStationID(), mModel.getStreamLink());
             mPlayback.pause();
             mState = State.Paused;
-            updateNotification(mModel.getStationName() + "(paused)");
         } else if (mState.equals(State.Preparing) || mState.equals(State.Retrieving)) {
             mPlayback.stop(true);
             mState = State.Retrieving;
@@ -263,200 +170,46 @@ public class StationPlayerService extends Service implements MediaPlayer.OnPrepa
 
     public void startMusic() {
         if (!mState.equals(State.Preparing) && !mState.equals(State.Retrieving)) {
-            mPlayback.setMedia(mModel);
+            mPlayback.setMedia(mModel.getStationID(), mModel.getStreamLink());
             mPlayback.play();
-            updateNotification(mModel.getStationName() + "(playing)");
         } else if (mState.equals(State.Retrieving)) {
-            mPlayback.setMedia(mModel);
+            mPlayback.setMedia(mModel.getStationID(), mModel.getStreamLink());
             mPlayback.play();
-        }
-    }
-
-    /**
-     * Updates the notification.
-     */
-    void updateNotification(String text) {
-        // Notify NotificationManager of new intent
-    }
-
-    public boolean isPlaying() {
-        return mState.equals(State.Playing);
-    }
-
-    public String getSongTitle() {
-        return mModel.getStationName();
-    }
-
-    public String getSongPicUrl() {
-        return mModel.getStationLogo();
-    }
-
-    void setUpAsForeground(String text) {
-        PendingIntent pi =
-                PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), MainActivity.class),
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-        if (mModel.isPlaying() == StationResultModel.State.Playing)
-            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
-        else
-            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
-
-        mModel.addChangeListener(realmModel -> {
-            if (mModel.isPlaying() != StationResultModel.State.Playing)
-                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
-            else
-                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
-            startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
-        });
-
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, 0);
-
-        mNotification = new Notification.Builder(this).build();
-        mNotification.contentView = mRemoteViews;
-        mNotification.flags = Notification.FLAG_ONGOING_EVENT;
-        mNotification.icon = R.drawable.logo;
-        mNotification.contentIntent = pendingIntent;
-        mPicasso.load(mModel.getStationLogo()).into(mRemoteViews, R.id.status_bar_album_art, Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
-        startForeground(NOTIFICATION_ID, mNotification);
-    }
-
-    private void initMediaPlayer() {
-        try {
-            mPlayer.reset();
-            mPlayer.setDataSource(mModel.getStreamLink());
-        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            mPlayer.prepareAsync(); // prepare async to not block main thread
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-        mState = State.Preparing;
-    }
-
-    public void togglePlay(StationResultModel station) {
-        Log.i(LOG_TAG, "Clicked Play");
-        mModel = station;
-        if (mPlayer.isPlaying()) {
-            mPlayer.pause();
-            mRealm.beginTransaction();
-            if (mModel != null)
-                mModel.setPlaying(StationResultModel.State.Stopped);
-            mRealm.commitTransaction();
-        } else {
-            try {
-                mPlayer.reset();
-                mPlayer.setDataSource(station.getStreamLink());
-                mPlayer.prepareAsync();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_STARTFOREGROUND_ACTION));
-        } else if (intent.getAction().equals(ACTION_MEDIA_BUTTON)) {
-            Log.i(LOG_TAG, getString(R.string.toast_media_clicked));
-        } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
-        } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-            int id = intent.getIntExtra("MODEL_ID", 0);
-            StationResultModel model = mRealm.where(StationResultModel.class).equalTo("stationID", id).findFirst();
-            if (model != null) preparePlayer(model);
-        } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
-            pauseMusic();
-        } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
-        } else if (intent.getAction().equals(
-                Constants.ACTION.STOPFOREGROUND_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_foreground_recived));
-            mPlayback.stop(true);
-            mRealm.beginTransaction();
-            if (mModel != null)
-                mModel.setPlaying(StationResultModel.State.Stopped);
-            mRealm.commitTransaction();
-            stopForeground(true);
-            stopSelf();
-        }
+        if (isHandsetRegistered)
+            HeadsetActionButtonReceiver.register(getApplicationContext(), this);
+        isHandsetRegistered = true;
+        if (intent != null)
+            if (intent.getAction() != null)
+                if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
+                    Log.i(LOG_TAG, getString(R.string.toast_STARTFOREGROUND_ACTION));
+                } else if (intent.getAction().equals(ACTION_MEDIA_BUTTON)) {
+                    Log.i(LOG_TAG, getString(R.string.toast_media_clicked));
+                } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
+                    Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
+                } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
+                    int id = intent.getIntExtra(MODEL_ID, 0);
+                    StationResultModel model = mRealm.where(StationResultModel.class).equalTo("stationID", id).findFirst();
+                    if (model != null) preparePlayer(model);
+                } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
+                    pauseMusic();
+                } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
+                    Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
+                } else if (intent.getAction().equals(
+                        Constants.ACTION.STOPFOREGROUND_ACTION)) {
+                    Log.i(LOG_TAG, getString(R.string.toast_foreground_recived));
+                    HeadsetActionButtonReceiver.unregister();
+                    isHandsetRegistered = false;
+                    mPlayback.stop(true);
+                    stopForeground(true);
+                    stopSelf();
+                }
         MediaButtonReceiver.handleIntent(mediaSession, intent);
         return super.onStartCommand(intent, flags, startId);
-//        handleIncomingActions(intent);
-//        return START_STICKY;
-    }
-
-    private void showNotification(String stationName, String programName, String stationImage) {
-        // Using RemoteViews to bind custom layouts into Notification
-        mRemoteViews = new RemoteViews(getPackageName(), R.layout.status_bar);
-
-        // showing default album image
-//        mRemoteViews.setViewVisibility(R.id.status_bar_icon, View.VISIBLE);
-        mRemoteViews.setViewVisibility(R.id.status_bar_album_art, View.GONE);
-
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.setAction(Constants.ACTION.MAIN_ACTION);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, 0);
-
-        Intent previousIntent = new Intent(this, StationPlayerService.class);
-        previousIntent.setAction(Constants.ACTION.PREV_ACTION);
-        PendingIntent ppreviousIntent = PendingIntent.getService(this, 0,
-                previousIntent, 0);
-
-        Intent playIntent = new Intent(this, StationPlayerService.class);
-        playIntent.setAction(Constants.ACTION.PLAY_ACTION);
-        PendingIntent pplayIntent = PendingIntent.getService(this, 0,
-                playIntent, 0);
-
-        Intent nextIntent = new Intent(this, StationPlayerService.class);
-        nextIntent.setAction(Constants.ACTION.NEXT_ACTION);
-        PendingIntent pnextIntent = PendingIntent.getService(this, 0,
-                nextIntent, 0);
-
-        Intent closeIntent = new Intent(this, StationPlayerService.class);
-        closeIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
-        PendingIntent pcloseIntent = PendingIntent.getService(this, 0,
-                closeIntent, 0);
-
-        mRemoteViews.setOnClickPendingIntent(R.id.status_bar_play, pplayIntent);
-        mRemoteViews.setOnClickPendingIntent(R.id.status_bar_next, pnextIntent);
-        mRemoteViews.setOnClickPendingIntent(R.id.status_bar_prev, ppreviousIntent);
-        mRemoteViews.setOnClickPendingIntent(R.id.status_bar_collapse, pcloseIntent);
-
-        mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
-
-        mRemoteViews.setTextViewText(R.id.status_bar_track_name, stationName);
-        mRemoteViews.setTextViewText(R.id.status_bar_artist_name, programName);
-
-        if (mModel.isPlaying() == StationResultModel.State.Playing)
-            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
-        else
-            mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
-
-        mModel.addChangeListener(realmModel -> {
-            if (mModel.isPlaying() == StationResultModel.State.Playing || mModel.isPlaying() == StationResultModel.State.Buffering)
-                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_puss);
-            else
-                mRemoteViews.setImageViewResource(R.id.status_bar_play, R.drawable.ic_paly_liste);
-            startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
-        });
-
-        mNotification = new Notification.Builder(this).build();
-        mNotification.contentView = mRemoteViews;
-        mNotification.flags = Notification.FLAG_ONGOING_EVENT;
-        mNotification.icon = R.drawable.logo;
-        mNotification.contentIntent = pendingIntent;
-        mPicasso.load(stationImage).into(mRemoteViews, R.id.status_bar_album_art, Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
-        startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, mNotification);
     }
 
     //Handle incoming phone calls
@@ -496,16 +249,15 @@ public class StationPlayerService extends Service implements MediaPlayer.OnPrepa
                 PhoneStateListener.LISTEN_CALL_STATE);
     }
 
-    // indicates the state our service:
-    enum State {
-        Retrieving, // the MediaRetriever is retrieving music
-        Stopped, // media player is stopped and not prepared to play
-        Preparing, // media player is preparing...
-        Playing, // playback active (media player ready!). (but the media player may actually be
-        // paused in this state if we don't have audio focus. But we stay in this state
-        // so that we know we have to resume playback once we get focus back)
-        Paused
-        // playback paused (media player ready!)
+    @Override
+    public void onMediaButtonSingleClick() {
+        if (mModel != null)
+            preparePlayer(mModel);
+    }
+
+    @Override
+    public void onMediaButtonDoubleClick() {
+
     }
 
     public class ServiceBinder extends Binder {
@@ -625,7 +377,7 @@ public class StationPlayerService extends Service implements MediaPlayer.OnPrepa
                     .into(target);
 
             playPauseIntent.setAction(Constants.ACTION.PLAY_ACTION);
-            playPauseIntent.putExtra("MODEL_ID", mModel.getStationID());
+            playPauseIntent.putExtra(MODEL_ID, mModel.getStationID());
             playPauseIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent playPauseAction = PendingIntent.getService(this, 0,
                     playPauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -660,14 +412,83 @@ public class StationPlayerService extends Service implements MediaPlayer.OnPrepa
         notificationManager.cancel(NOTIFICATION_ID);
     }
 
-    private void handleIncomingActions(Intent playbackAction) {
-        if (playbackAction == null || playbackAction.getAction() == null) return;
+    @Override
+    public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
+    }
 
-        String actionString = playbackAction.getAction();
-        if (actionString.equalsIgnoreCase(Constants.ACTION.PLAY_ACTION)) {
-            transportControls.play();
-        } else if (actionString.equalsIgnoreCase(Constants.ACTION.PAUSE_ACTION)) {
-            transportControls.pause();
+    @Override
+    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+        isPreparing = false;
+//        mRealm.beginTransaction();
+//        if (mModel != null)
+//            mModel.setPlaying(State.Stopped);
+//        mRealm.commitTransaction();
+        Log.i("Error", "true");
+        mState = State.Stopped;
+        stopForeground(true);
+        return false;
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        mState = State.Playing;
+        isPreparing = false;
+//        mRealm.beginTransaction();
+//        if (mModel != null)
+//            mModel.setPlaying(State.Playing);
+//        mRealm.commitTransaction();
+        Log.i("Prepared", "true");
+    }
+
+    @Override
+    public void onCompletion() {
+        mState = State.Retrieving;
+//        mRealm.beginTransaction();
+//        if (mModel != null)
+//            mModel.setPlaying(State.Stopped);
+//        mRealm.commitTransaction();
+    }
+
+    @Override
+    public void onPlaybackStatusChanged(int state) {
+        switch (state) {
+            case PlaybackState.STATE_PLAYING:
+                mRealm.beginTransaction();
+                if (mModel != null)
+                    mModel.setPlaying(State.Playing);
+                mRealm.commitTransaction();
+                mState = State.Playing;
+                break;
+            case PlaybackState.STATE_PAUSED:
+                mRealm.beginTransaction();
+                if (mModel != null)
+                    mModel.setPlaying(State.Paused);
+                mRealm.commitTransaction();
+                mState = State.Paused;
+                break;
+            case PlaybackState.STATE_STOPPED:
+                mRealm.beginTransaction();
+                if (mModel != null)
+                    mModel.setPlaying(State.Stopped);
+                mRealm.commitTransaction();
+                mState = State.Stopped;
+                break;
+            case PlaybackState.STATE_BUFFERING:
+                mRealm.beginTransaction();
+                if (mModel != null)
+                    mModel.setPlaying(State.Buffering);
+                mRealm.commitTransaction();
+                mState = State.Preparing;
+                break;
         }
+    }
+
+    @Override
+    public void onError(String error) {
+        mState = State.Retrieving;
+//        mRealm.beginTransaction();
+//        if (mModel != null)
+//            mModel.setPlaying(State.Stopped);
+//        mRealm.commitTransaction();
     }
 }

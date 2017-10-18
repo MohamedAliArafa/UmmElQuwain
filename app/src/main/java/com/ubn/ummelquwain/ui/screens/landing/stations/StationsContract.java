@@ -1,5 +1,7 @@
 package com.ubn.ummelquwain.ui.screens.landing.stations;
 
+import android.view.View;
+
 import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 
 import io.realm.RealmResults;
@@ -17,7 +19,8 @@ public interface StationsContract {
 
     interface UserAction {
         void getData();
-        void openDetails(int stationID);
+
+        void openDetails(int stationID, View viewShared);
 
         void playStream(StationResultModel station);
 

@@ -19,6 +19,7 @@ import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
 import com.ubn.ummelquwain.player.Player;
 import com.ubn.ummelquwain.ui.screens.landing.stations.details.StationContract;
 import com.ubn.ummelquwain.ui.screens.main.MainActivity;
+import com.ubn.ummelquwain.utilities.Constants.State;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import io.realm.Realm;
@@ -60,7 +61,7 @@ public class LandingProvider implements LifecycleObserver, LandingContract.UserA
         playing = false;
         mStationModel.addChangeListener(stationResultModels -> {
             for (StationResultModel station : mStationModel) {
-                if (station.isPlaying() == StationResultModel.State.Playing || station.isPlaying() == StationResultModel.State.Buffering) {
+                if (station.isPlaying() == State.Playing || station.isPlaying() == State.Buffering) {
                     mView.showPlayer(station);
                     playing = true;
                 }
@@ -70,7 +71,7 @@ public class LandingProvider implements LifecycleObserver, LandingContract.UserA
         mProgramModel = mRealm.where(ProgramResultModel.class).findAll();
         mProgramModel.addChangeListener(stationResultModels -> {
             for (ProgramResultModel program : mProgramModel) {
-                if (program.isPlaying()) {
+                if (program.isPlaying() == State.Playing || program.isPlaying() == State.Buffering) {
                     mView.showPlayer(program);
                     playing = true;
                 }

@@ -14,14 +14,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.booking.rtlviewpager.RtlViewPager;
+import com.bumptech.glide.load.Option;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.programs.details.commnts.ProgramCommentsFragment;
 import com.ubn.ummelquwain.ui.screens.landing.programs.details.info.ProgramInfoFragment;
+import com.ubn.ummelquwain.utilities.Constants;
 import com.ubn.ummelquwain.utilities.ViewPagerAdapter;
-import com.booking.rtlviewpager.RtlViewPager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.Arrays;
 import java.util.List;
@@ -119,21 +122,38 @@ public class ProgramFragment extends Fragment implements ProgramContract.ModelVi
         mProgramAnchorTextView.setText(model.getBroadcasterName());
         if (model.getIsLiveAudio() != null)
             mProgramAnchorLiveTextView.setText(model.getIsLiveAudio() ? mContext.getString(R.string.header_live) : mContext.getString(R.string.header_on));
-        mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(model.isPlaying() ?
-                R.drawable.ic_puss : R.drawable.ic_paly_liste));
+        switch (model.isPlaying()) {
+            case Paused:
+                mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                mIndicatorView.setVisibility(View.GONE);
+                break;
+            case Playing:
+                mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                mIndicatorView.setVisibility(View.VISIBLE);
+                break;
+            case Stopped:
+                mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                mIndicatorView.setVisibility(View.GONE);
+                break;
+            case Buffering:
+                mPlayBtn.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
+                mIndicatorView.setVisibility(View.VISIBLE);
+                break;
+        }
         mPlayBtn.setOnClickListener(view -> mPresenter.playStream());
-        mIndicatorView.setVisibility(model.isPlaying() ?
-                View.VISIBLE : View.GONE);
+        mProgramLogoImageView.setTransitionName("prog_"+String.valueOf(model.getProgramID()));
         if (isAdded())
             GlideApp.with(this)
                     .load(model.getProgramLogo())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                     .fitCenter()
                     .into(mProgramLogoImageView);
         if (isAdded())
             GlideApp.with(this)
                     .load(model.getProgramImage())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                     .fitCenter()
                     .into(mProgramBackImageView);
         supplierFragments = Arrays.asList(ProgramCommentsFragment.newInstance(model),

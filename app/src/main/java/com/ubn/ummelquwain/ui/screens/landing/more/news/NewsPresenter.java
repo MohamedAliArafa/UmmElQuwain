@@ -72,6 +72,6 @@ public class NewsPresenter implements NewsContract.UserAction, LifecycleObserver
     @Override
     public void openDetails(int newsID) {
         mFragmentManager.beginTransaction().addToBackStack(null)
-                .add(R.id.fragment_container, NewsDetailsFragment.newInstance(newsID)).commit();
+                .replace(R.id.fragment_container, NewsDetailsFragment.newInstance(newsID)).commit();
     }
 }

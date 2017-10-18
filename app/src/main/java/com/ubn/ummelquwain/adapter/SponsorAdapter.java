@@ -7,10 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.Option;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.Sponsors.SponsorResultModel;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.ubn.ummelquwain.utilities.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +64,7 @@ public class SponsorAdapter extends RecyclerView.Adapter<SponsorAdapter.MyViewHo
         GlideApp.with(holder.itemView)
                 .load(mList.get(position).getSponserImage())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                 .fitCenter()
                 .into(holder.mLogo);
     }

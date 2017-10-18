@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
+import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.Twitter;
 import com.ubn.ummelquwain.dagger.Application.component.ApplicationComponent;
 import com.ubn.ummelquwain.dagger.Application.component.DaggerApplicationComponent;
 import com.ubn.ummelquwain.dagger.Application.module.ContextModule;
@@ -15,8 +17,6 @@ import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 import com.ubn.ummelquwain.models.response.program.ProgramResultModel;
 import com.ubn.ummelquwain.player.Player;
 import com.ubn.ummelquwain.service.ApiService;
-import com.squareup.picasso.Picasso;
-import com.twitter.sdk.android.core.Twitter;
 
 import java.util.Locale;
 

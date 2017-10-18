@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawable(null);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(
                 getString(R.string.com_twitter_sdk_android_CONSUMER_KEY),
                 getString(R.string.com_twitter_sdk_android_CONSUMER_SECRET));
@@ -106,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         } else {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY);
             if (fragment instanceof LandingFragment) {
-
                 if (((LandingFragment) getSupportFragmentManager().findFragmentByTag(LANDING_FRAGMENT_KEY)).moveToHome()) {
                     super.onBackPressed();
                 }
@@ -132,8 +132,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mContent = new LandingFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, mContent, LANDING_FRAGMENT_KEY);
-        fragmentTransaction.add(R.id.fragment_container, new LoginFragment(), LOGIN_FRAGMENT_KEY);
+//        fragmentTransaction.replace(R.id.fragment_container, mContent, LANDING_FRAGMENT_KEY);
+        fragmentTransaction.replace(R.id.fragment_container, new LoginFragment(), LOGIN_FRAGMENT_KEY);
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right, android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right);

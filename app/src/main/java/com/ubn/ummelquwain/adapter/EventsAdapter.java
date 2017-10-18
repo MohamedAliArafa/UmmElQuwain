@@ -9,11 +9,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.Option;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.Events.EventResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.more.events.EventsContract;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.ubn.ummelquwain.utilities.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +96,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         GlideApp.with(mContext)
                 .load(model.getEventImage())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                 .fitCenter()
                 .timeout(0)
                 .into(holder.mEventImageView);

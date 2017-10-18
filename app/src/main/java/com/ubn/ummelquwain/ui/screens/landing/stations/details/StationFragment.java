@@ -16,12 +16,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.booking.rtlviewpager.RtlViewPager;
+import com.bumptech.glide.load.Option;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.stations.details.info.StationInfoFragment;
 import com.ubn.ummelquwain.ui.screens.landing.stations.details.schedule.StationScheduleFragment;
+import com.ubn.ummelquwain.utilities.Constants;
 import com.ubn.ummelquwain.utilities.ViewPagerAdapter;
 
 import java.util.Arrays;
@@ -163,15 +166,19 @@ public class StationFragment extends Fragment implements StationContract.ModelVi
                 });
             });
 
+            mStationLogoImageView.setTransitionName("stat_"+String.valueOf(model.getStationID()));
+
             GlideApp.with(this)
                     .load(model.getStationLogo())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                     .fitCenter()
                     .into(mStationLogoImageView);
 
             GlideApp.with(this)
                     .load(model.getStationImage())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                     .fitCenter()
                     .into(mStationBackImageView);
         } catch (Exception e) {

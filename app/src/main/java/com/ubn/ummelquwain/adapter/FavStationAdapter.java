@@ -11,11 +11,14 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.Option;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.ubn.ummelquwain.R;
 import com.ubn.ummelquwain.dagger.Application.module.GlideApp;
 import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.favorite.FavContract;
+import com.ubn.ummelquwain.utilities.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -112,6 +115,7 @@ public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultMod
         GlideApp.with(mContext)
                 .load(model.getStationLogo())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(RequestOptions.option(Option.memory(Constants.GLIDE_TIMEOUT), 0))
                 .fitCenter()
                 .into(holder.mThumpImageView);
         try {
@@ -157,8 +161,9 @@ public class FavStationAdapter extends RealmRecyclerViewAdapter<StationResultMod
                     e.printStackTrace();
                 }
             });
+            holder.mThumpImageView.setTransitionName(String.valueOf(model.getStationID()));
             holder.itemView.setOnClickListener(view ->
-                    mPresenter.openDetails(model.getStationID())
+                    mPresenter.openDetails(model.getStationID(), holder.mThumpImageView)
             );
             holder.mPlayImageView.setOnClickListener(view -> {
                         mPresenter.playStream(model);

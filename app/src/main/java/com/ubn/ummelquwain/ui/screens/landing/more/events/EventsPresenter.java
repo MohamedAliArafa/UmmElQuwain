@@ -82,7 +82,7 @@ public class EventsPresenter implements EventsContract.UserAction, LifecycleObse
     @Override
     public void openDetails(EventResultModel event) {
         mFragmentManager.beginTransaction().addToBackStack(null)
-                .add(R.id.fragment_container, EventDetailsFragment.newInstance(event)).commit();
+                .replace(R.id.fragment_container, EventDetailsFragment.newInstance(event)).commit();
     }
 
     @Override

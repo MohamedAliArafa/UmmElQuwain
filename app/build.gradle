@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.24.1'
+        classpath 'io.fabric.tools:gradle:1.24.2'
     }
 }
 apply plugin: 'com.android.application'
@@ -22,13 +22,13 @@ repositories {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     compileOptions.incremental = false
     defaultConfig {
         applicationId 'com.ubn.ummelquwain'
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 5
+        versionCode 6
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.compileOptions.sourceCompatibility 1.8
@@ -62,7 +62,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.0@aar') {
         transitive = true
     }
     compile 'com.android.support:appcompat-v7:26.1.0'
@@ -112,6 +112,7 @@ dependencies {
     compile 'com.google.android.exoplayer:exoplayer:r2.5.3'
     //Image Loader
     compile 'com.github.bumptech.glide:glide:4.1.1'
+    compile 'com.github.bumptech.glide:okhttp3-integration:1.5.0' // no @aar
     annotationProcessor 'com.github.bumptech.glide:compiler:4.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'

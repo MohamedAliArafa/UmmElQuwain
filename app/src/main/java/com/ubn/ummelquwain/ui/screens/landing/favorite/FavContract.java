@@ -1,5 +1,7 @@
 package com.ubn.ummelquwain.ui.screens.landing.favorite;
 
+import android.view.View;
+
 import com.ubn.ummelquwain.models.response.Sponsors.SponsorResultModel;
 import com.ubn.ummelquwain.models.response.Station.StationResultModel;
 import com.ubn.ummelquwain.ui.screens.landing.stations.StationsContract;
@@ -26,7 +28,7 @@ public interface FavContract {
 
         void playStream(StationResultModel station);
 
-        void openDetails(int albumID);
+        void openDetails(int stationID, View viewShared);
         void setFav(int itemID, int isFav, StationsContract.adapterCallback callback);
 
         void openLogin();

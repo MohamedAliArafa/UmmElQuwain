@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ import io.realm.RealmResults;
  */
 public class StationsFragment extends Fragment implements StationsContract.ModelView {
 
-//    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     @BindView(R.id.recycler_stations)
     RecyclerView mRecycler;
 
@@ -41,6 +41,7 @@ public class StationsFragment extends Fragment implements StationsContract.Model
 
     StationAdapter mAdapter;
     StationsPresenter mPresenter;
+    private String LOG_TAG = StationsFragment.class.getName();
 
     public StationsFragment() {
         // Required empty public constructor
@@ -111,16 +112,10 @@ public class StationsFragment extends Fragment implements StationsContract.Model
         });
     }
 
-
-
-//    @Override
-//    public LifecycleRegistry getLifecycle() {
-//        return mLifecycleRegistry;
-//    }
-
     @Override
     public void updateUI(RealmResults<StationResultModel> models) {
         mAdapter.updateData(models);
+        Log.d(LOG_TAG, "UI Updated");
     }
 
     @Override
