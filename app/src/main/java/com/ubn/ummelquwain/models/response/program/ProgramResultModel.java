@@ -60,6 +60,9 @@ public class ProgramResultModel extends RealmObject {
     @SerializedName("IsFavourite")
     @Expose
     private Integer isFavourite;
+    @SerializedName("IsLive")
+    @Expose
+    private Integer isLive;
     @SerializedName("UserID")
     @Expose
     private String userID;
@@ -204,6 +207,28 @@ public class ProgramResultModel extends RealmObject {
         return isFavourite;
     }
 
+    public Integer getIsLive() {
+        return isLive;
+    }
+    public void setIsLive(Integer isLive) {
+        this.isLive = isLive;
+    }
+    public RealmList<ProgramUserCommentResultModel> getUserComments() {
+        return UserComments;
+    }
+
+    public void setUserComments(RealmList<ProgramUserCommentResultModel> userComments) {
+        UserComments = userComments;
+    }
+
+    public RealmList<ProgramScheduleResultModel> getSchedule() {
+        return Schedule;
+    }
+
+    public void setSchedule(RealmList<ProgramScheduleResultModel> schedule) {
+        Schedule = schedule;
+    }
+
     public void setIsFavourite(Integer isFavourite) {
         this.isFavourite = isFavourite;
     }
@@ -248,19 +273,4 @@ public class ProgramResultModel extends RealmObject {
         isLiveVideo = liveVideo;
     }
 
-    public RealmList<ProgramUserCommentResultModel> getUserComments() {
-        return UserComments;
-    }
-
-    public void setUserComments(RealmList<ProgramUserCommentResultModel> userComments) {
-        UserComments = userComments;
-    }
-
-    public RealmList<ProgramScheduleResultModel> getSchedule() {
-        return Schedule;
-    }
-
-    public void setSchedule(RealmList<ProgramScheduleResultModel> schedule) {
-        Schedule = schedule;
-    }
 }

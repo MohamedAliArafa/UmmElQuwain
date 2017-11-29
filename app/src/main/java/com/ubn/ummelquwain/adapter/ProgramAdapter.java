@@ -2,6 +2,7 @@ package com.ubn.ummelquwain.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,30 +95,49 @@ public class ProgramAdapter extends RealmRecyclerViewAdapter<ProgramResultModel,
                 .fitCenter()
                 .into(holder.mThumpImageView);
         holder.itemView.setOnClickListener(view -> mPresenter.openDetails(model.getProgramID(), holder.mThumpImageView));
+        Log.e("nmn",model.getIsLive()+"");
         switch (model.isPlaying()) {
             case Paused:
-                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
-                holder.mIndicatorView.setVisibility(View.GONE);
+                if (model.getIsLive() == 1) {
+                    holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                    holder.mIndicatorView.setVisibility(View.GONE);
+                } else {
+                    holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_gray));
+                    holder.mIndicatorView.setVisibility(View.GONE);
+                }
                 break;
             case Playing:
                 holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
                 holder.mIndicatorView.setVisibility(View.VISIBLE);
                 break;
             case Stopped:
-                holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
-                holder.mIndicatorView.setVisibility(View.GONE);
+               if (model.getIsLive() == 1) {
+                    holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_liste));
+                    holder.mIndicatorView.setVisibility(View.GONE);
+                } else {
+                    holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_paly_gray));
+                    holder.mIndicatorView.setVisibility(View.GONE);
+                }
                 break;
             case Buffering:
                 holder.mPlayImageView.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_puss));
                 holder.mIndicatorView.setVisibility(View.VISIBLE);
                 break;
         }
-        holder.mThumpImageView.setTransitionName("prog_"+String.valueOf(model.getProgramID()));
+        holder.mThumpImageView.setTransitionName("prog_" + String.valueOf(model.getProgramID()));
         holder.itemView.setOnClickListener(view ->
                 mPresenter.openDetails(model.getProgramID(), holder.mThumpImageView)
         );
-        holder.mPlayImageView.setOnClickListener(view -> mPresenter.playStream(model)
-        );
+//        holder.mPlayImageView.setOnClickListener(view -> mPresenter.playStream(model)
+//        );
+        holder.mPlayImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (model.getIsLive() == 1) {
+                    mPresenter.playStream(model);
+                }
+            }
+        });
     }
 
     @Override

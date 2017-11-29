@@ -307,6 +307,7 @@ public class Utility {
                 Program.setProgramInfo(mProgram.getProgramInfo());
                 Program.setProgramLogo(mProgram.getProgramLogo());
                 Program.setIsLiveAudio(mProgram.getIsLiveAudio());
+                Program.setIsLive(mProgram.getIsLive());
                 Program.setAudioProgramLink(mProgram.getAudioProgramLink());
                 Program.setIsLiveVideo(mProgram.getIsLiveVideo());
                 Program.setVedioProgramLink(mProgram.getVedioProgramLink());
@@ -370,6 +371,7 @@ public class Utility {
             Program.setProgramLogo(mProgram.getProgramLogo());
             Program.setIsLiveAudio(mProgram.getIsLiveAudio());
             Program.setAudioProgramLink(mProgram.getAudioProgramLink());
+            Program.setIsLive(mProgram.getIsLive());
             Program.setIsLiveVideo(mProgram.getIsLiveVideo());
             Program.setVedioProgramLink(mProgram.getVedioProgramLink());
             Program.setProgramImage(mProgram.getProgramImage());

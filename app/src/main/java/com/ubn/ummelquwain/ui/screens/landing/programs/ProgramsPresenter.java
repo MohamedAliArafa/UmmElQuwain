@@ -66,6 +66,7 @@ public class ProgramsPresenter implements ProgramsContract.UserAction, Lifecycle
         String deviceId = MyApplication.get(mContext).getDeviceID();
         if (user.equals("-1"))
             user = deviceId;
+        Log.e("user" ,user);
         mProgramCall = MyApplication.get(mContext).getApiService()
                 .getAllPrograms(new StationsRequestModel(MyApplication.get(mContext).getLanguage(), user));
         if (!isDataCalled)

@@ -1,7 +1,5 @@
 package com.ubn.ummelquwain.ui.screens.landing;
 
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -48,7 +46,7 @@ import static com.ubn.ummelquwain.utilities.Constants.LANDING_FRAGMENT_KEY;
 import static com.ubn.ummelquwain.utilities.Constants.POSITION_KEY;
 
 
-public class LandingFragment extends Fragment implements LandingContract.ModelView, LifecycleRegistryOwner {
+public class LandingFragment extends Fragment implements LandingContract.ModelView {
 
     @BindView(R.id.tl_landing)
     TabLayout mTabLayout;
@@ -70,7 +68,6 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
     ConstraintLayout mConstrainContainer;
     @BindView(R.id.iv_player_bg)
     ImageView mPlayerImageView;
-    LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
     List<Integer> supplierNames =
             Arrays.asList(R.string.title_stations, R.string.title_favs, R.string.title_programs,
                     R.string.title_media, R.string.title_more);
@@ -276,25 +273,22 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
         mLikeImageView.setAlpha(1f);
         mStationNameTextView.setText(mStationModel.getStationName());
         mProgramNameTextView.setText(mStationModel.getCurrentProgramName());
-        mLikeImageView.setOnClickListener(view -> {
-            mProvider.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
-                mRealm.beginTransaction();
-                model.setIsFavourite(fav);
-                mRealm.commitTransaction();
-            });
-        });
-        mShareImageView.setOnClickListener(view -> {
-            mProvider.shareFromPlayer(model);
-        });
-        mPlayImageView.setOnClickListener(view -> {
-                    mProvider.playStream(model);
-                }
-        );
+        mLikeImageView.setOnClickListener(view -> mProvider.setFav(model.getStationID(), model.getIsFavourite(), fav -> {
+            mRealm.beginTransaction();
+            model.setIsFavourite(fav);
+            mRealm.commitTransaction();
+        }));
+        mShareImageView.setOnClickListener(view -> mProvider.shareFromPlayer(model));
+        mPlayImageView.setOnClickListener(view -> mProvider.playStream(model));
         if (mContext != null) {
-            Animation anim = AnimationUtils.loadAnimation(mContext,
-                    R.anim.slide_up);
-            if (!changed)
-                mConstrainContainer.setAnimation(anim);
+//            try {
+                Animation anim = AnimationUtils.loadAnimation(mContext,
+                        R.anim.slide_up);
+                if (!changed)
+                    mConstrainContainer.setAnimation(anim);
+//            } catch (Exception e){
+//                e.printStackTrace();
+//            }
         }
         mConstrainContainer.setVisibility(View.VISIBLE);
     }
@@ -393,11 +387,6 @@ public class LandingFragment extends Fragment implements LandingContract.ModelVi
                 R.anim.slide_down);
         mConstrainContainer.setAnimation(anim);
         mConstrainContainer.setVisibility(View.GONE);
-    }
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return mLifecycleRegistry;
     }
 
     public void startFragmentFromChild(Fragment fragment) {

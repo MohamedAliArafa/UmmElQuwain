@@ -28,8 +28,8 @@ android {
         applicationId 'com.ubn.ummelquwain'
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 6
-        versionName "1.0"
+        versionCode 8
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         android.compileOptions.sourceCompatibility 1.8
         android.compileOptions.targetCompatibility 1.8

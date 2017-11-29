@@ -170,31 +170,34 @@ public class ProgramPlayerService extends Service implements MediaPlayer.OnPrepa
         if (isHandsetRegistered)
             HeadsetActionButtonReceiver.register(getApplicationContext(), this);
         isHandsetRegistered = true;
-        if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_STARTFOREGROUND_ACTION));
-        } else if (intent.getAction().equals(ACTION_MEDIA_BUTTON)) {
-            Log.i(LOG_TAG, getString(R.string.toast_media_clicked));
-        } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
-        } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
-            int id = intent.getIntExtra(MODEL_ID, 0);
-            ProgramResultModel model = mRealm.where(ProgramResultModel.class).equalTo("programID", id).findFirst();
-            if (model != null) preparePlayer(model);
-        } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
-            pauseMusic();
-        } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
-        } else if (intent.getAction().equals(
-                Constants.ACTION.STOPFOREGROUND_ACTION)) {
-            Log.i(LOG_TAG, getString(R.string.toast_foreground_recived));
-            HeadsetActionButtonReceiver.unregister();
-            isHandsetRegistered = false;
-            mPlayback.stop(true);
-            stopForeground(true);
-            stopSelf();
+        if (intent != null) {
+            if (intent.getAction().equals(Constants.ACTION.STARTFOREGROUND_ACTION)) {
+                Log.i(LOG_TAG, getString(R.string.toast_STARTFOREGROUND_ACTION));
+            } else if (intent.getAction().equals(ACTION_MEDIA_BUTTON)) {
+                Log.i(LOG_TAG, getString(R.string.toast_media_clicked));
+            } else if (intent.getAction().equals(Constants.ACTION.PREV_ACTION)) {
+                Log.i(LOG_TAG, getString(R.string.toast_clicked_previous));
+            } else if (intent.getAction().equals(Constants.ACTION.PLAY_ACTION)) {
+                int id = intent.getIntExtra(MODEL_ID, 0);
+                ProgramResultModel model = mRealm.where(ProgramResultModel.class).equalTo("programID", id).findFirst();
+                if (model != null) preparePlayer(model);
+            } else if (intent.getAction().equals(Constants.ACTION.PAUSE_ACTION)) {
+                pauseMusic();
+            } else if (intent.getAction().equals(Constants.ACTION.NEXT_ACTION)) {
+                Log.i(LOG_TAG, getString(R.string.toast_clicked_next));
+            } else if (intent.getAction().equals(
+                    Constants.ACTION.STOPFOREGROUND_ACTION)) {
+                Log.i(LOG_TAG, getString(R.string.toast_foreground_recived));
+                HeadsetActionButtonReceiver.unregister();
+                isHandsetRegistered = false;
+                mPlayback.stop(true);
+                stopForeground(true);
+                stopSelf();
+            }
+            MediaButtonReceiver.handleIntent(mediaSession, intent);
+            return super.onStartCommand(intent, flags, startId);
         }
-        MediaButtonReceiver.handleIntent(mediaSession, intent);
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     //Handle incoming phone calls
@@ -387,7 +390,8 @@ public class ProgramPlayerService extends Service implements MediaPlayer.OnPrepa
                     // Add playback actions
                     .addAction(notificationAction, "pause", playPauseAction);
 
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(NOTIFICATION_ID, notificationBuilder.build());
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
+                    .notify(NOTIFICATION_ID, notificationBuilder.build());
         }
     }
 
@@ -397,7 +401,8 @@ public class ProgramPlayerService extends Service implements MediaPlayer.OnPrepa
     }
 
     @Override
-    public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {}
+    public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
+    }
 
     @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
